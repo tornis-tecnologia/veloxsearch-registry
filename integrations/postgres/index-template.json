@@ -1,0 +1,38 @@
+{
+  "index_patterns": [
+    "postgres-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "pg_db": {
+          "type": "keyword"
+        },
+        "pg_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "pg_user": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "integer"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "postgres"
+    }
+  }
+}

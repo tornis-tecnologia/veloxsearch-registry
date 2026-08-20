@@ -1,0 +1,25 @@
+{
+  "description": "VeloxSearch nginx access-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "%{COMBINEDAPACHELOG}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": [
+          "dd/MMM/yyyy:HH:mm:ss Z"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

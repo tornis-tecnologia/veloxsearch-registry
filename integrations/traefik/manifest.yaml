@@ -1,0 +1,64 @@
+# VeloxSearch integration package — Traefik.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: traefik
+version: 1.0.0
+
+title:
+  en: "Traefik"
+  es: "Traefik"
+  pt: "Traefik"
+summary:
+  en: "CLF access logs from the Traefik ingress: status, routers, clients."
+  es: "Registros de acceso (CLF) del ingress Traefik: estado, routers, clientes."
+  pt: "Logs de acesso (CLF) do ingress Traefik: status, routers, clientes."
+
+# recipes::recipe_index("traefik")
+index: traefik-logs
+# recipes::dashboard_id("traefik")
+dashboard: velox-traefik-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "Traefik"
+  any_of:
+    - image_contains: traefik
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/traefik
+  index_template: index-template.json   # PUT {os_host}/_index_template/traefik-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: traefik
+  index_template: traefik-logs
+  index_pattern: traefik-logs
+  saved_objects:
+    - velox-traefik-reqs
+    - velox-traefik-clients
+    - velox-traefik-errors
+    - velox-traefik-timeline
+    - velox-traefik-status
+    - velox-traefik-routers
+    - velox-traefik-top
+    - velox-traefik-ips
+    - velox-traefik-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: Yo9lk+wf0wy71tVPvI9vTE81uVNFraVajnyAh5U8MvvdFUWksTXc2E1sVcFcLtteC+2B8rri6ni2AKR8jQlPBA==

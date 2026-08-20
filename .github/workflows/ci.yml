@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Schema and catalog consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml jsonschema
+      - name: Validate every package
+        # Fetches the schema from the core repository on purpose: the schema
+        # lives with the engine that enforces it, and a stale local copy would
+        # let a package pass here and fail there.
+        run: scripts/validate.py
+
+  golden:
+    name: Byte-equivalence and signatures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: registry
+      # The authoritative gate. The core's own tests compare every asset here
+      # against what its recipes generate, and verify every signature against
+      # the keyring compiled into the binary. Running them from this side means
+      # a package edit cannot merge while it disagrees with the core.
+      - uses: actions/checkout@v4
+        with:
+          repository: tornis-tecnologia/veloxsearch-oss
+          path: core
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core
+      - name: Run the core's registry gates against this checkout
+        working-directory: core
+        env:
+          VELOX_REGISTRY_PATH: ${{ github.workspace }}/registry
+        run: cargo test --lib registry_golden catalog

@@ -1,0 +1,26 @@
+{
+  "description": "VeloxSearch traefik access-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "%{COMBINEDAPACHELOG} %{NUMBER:request_count} \"%{DATA:traefik_router}\" \"%{DATA:traefik_service}\" %{NUMBER:duration_ms}ms",
+          "%{COMBINEDAPACHELOG}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": [
+          "dd/MMM/yyyy:HH:mm:ss Z"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

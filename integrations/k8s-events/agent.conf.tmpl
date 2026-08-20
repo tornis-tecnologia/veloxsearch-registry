@@ -1,0 +1,18 @@
+[SERVICE]
+    Flush 5
+    Log_Level info
+[INPUT]
+    Name kubernetes_events
+    Tag k8s_events
+[OUTPUT]
+    Name opensearch
+    Match *
+    Host {os_host}
+    Port 9200
+    HTTP_User {os_user}
+    HTTP_Passwd {os_password}
+    tls On
+    tls.verify Off
+    Suppress_Type_Name On
+    Index {index}
+    Trace_Error On

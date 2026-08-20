@@ -1,0 +1,38 @@
+{
+  "index_patterns": [
+    "mongo-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "c": {
+          "type": "keyword"
+        },
+        "ctx": {
+          "type": "keyword"
+        },
+        "id": {
+          "type": "long"
+        },
+        "msg": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "s": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "mongo"
+    }
+  }
+}

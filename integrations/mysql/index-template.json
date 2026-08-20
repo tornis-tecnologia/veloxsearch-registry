@@ -1,0 +1,38 @@
+{
+  "index_patterns": [
+    "mysql-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "err_code": {
+          "type": "keyword"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "mysql_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "subsystem": {
+          "type": "keyword"
+        },
+        "thread_id": {
+          "type": "long"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "mysql"
+    }
+  }
+}

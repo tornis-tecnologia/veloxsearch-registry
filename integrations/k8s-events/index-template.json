@@ -1,0 +1,53 @@
+{
+  "index_patterns": [
+    "k8s-events*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "count": {
+          "type": "long"
+        },
+        "involvedObject": {
+          "properties": {
+            "kind": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "message": {
+          "type": "text"
+        },
+        "metadata": {
+          "properties": {
+            "namespace": {
+              "type": "keyword"
+            }
+          }
+        },
+        "reason": {
+          "type": "keyword"
+        },
+        "source": {
+          "properties": {
+            "component": {
+              "type": "keyword"
+            }
+          }
+        },
+        "type": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "k8s-events"
+    }
+  }
+}

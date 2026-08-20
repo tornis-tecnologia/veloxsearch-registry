@@ -1,0 +1,27 @@
+{
+  "description": "VeloxSearch rabbitmq server-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "^%{TIMESTAMP_ISO8601:rmq_time} \\[%{DATA:level}\\] <%{DATA:rmq_pid}> %{GREEDYDATA:rmq_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "rmq_time",
+        "formats": [
+          "ISO8601",
+          "yyyy-MM-dd HH:mm:ss.SSSSSSZ",
+          "yyyy-MM-dd HH:mm:ss.SSSZ"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

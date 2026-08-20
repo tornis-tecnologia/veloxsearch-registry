@@ -1,0 +1,32 @@
+{
+  "index_patterns": [
+    "kafka-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "kafka_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "logger": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "kafka"
+    }
+  }
+}

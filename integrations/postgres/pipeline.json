@@ -1,0 +1,26 @@
+{
+  "description": "VeloxSearch postgres server-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "^%{TIMESTAMP_ISO8601:pg_time} %{WORD:pg_tz} \\[%{POSINT:pid}\\] (?:%{DATA:pg_user}@%{DATA:pg_db} )?%{WORD:level}:\\s+%{GREEDYDATA:pg_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "pg_time",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss.SSS",
+          "yyyy-MM-dd HH:mm:ss"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

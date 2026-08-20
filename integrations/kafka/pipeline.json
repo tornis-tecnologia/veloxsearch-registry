@@ -1,0 +1,27 @@
+{
+  "description": "VeloxSearch kafka server-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "^\\[%{TIMESTAMP_ISO8601:kafka_time}\\] %{LOGLEVEL:level}\\s+%{GREEDYDATA:kafka_message} \\(%{NOTSPACE:logger}\\)$",
+          "^\\[%{TIMESTAMP_ISO8601:kafka_time}\\] %{LOGLEVEL:level}\\s+%{GREEDYDATA:kafka_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "kafka_time",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss,SSS",
+          "ISO8601"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

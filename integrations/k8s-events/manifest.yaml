@@ -1,0 +1,59 @@
+# VeloxSearch integration package — Kubernetes Events.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: k8s-events
+version: 1.0.0
+
+title:
+  en: "Kubernetes Events"
+  es: "Eventos de Kubernetes"
+  pt: "Eventos do Kubernetes"
+summary:
+  en: "Cluster events: warnings, OOMKills, scheduling failures."
+  es: "Eventos del clúster: advertencias, OOMKills, fallos de planificación."
+  pt: "Eventos do cluster: warnings, OOMKills, falhas de scheduling."
+
+# recipes::recipe_index("k8s-events")
+index: k8s-events
+# recipes::dashboard_id("k8s-events")
+dashboard: velox-events-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# No `discovery` block: this package monitors the cluster or the nodes
+# themselves, not a discovered container image (schema §discovery).
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/k8s-events
+  index_template: index-template.json   # PUT {os_host}/_index_template/k8s-events
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: k8s-events
+  index_template: k8s-events
+  index_pattern: k8s-events
+  saved_objects:
+    - velox-events-total
+    - velox-events-warn
+    - velox-events-timeline
+    - velox-events-reasons
+    - velox-events-top
+    - velox-events-ns
+    - velox-events-kinds
+    - velox-events-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: Gk8litpFyaqumwEpkK/Sqr55lzG5rkzFO7Hx9EIft92pqeLEwecbxWybPhi1N3R+nJ9okQDdsYENZvzlYNyxCw==

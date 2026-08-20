@@ -1,0 +1,62 @@
+# VeloxSearch integration package — Redis.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: redis
+version: 1.0.0
+
+title:
+  en: "Redis"
+  es: "Redis"
+  pt: "Redis"
+summary:
+  en: "Server logs from redis containers: levels, roles, messages."
+  es: "Registros de servidor de contenedores redis: niveles, roles, mensajes."
+  pt: "Logs de servidor de containers redis: níveis, papéis, mensagens."
+
+# recipes::recipe_index("redis")
+index: redis-logs
+# recipes::dashboard_id("redis")
+dashboard: velox-redis-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "Redis"
+  any_of:
+    - image_contains: redis
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/redis
+  index_template: index-template.json   # PUT {os_host}/_index_template/redis-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: redis
+  index_template: redis-logs
+  index_pattern: redis-logs
+  saved_objects:
+    - velox-redis-total
+    - velox-redis-warn
+    - velox-redis-timeline
+    - velox-redis-levels
+    - velox-redis-messages
+    - velox-redis-roles
+    - velox-redis-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: 7zshOlXrJpVWXKPZRfYoCfYhL2KFl8CXWMX9hKK9vTWaMAU9OttwNBRVfJRsX40VHjdQXDMYf1Rdm9jmvR9JAA==

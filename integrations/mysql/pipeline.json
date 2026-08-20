@@ -1,0 +1,26 @@
+{
+  "description": "VeloxSearch mysql/mariadb server-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "^%{TIMESTAMP_ISO8601:mysql_time}\\s+%{NUMBER:thread_id} \\[%{DATA:level}\\] (?:\\[%{DATA:err_code}\\] )?(?:\\[%{DATA:subsystem}\\] )?%{GREEDYDATA:mysql_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "mysql_time",
+        "formats": [
+          "ISO8601",
+          "yyyy-MM-dd HH:mm:ss"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

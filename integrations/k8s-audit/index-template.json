@@ -1,0 +1,59 @@
+{
+  "index_patterns": [
+    "k8s-audit-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "objectRef": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            },
+            "namespace": {
+              "type": "keyword"
+            },
+            "resource": {
+              "type": "keyword"
+            }
+          }
+        },
+        "requestURI": {
+          "type": "keyword"
+        },
+        "responseStatus": {
+          "properties": {
+            "code": {
+              "type": "integer"
+            }
+          }
+        },
+        "sourceIPs": {
+          "type": "ip"
+        },
+        "stage": {
+          "type": "keyword"
+        },
+        "user": {
+          "properties": {
+            "username": {
+              "type": "keyword"
+            }
+          }
+        },
+        "verb": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "k8s-audit"
+    }
+  }
+}

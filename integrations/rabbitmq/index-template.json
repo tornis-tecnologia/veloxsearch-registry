@@ -1,0 +1,32 @@
+{
+  "index_patterns": [
+    "rabbitmq-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "rmq_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "rmq_pid": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "rabbitmq"
+    }
+  }
+}

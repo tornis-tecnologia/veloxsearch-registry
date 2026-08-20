@@ -1,0 +1,57 @@
+# VeloxSearch integration package — Kubernetes / K3S.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: kubernetes
+version: 1.0.0
+
+title:
+  en: "Kubernetes / K3S"
+  es: "Kubernetes / K3S"
+  pt: "Kubernetes / K3S"
+summary:
+  en: "All cluster and pod logs from every node — the cluster monitoring itself."
+  es: "Todos los registros del clúster y de los pods desde cada nodo — el clúster monitoreándose a sí mismo."
+  pt: "Todos os logs do cluster e dos pods de cada nó — o cluster monitorando a si mesmo."
+
+# recipes::recipe_index("kubernetes")
+index: k8s-logs
+# recipes::dashboard_id("kubernetes")
+dashboard: velox-k8s-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# No `discovery` block: this package monitors the cluster or the nodes
+# themselves, not a discovered container image (schema §discovery).
+
+# The assets shipped alongside this manifest.
+assets:
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  index_pattern: k8s-logs
+  saved_objects:
+    - velox-k8s-total
+    - velox-k8s-active-pods
+    - velox-k8s-errors
+    - velox-k8s-timeline
+    - velox-k8s-ns
+    - velox-k8s-stream
+    - velox-k8s-pod
+    - velox-k8s-containers
+    - velox-k8s-nodes
+    - velox-k8s-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: Qzuy6AD1D6R8vXI1QXZF3zQSXekl0wWChE8vuyqPGLttHYJ7d6Z8SrEW76uAv+ZL6ndW2W8T1woGUyy+KzrFDg==

@@ -1,0 +1,62 @@
+# VeloxSearch integration package — MongoDB.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: mongo
+version: 1.0.0
+
+title:
+  en: "MongoDB"
+  es: "MongoDB"
+  pt: "MongoDB"
+summary:
+  en: "JSON server logs from mongo containers: severity, components."
+  es: "Registros JSON de servidor de contenedores mongo: severidad, componentes."
+  pt: "Logs JSON de servidor de containers mongo: severidade, componentes."
+
+# recipes::recipe_index("mongo")
+index: mongo-logs
+# recipes::dashboard_id("mongo")
+dashboard: velox-mongo-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "MongoDB"
+  any_of:
+    - image_contains: mongo
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/mongo
+  index_template: index-template.json   # PUT {os_host}/_index_template/mongo-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: mongo
+  index_template: mongo-logs
+  index_pattern: mongo-logs
+  saved_objects:
+    - velox-mongo-total
+    - velox-mongo-errors
+    - velox-mongo-timeline
+    - velox-mongo-sev
+    - velox-mongo-comp
+    - velox-mongo-messages
+    - velox-mongo-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: 7Efn4MRPb68mZ92x+22bU6Dm96XHbewLncCDKymv8XWofP+Ses5uZzj3uEKBbDLhYtr5z1DJ0WImRHba3noSCw==

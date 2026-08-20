@@ -1,0 +1,27 @@
+{
+  "description": "VeloxSearch ssh/auth security-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "%{SYSLOGTIMESTAMP:syslog_time} %{SYSLOGHOST:host} %{DATA:program}(?:\\[%{POSINT:pid}\\])?: %{WORD:auth_result} %{WORD:auth_method} for (?:invalid user )?%{DATA:auth_user} from %{IP:src_ip} port %{NUMBER:src_port}",
+          "%{SYSLOGTIMESTAMP:syslog_time} %{SYSLOGHOST:host} %{DATA:program}(?:\\[%{POSINT:pid}\\])?: %{GREEDYDATA:auth_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "syslog_time",
+        "formats": [
+          "MMM d HH:mm:ss",
+          "MMM dd HH:mm:ss"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

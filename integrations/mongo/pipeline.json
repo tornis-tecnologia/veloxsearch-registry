@@ -1,0 +1,22 @@
+{
+  "description": "VeloxSearch mongodb server-log pipeline",
+  "processors": [
+    {
+      "json": {
+        "add_to_root": true,
+        "field": "message",
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "field": "t.$date",
+        "formats": [
+          "ISO8601"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

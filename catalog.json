@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0",
+  "integrations": [
+    {
+      "id": "k8s-audit",
+      "version": "1.0.0",
+      "title": {
+        "en": "Kubernetes Audit",
+        "es": "Auditoría de Kubernetes",
+        "pt": "Auditoria do Kubernetes"
+      },
+      "summary": {
+        "en": "API-server audit log: verbs, users, resources, denied requests.",
+        "es": "Registro de auditoría del API-server: verbos, usuarios, recursos, solicitudes denegadas.",
+        "pt": "Log de auditoria do API-server: verbos, usuários, recursos, requisições negadas."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "k8s-events",
+      "version": "1.0.0",
+      "title": {
+        "en": "Kubernetes Events",
+        "es": "Eventos de Kubernetes",
+        "pt": "Eventos do Kubernetes"
+      },
+      "summary": {
+        "en": "Cluster events: warnings, OOMKills, scheduling failures.",
+        "es": "Eventos del clúster: advertencias, OOMKills, fallos de planificación.",
+        "pt": "Eventos do cluster: warnings, OOMKills, falhas de scheduling."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "kafka",
+      "version": "1.0.0",
+      "title": {
+        "en": "Apache Kafka",
+        "es": "Apache Kafka",
+        "pt": "Apache Kafka"
+      },
+      "summary": {
+        "en": "Broker logs from kafka containers: levels, loggers, messages.",
+        "es": "Registros de broker de contenedores kafka: niveles, loggers, mensajes.",
+        "pt": "Logs de broker de containers kafka: níveis, loggers, mensagens."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "kubernetes",
+      "version": "1.0.0",
+      "title": {
+        "en": "Kubernetes / K3S",
+        "es": "Kubernetes / K3S",
+        "pt": "Kubernetes / K3S"
+      },
+      "summary": {
+        "en": "All cluster and pod logs from every node — the cluster monitoring itself.",
+        "es": "Todos los registros del clúster y de los pods desde cada nodo — el clúster monitoreándose a sí mismo.",
+        "pt": "Todos os logs do cluster e dos pods de cada nó — o cluster monitorando a si mesmo."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "mongo",
+      "version": "1.0.0",
+      "title": {
+        "en": "MongoDB",
+        "es": "MongoDB",
+        "pt": "MongoDB"
+      },
+      "summary": {
+        "en": "JSON server logs from mongo containers: severity, components.",
+        "es": "Registros JSON de servidor de contenedores mongo: severidad, componentes.",
+        "pt": "Logs JSON de servidor de containers mongo: severidade, componentes."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "mysql",
+      "version": "1.0.0",
+      "title": {
+        "en": "MySQL / MariaDB",
+        "es": "MySQL / MariaDB",
+        "pt": "MySQL / MariaDB"
+      },
+      "summary": {
+        "en": "Error logs from mysql/mariadb containers: levels, subsystems.",
+        "es": "Registros de error de contenedores mysql/mariadb: niveles, subsistemas.",
+        "pt": "Logs de erro de containers mysql/mariadb: níveis, subsistemas."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "nginx",
+      "version": "1.0.0",
+      "title": {
+        "en": "Nginx",
+        "es": "Nginx",
+        "pt": "Nginx"
+      },
+      "summary": {
+        "en": "Grok-parsed access logs from nginx containers.",
+        "es": "Registros de acceso de contenedores nginx, analizados con grok.",
+        "pt": "Logs de acesso parseados (grok) de containers nginx."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "postgres",
+      "version": "1.0.0",
+      "title": {
+        "en": "PostgreSQL",
+        "es": "PostgreSQL",
+        "pt": "PostgreSQL"
+      },
+      "summary": {
+        "en": "Server logs from postgres containers: errors, levels, sessions.",
+        "es": "Registros de servidor de contenedores postgres: errores, niveles, sesiones.",
+        "pt": "Logs de servidor de containers postgres: erros, níveis, sessões."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "rabbitmq",
+      "version": "1.0.0",
+      "title": {
+        "en": "RabbitMQ",
+        "es": "RabbitMQ",
+        "pt": "RabbitMQ"
+      },
+      "summary": {
+        "en": "Server logs from rabbitmq containers: levels, messages.",
+        "es": "Registros de servidor de contenedores rabbitmq: niveles, mensajes.",
+        "pt": "Logs de servidor de containers rabbitmq: níveis, mensagens."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "redis",
+      "version": "1.0.0",
+      "title": {
+        "en": "Redis",
+        "es": "Redis",
+        "pt": "Redis"
+      },
+      "summary": {
+        "en": "Server logs from redis containers: levels, roles, messages.",
+        "es": "Registros de servidor de contenedores redis: niveles, roles, mensajes.",
+        "pt": "Logs de servidor de containers redis: níveis, papéis, mensagens."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "ssh",
+      "version": "1.0.0",
+      "title": {
+        "en": "SSH / Auth logs",
+        "es": "Registros SSH / Auth",
+        "pt": "Logs SSH / Auth"
+      },
+      "summary": {
+        "en": "Node auth logs: failed and accepted logins, source IPs, users.",
+        "es": "Registros de autenticación de los nodos: inicios de sesión fallidos y aceptados, IPs de origen, usuarios.",
+        "pt": "Logs de autenticação dos nós: logins falhos e aceitos, IPs de origem, usuários."
+      },
+      "min_core_version": "0.7.0"
+    },
+    {
+      "id": "traefik",
+      "version": "1.0.0",
+      "title": {
+        "en": "Traefik",
+        "es": "Traefik",
+        "pt": "Traefik"
+      },
+      "summary": {
+        "en": "CLF access logs from the Traefik ingress: status, routers, clients.",
+        "es": "Registros de acceso (CLF) del ingress Traefik: estado, routers, clientes.",
+        "pt": "Logs de acesso (CLF) do ingress Traefik: status, routers, clientes."
+      },
+      "min_core_version": "0.7.0"
+    }
+  ]
+}

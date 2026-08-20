@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+*.pyc
+# Private signing keys must never be committed.
+*.priv.pem
+keys/*.pem
+keys/*.key

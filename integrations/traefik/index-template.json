@@ -1,0 +1,47 @@
+{
+  "index_patterns": [
+    "traefik-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "bytes": {
+          "type": "long"
+        },
+        "clientip": {
+          "type": "ip"
+        },
+        "duration_ms": {
+          "type": "float"
+        },
+        "request": {
+          "type": "keyword"
+        },
+        "response": {
+          "type": "integer"
+        },
+        "traefik_router": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "traefik_service": {
+          "type": "keyword"
+        },
+        "verb": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "traefik"
+    }
+  }
+}

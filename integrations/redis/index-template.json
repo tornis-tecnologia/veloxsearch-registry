@@ -1,0 +1,35 @@
+{
+  "index_patterns": [
+    "redis-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "level_sym": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "integer"
+        },
+        "redis_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
+        },
+        "role": {
+          "type": "keyword"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "redis"
+    }
+  }
+}

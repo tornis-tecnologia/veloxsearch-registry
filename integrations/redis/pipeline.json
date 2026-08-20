@@ -1,0 +1,26 @@
+{
+  "description": "VeloxSearch redis server-log pipeline",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "ignore_failure": true,
+        "ignore_missing": true,
+        "patterns": [
+          "^%{POSINT:pid}:%{DATA:role} %{REDISTIMESTAMP:redis_time} %{DATA:level_sym} %{GREEDYDATA:redis_message}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "redis_time",
+        "formats": [
+          "dd MMM yyyy HH:mm:ss.SSS",
+          "dd MMM HH:mm:ss.SSS"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

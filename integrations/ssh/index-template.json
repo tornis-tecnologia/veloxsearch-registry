@@ -1,0 +1,44 @@
+{
+  "index_patterns": [
+    "ssh-logs*"
+  ],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "auth_message": {
+          "type": "text"
+        },
+        "auth_method": {
+          "type": "keyword"
+        },
+        "auth_result": {
+          "type": "keyword"
+        },
+        "auth_user": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "integer"
+        },
+        "program": {
+          "type": "keyword"
+        },
+        "src_ip": {
+          "type": "ip"
+        },
+        "src_port": {
+          "type": "integer"
+        }
+      }
+    },
+    "settings": {
+      "index.default_pipeline": "ssh"
+    }
+  }
+}

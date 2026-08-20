@@ -1,0 +1,59 @@
+# VeloxSearch integration package — SSH / Auth logs.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: ssh
+version: 1.0.0
+
+title:
+  en: "SSH / Auth logs"
+  es: "Registros SSH / Auth"
+  pt: "Logs SSH / Auth"
+summary:
+  en: "Node auth logs: failed and accepted logins, source IPs, users."
+  es: "Registros de autenticación de los nodos: inicios de sesión fallidos y aceptados, IPs de origen, usuarios."
+  pt: "Logs de autenticação dos nós: logins falhos e aceitos, IPs de origem, usuários."
+
+# recipes::recipe_index("ssh")
+index: ssh-logs
+# recipes::dashboard_id("ssh")
+dashboard: velox-ssh-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# No `discovery` block: this package monitors the cluster or the nodes
+# themselves, not a discovered container image (schema §discovery).
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/ssh
+  index_template: index-template.json   # PUT {os_host}/_index_template/ssh-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: ssh
+  index_template: ssh-logs
+  index_pattern: ssh-logs
+  saved_objects:
+    - velox-ssh-total
+    - velox-ssh-srcips
+    - velox-ssh-failed
+    - velox-ssh-outcomes
+    - velox-ssh-ips
+    - velox-ssh-users
+    - velox-ssh-methods
+    - velox-ssh-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: 2fkzJUKfGdN2RpMPD+20VIv8JloWGf6y02z17Bh8jZnxgwLxT4D/dTSULqCigs/TxG1iUto38mhvIXe2rfdKAQ==

@@ -1,0 +1,65 @@
+# VeloxSearch integration package — Nginx.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: nginx
+version: 1.0.0
+
+title:
+  en: "Nginx"
+  es: "Nginx"
+  pt: "Nginx"
+summary:
+  en: "Grok-parsed access logs from nginx containers."
+  es: "Registros de acceso de contenedores nginx, analizados con grok."
+  pt: "Logs de acesso parseados (grok) de containers nginx."
+
+# recipes::recipe_index("nginx")
+index: nginx-logs
+# recipes::dashboard_id("nginx")
+dashboard: velox-nginx-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "Nginx"
+  any_of:
+    - image_contains: nginx
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/nginx
+  index_template: index-template.json   # PUT {os_host}/_index_template/nginx-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: nginx
+  index_template: nginx-logs
+  index_pattern: nginx-logs
+  saved_objects:
+    - velox-nginx-reqs
+    - velox-nginx-clients
+    - velox-nginx-errors
+    - velox-nginx-timeline
+    - velox-nginx-status
+    - velox-nginx-bytes
+    - velox-nginx-top
+    - velox-nginx-ips
+    - velox-nginx-agents
+    - velox-nginx-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: yOYOHXzq9PqAyIyj6NbSMEejc5yifpqGCnic+I2TN4+jlFNi5tRHovS7VcZENPEEaSSAHIntiDQxUF5MtpX2CQ==

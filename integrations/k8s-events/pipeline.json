@@ -1,0 +1,37 @@
+{
+  "description": "VeloxSearch k8s-events pipeline (@timestamp from event times)",
+  "processors": [
+    {
+      "date": {
+        "field": "lastTimestamp",
+        "formats": [
+          "ISO8601"
+        ],
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    },
+    {
+      "date": {
+        "field": "eventTime",
+        "formats": [
+          "ISO8601"
+        ],
+        "if": "ctx['@timestamp'] == null",
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    },
+    {
+      "date": {
+        "field": "metadata.creationTimestamp",
+        "formats": [
+          "ISO8601"
+        ],
+        "if": "ctx['@timestamp'] == null",
+        "ignore_failure": true,
+        "target_field": "@timestamp"
+      }
+    }
+  ]
+}

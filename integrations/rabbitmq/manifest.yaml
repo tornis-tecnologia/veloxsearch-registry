@@ -1,0 +1,61 @@
+# VeloxSearch integration package — RabbitMQ.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: rabbitmq
+version: 1.0.0
+
+title:
+  en: "RabbitMQ"
+  es: "RabbitMQ"
+  pt: "RabbitMQ"
+summary:
+  en: "Server logs from rabbitmq containers: levels, messages."
+  es: "Registros de servidor de contenedores rabbitmq: niveles, mensajes."
+  pt: "Logs de servidor de containers rabbitmq: níveis, mensagens."
+
+# recipes::recipe_index("rabbitmq")
+index: rabbitmq-logs
+# recipes::dashboard_id("rabbitmq")
+dashboard: velox-rabbitmq-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "RabbitMQ"
+  any_of:
+    - image_contains: rabbitmq
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/rabbitmq
+  index_template: index-template.json   # PUT {os_host}/_index_template/rabbitmq-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: rabbitmq
+  index_template: rabbitmq-logs
+  index_pattern: rabbitmq-logs
+  saved_objects:
+    - velox-rabbitmq-total
+    - velox-rabbitmq-errors
+    - velox-rabbitmq-timeline
+    - velox-rabbitmq-levels
+    - velox-rabbitmq-messages
+    - velox-rabbitmq-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: AEzpUDwqAPV07sJHmSK7ipgnAh7wG+o5qwN1oOAViDNU77jrsfnzllWfy86BSV9wBmoruLcGxOpbW3FQu0UBCQ==

@@ -1,0 +1,63 @@
+# VeloxSearch integration package — MySQL / MariaDB.
+#
+# Generated from the in-binary recipe catalog: every id below is what
+# src/recipes.rs produces today, so the golden gates in
+# src/registry_golden.rs hold this package byte-equivalent to the core.
+# Validates against docs/integrations/manifest.schema.json in veloxsearch-oss.
+schema_version: "1.0"
+
+id: mysql
+version: 1.0.0
+
+title:
+  en: "MySQL / MariaDB"
+  es: "MySQL / MariaDB"
+  pt: "MySQL / MariaDB"
+summary:
+  en: "Error logs from mysql/mariadb containers: levels, subsystems."
+  es: "Registros de error de contenedores mysql/mariadb: niveles, subsistemas."
+  pt: "Logs de erro de containers mysql/mariadb: níveis, subsistemas."
+
+# recipes::recipe_index("mysql")
+index: mysql-logs
+# recipes::dashboard_id("mysql")
+dashboard: velox-mysql-overview
+
+# First core release that ships the fixed integration apply-engine (#70).
+min_core_version: 0.7.0
+
+# discovery.rs::match_recipe — the exact predicate the core uses today.
+# Data only: an image-substring test, never a code path.
+discovery:
+  kind: "MySQL / MariaDB"
+  any_of:
+    - image_contains: mariadb
+    - image_contains: mysql
+
+# The assets shipped alongside this manifest.
+assets:
+  pipeline: pipeline.json               # PUT {os_host}/_ingest/pipeline/mysql
+  index_template: index-template.json   # PUT {os_host}/_index_template/mysql-logs
+  saved_objects: saved-objects.ndjson   # _bulk_create into tenant {tenant}
+  agent_config: agent.conf.tmpl         # Fluent Bit config (interpolated)
+
+# Everything install creates, so uninstall removes exactly that and no more.
+teardown:
+  ingest_pipeline: mysql
+  index_template: mysql-logs
+  index_pattern: mysql-logs
+  saved_objects:
+    - velox-mysql-total
+    - velox-mysql-errors
+    - velox-mysql-timeline
+    - velox-mysql-levels
+    - velox-mysql-subsystems
+    - velox-mysql-messages
+    - velox-mysql-overview   # dashboard
+
+# ed25519 over the canonical package digest (docs/integrations/signing.md).
+# Signed by the registry publish step against the maintainer-held key.
+signature:
+  algorithm: ed25519
+  key_id: velox-registry-2026
+  value: igIBA1FnNbY3ZSbpeTmMloVmMDVpALXQIrr50UYecOYbz8G63I/Gr3IdMoCsSTLCuqY4D4Fqt5ZPuRdxLBc6Cg==
