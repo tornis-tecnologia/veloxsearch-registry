@@ -13,6 +13,8 @@ SCHEMA_URL = ("https://raw.githubusercontent.com/tornis-tecnologia/"
               "veloxsearch-oss/main/docs/integrations/manifest.schema.json")
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LOCALES = ("en", "es", "pt")
+# catalog.rs::PLACEHOLDER_SIG_PREFIX
+PLACEHOLDER_PREFIX = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8"
 
 errors = []
 def err(msg): errors.append(msg)
@@ -28,6 +30,11 @@ def load_schema(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--schema", help="local manifest.schema.json (default: fetch from the core repo)")
+    ap.add_argument("--expect-signed", action="store_true",
+                    help="refuse the documented placeholder signature. Off by default so a "
+                         "work-in-progress package still validates; ON in the CI job that "
+                         "gates merges, because a placeholder in main is a package the "
+                         "control plane will reject as UNSIGNED.")
     args = ap.parse_args()
 
     try:
@@ -104,6 +111,11 @@ def main():
         sig = m.get("signature", {})
         if sig.get("algorithm") != "ed25519":
             err(f"{pid}: signature.algorithm is {sig.get('algorithm')!r}, only ed25519 is supported")
+        # The staging placeholder, spelled the same way catalog.rs spells it.
+        # Keep the two in step: this is the string the core reports as UNSIGNED.
+        if args.expect_signed and str(sig.get("value", "")).startswith(PLACEHOLDER_PREFIX):
+            err(f"{pid}: still carries the placeholder signature — sign it with "
+                f"`velox sign integrations/{pid} --key <key>` before merging")
 
         for line_no, line in enumerate((pkg / "saved-objects.ndjson").read_text().splitlines(), 1):
             if not line.strip():
@@ -118,7 +130,8 @@ def main():
         for e in errors:
             print(f"  {e}", file=sys.stderr)
         sys.exit(1)
-    print(f"{len(dirs)} packages validated: schema, catalog consistency, layout, teardown.")
+    signed = " and signed" if args.expect_signed else ""
+    print(f"{len(dirs)} packages validated: schema, catalog consistency, layout, teardown{signed}.")
 
 
 if __name__ == "__main__":
