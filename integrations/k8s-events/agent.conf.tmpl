@@ -4,6 +4,11 @@
 [INPUT]
     Name kubernetes_events
     Tag k8s_events
+[FILTER]
+    Name lua
+    Match k8s_events
+    script /fluent-bit/etc/prune.lua
+    call prune
 [OUTPUT]
     Name opensearch
     Match *

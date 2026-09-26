@@ -7,7 +7,7 @@
 schema_version: "1.0"
 
 id: k8s-events
-version: 1.0.0
+version: 1.0.1
 
 title:
   en: "Kubernetes Events"
@@ -24,7 +24,7 @@ index: k8s-events
 dashboard: velox-events-overview
 
 # First core release that ships the fixed integration apply-engine (#70).
-min_core_version: 0.7.0
+min_core_version: 0.10.6
 
 # No `discovery` block: this package monitors the cluster or the nodes
 # themselves, not a discovered container image (schema §discovery).

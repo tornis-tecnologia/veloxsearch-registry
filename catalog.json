@@ -18,7 +18,7 @@
     },
     {
       "id": "k8s-events",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "title": {
         "en": "Kubernetes Events",
         "es": "Eventos de Kubernetes",
@@ -29,7 +29,7 @@
         "es": "Eventos del clúster: advertencias, OOMKills, fallos de planificación.",
         "pt": "Eventos do cluster: warnings, OOMKills, falhas de scheduling."
       },
-      "min_core_version": "0.7.0"
+      "min_core_version": "0.10.6"
     },
     {
       "id": "kafka",
