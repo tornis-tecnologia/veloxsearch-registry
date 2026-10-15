@@ -2,6 +2,14 @@
   "description": "VeloxSearch rabbitmq server-log pipeline",
   "processors": [
     {
+      "gsub": {
+        "field": "message",
+        "ignore_missing": true,
+        "pattern": "\\x1B\\[[0-9;]*m",
+        "replacement": ""
+      }
+    },
+    {
       "grok": {
         "field": "message",
         "ignore_failure": true,
