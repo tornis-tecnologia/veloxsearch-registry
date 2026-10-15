@@ -52,4 +52,4 @@ jobs:
         working-directory: core
         env:
           VELOX_REGISTRY_PATH: ${{ github.workspace }}/registry
-        run: cargo test --lib registry_golden catalog
+        run: cargo test --lib -- registry_golden catalog
