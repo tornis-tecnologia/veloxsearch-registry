@@ -92,6 +92,12 @@ VELOX_REGISTRY_PATH=/path/to/veloxsearch-registry \
 
 Manifests are hand-authored and are never rewritten by that command.
 
+CI runs the core's gates against its `develop`, unless the pull request's head
+branch also exists in `veloxsearch-oss`: then it uses that branch. So open the
+recipe change and the regenerated package on the **same branch name** in both
+repositories; each CI tests against the other. Merge the two back to back:
+until both land, the first trunk is red against the other.
+
 ## Checklist
 
 - [ ] `integrations/<id>/` with a manifest and its assets
