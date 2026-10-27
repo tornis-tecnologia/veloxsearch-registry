@@ -17,11 +17,23 @@
         "duration_ms": {
           "type": "float"
         },
+        "level": {
+          "type": "keyword"
+        },
         "request": {
           "type": "keyword"
         },
         "response": {
           "type": "integer"
+        },
+        "traefik_message": {
+          "fields": {
+            "keyword": {
+              "ignore_above": 512,
+              "type": "keyword"
+            }
+          },
+          "type": "text"
         },
         "traefik_router": {
           "fields": {
