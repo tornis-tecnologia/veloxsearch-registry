@@ -7,7 +7,7 @@
 schema_version: "1.0"
 
 id: rabbitmq
-version: 1.0.0
+version: 1.0.1
 
 title:
   en: "RabbitMQ"
@@ -57,5 +57,5 @@ teardown:
 # Signed by the registry publish step against the maintainer-held key.
 signature:
   algorithm: ed25519
-  key_id: velox-registry-2026
-  value: AEzpUDwqAPV07sJHmSK7ipgnAh7wG+o5qwN1oOAViDNU77jrsfnzllWfy86BSV9wBmoruLcGxOpbW3FQu0UBCQ==
+  key_id: velox-registry-2026-10
+  value: V3rg9okXRwDZKuRlDNLs95IAhwoPkdweB4C7BeD6OPF+hGr+hZNk89ybTBbbAm9h80z+Ma3S9l8asTr0a/qIBw==

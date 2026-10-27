@@ -61,5 +61,5 @@ teardown:
 # Signed by the registry publish step against the maintainer-held key.
 signature:
   algorithm: ed25519
-  key_id: velox-registry-2026
-  value: yOYOHXzq9PqAyIyj6NbSMEejc5yifpqGCnic+I2TN4+jlFNi5tRHovS7VcZENPEEaSSAHIntiDQxUF5MtpX2CQ==
+  key_id: velox-registry-2026-10
+  value: 7QZqzzSjKYINWIAszNknKpZEHp9GfGg8Xa3HeDnemF/JLVOYLcwIa4g68lZ5Fliu+l+rycUlqoZbyhxRxLICBg==

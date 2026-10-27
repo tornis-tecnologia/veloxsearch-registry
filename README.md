@@ -16,7 +16,7 @@ That is why contributing an integration needs no Rust.
 ```
 catalog.json                 what the Integrations tab lists: id, version, i18n strings, core floor
 keys/
-  velox-registry-2026.pub    the public half of the signing key (also compiled into the core)
+  velox-registry-2026-10.pub the public half of the signing key (also compiled into the core)
 integrations/
   <id>/
     manifest.yaml            the descriptor: identity, discovery, assets, teardown, signature

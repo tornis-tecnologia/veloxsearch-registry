@@ -7,7 +7,7 @@
 schema_version: "1.0"
 
 id: redis
-version: 1.0.0
+version: 1.0.1
 
 title:
   en: "Redis"
@@ -58,5 +58,5 @@ teardown:
 # Signed by the registry publish step against the maintainer-held key.
 signature:
   algorithm: ed25519
-  key_id: velox-registry-2026
-  value: 7zshOlXrJpVWXKPZRfYoCfYhL2KFl8CXWMX9hKK9vTWaMAU9OttwNBRVfJRsX40VHjdQXDMYf1Rdm9jmvR9JAA==
+  key_id: velox-registry-2026-10
+  value: 0PFP55nNcLncfoUW6Yn2pdZ+y8fqceikYPSKDUhm09febwgx9EDf14Bue+sgKl9Htsu9RJQb7ikfSrXvT7aHAQ==

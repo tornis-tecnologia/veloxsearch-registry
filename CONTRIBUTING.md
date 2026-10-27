@@ -55,18 +55,36 @@ the nodes themselves rather than a discoverable container image.
 **You do not sign your package**, and you should not try.
 
 Submit it with the placeholder signature (copy the block from any existing
-manifest). A maintainer computes the canonical digest and signs it with the
-private key at publish time. The private half is never in this repository, never
-in the container image, and never in CI.
+manifest). A maintainer signs it on their own machine at publish time. The
+private half of the key is never in this repository, never in the container
+image, and **never in CI** — which is why this step is a person and not a
+workflow.
 
-If you *want* to check your package will verify, run the core's gates against
-your checkout:
+CI refuses to merge a package that still carries the placeholder
+(`scripts/validate.py --expect-signed`), so nothing unsigned reaches `main`.
+
+Check your package yourself with the core's CLI — no key needed:
 
 ```sh
 git clone https://github.com/tornis-tecnologia/veloxsearch-oss.git
-cd veloxsearch-oss
+cd veloxsearch-oss && cargo build --release --bin velox
+./target/release/velox verify /path/to/veloxsearch-registry/integrations/<id>
+
+# and the byte-equivalence gates, if your package extends a core recipe
 VELOX_REGISTRY_PATH=/path/to/veloxsearch-registry cargo test
 ```
+
+### For maintainers: signing a pull request
+
+```sh
+gh pr checkout <number>
+velox sign integrations/<id> --key ~/path/to/velox-registry-2026-10.priv.pem
+git commit -am "sign: <id>" && git push
+```
+
+`velox sign` verifies the signature it just produced **before** writing, so a
+package that would not check out never reaches the disk. Run it once per changed
+package.
 
 ## The catalog
 
@@ -91,6 +109,17 @@ VELOX_REGISTRY_PATH=/path/to/veloxsearch-registry \
 ```
 
 Manifests are hand-authored and are never rewritten by that command.
+
+You usually will not have to do this by hand: a recipe change on the core's
+`main` opens a regeneration pull request here automatically
+(`registry-sync.yml` in `veloxsearch-oss`). It arrives unsigned, and a
+maintainer signs it as above.
+
+CI runs the core's gates against its `develop`, unless the pull request's head
+branch also exists in `veloxsearch-oss`: then it uses that branch. So open the
+recipe change and the regenerated package on the **same branch name** in both
+repositories; each CI tests against the other. Merge the two back to back:
+until both land, the first trunk is red against the other.
 
 ## Checklist
 

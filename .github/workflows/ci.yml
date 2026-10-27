@@ -27,7 +27,13 @@ jobs:
         # Fetches the schema from the core repository on purpose: the schema
         # lives with the engine that enforces it, and a stale local copy would
         # let a package pass here and fail there.
-        run: scripts/validate.py
+        #
+        # --expect-signed refuses the placeholder. It is what makes a
+        # regeneration PR from registry-sync.yml unmergeable until a maintainer
+        # has actually signed it: the control plane would reject a placeholder
+        # as UNSIGNED, so letting one reach main only moves the failure to the
+        # customer's cluster.
+        run: scripts/validate.py --expect-signed
 
   golden:
     name: Byte-equivalence and signatures
@@ -40,9 +46,22 @@ jobs:
       # against what its recipes generate, and verify every signature against
       # the keyring compiled into the binary. Running them from this side means
       # a package edit cannot merge while it disagrees with the core.
+      # A PR whose head branch also exists in the core is tested against that
+      # branch, so a package and the recipe change it was regenerated from can
+      # both go green before either merges (veloxsearch-oss#164).
+      - name: Pick the core ref
+        id: core-ref
+        env:
+          HEAD: ${{ github.head_ref }}
+        run: |
+          ref=develop
+          if [ -n "$HEAD" ] && git ls-remote --exit-code --heads https://github.com/tornis-tecnologia/veloxsearch-oss "refs/heads/$HEAD" >/dev/null; then ref=$HEAD; fi
+          echo "core ref: $ref"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           repository: tornis-tecnologia/veloxsearch-oss
+          ref: ${{ steps.core-ref.outputs.ref }}
           path: core
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
@@ -52,4 +71,27 @@ jobs:
         working-directory: core
         env:
           VELOX_REGISTRY_PATH: ${{ github.workspace }}/registry
-        run: cargo test --lib -- registry_golden catalog
+        # Name filters that match nothing make cargo report 0 tests and exit 0
+        # (#5). ~7 registry_golden + ~36 catalog tests ran on 2026-10-15, so a
+        # floor of 40 also catches either filter alone going empty.
+        run: |
+          set -o pipefail
+          rc=0
+          cargo test --lib -- registry_golden catalog | tee "$RUNNER_TEMP/gate.log" || rc=$?
+          passed=$(awk '/^test result:/ { for (i = 2; i <= NF; i++) if ($i == "passed;") n += $(i-1) } END { print n+0 }' "$RUNNER_TEMP/gate.log")
+          echo "registry gates passed: $passed (floor 40)"
+          [ "$rc" -eq 0 ] || exit "$rc"
+          [ "$passed" -ge 40 ] || { echo "::error::only $passed registry gate tests passed; a test-name filter no longer matches"; exit 1; }
+
+      # The gates above prove the assets match the core. This proves each
+      # package verifies against the keyring compiled into the binary — the
+      # same check the control plane runs before applying anything to a
+      # cluster, run here with the binary built from this very commit.
+      - name: Verify every signature
+        working-directory: core
+        run: |
+          set -euo pipefail
+          cargo build --release --bin velox
+          for dir in "${{ github.workspace }}"/registry/integrations/*/; do
+            ./target/release/velox verify "$dir"
+          done

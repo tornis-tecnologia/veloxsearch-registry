@@ -7,7 +7,7 @@
         "ignore_failure": true,
         "ignore_missing": true,
         "patterns": [
-          "^%{POSINT:pid}:%{DATA:role} %{REDISTIMESTAMP:redis_time} %{DATA:level_sym} %{GREEDYDATA:redis_message}"
+          "^%{POSINT:pid}:%{DATA:role} (?<redis_time>%{MONTHDAY} %{MONTH}(?: %{YEAR})? %{TIME}) %{DATA:level_sym} %{GREEDYDATA:redis_message}"
         ]
       }
     },
