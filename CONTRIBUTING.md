@@ -115,6 +115,12 @@ You usually will not have to do this by hand: a recipe change on the core's
 (`registry-sync.yml` in `veloxsearch-oss`). It arrives unsigned, and a
 maintainer signs it as above.
 
+CI runs the core's gates against its `develop`, unless the pull request's head
+branch also exists in `veloxsearch-oss`: then it uses that branch. So open the
+recipe change and the regenerated package on the **same branch name** in both
+repositories; each CI tests against the other. Merge the two back to back:
+until both land, the first trunk is red against the other.
+
 ## Checklist
 
 - [ ] `integrations/<id>/` with a manifest and its assets
