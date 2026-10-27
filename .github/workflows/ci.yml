@@ -27,7 +27,13 @@ jobs:
         # Fetches the schema from the core repository on purpose: the schema
         # lives with the engine that enforces it, and a stale local copy would
         # let a package pass here and fail there.
-        run: scripts/validate.py
+        #
+        # --expect-signed refuses the placeholder. It is what makes a
+        # regeneration PR from registry-sync.yml unmergeable until a maintainer
+        # has actually signed it: the control plane would reject a placeholder
+        # as UNSIGNED, so letting one reach main only moves the failure to the
+        # customer's cluster.
+        run: scripts/validate.py --expect-signed
 
   golden:
     name: Byte-equivalence and signatures
@@ -53,3 +59,16 @@ jobs:
         env:
           VELOX_REGISTRY_PATH: ${{ github.workspace }}/registry
         run: cargo test --lib -- registry_golden catalog
+
+      # The gates above prove the assets match the core. This proves each
+      # package verifies against the keyring compiled into the binary — the
+      # same check the control plane runs before applying anything to a
+      # cluster, run here with the binary built from this very commit.
+      - name: Verify every signature
+        working-directory: core
+        run: |
+          set -euo pipefail
+          cargo build --release --bin velox
+          for dir in "${{ github.workspace }}"/registry/integrations/*/; do
+            ./target/release/velox verify "$dir"
+          done
