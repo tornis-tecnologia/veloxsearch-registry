@@ -78,7 +78,7 @@ VELOX_REGISTRY_PATH=/path/to/veloxsearch-registry cargo test
 
 ```sh
 gh pr checkout <number>
-velox sign integrations/<id> --key ~/path/to/velox-registry-2026.priv.pem
+velox sign integrations/<id> --key ~/path/to/velox-registry-2026-10.priv.pem
 git commit -am "sign: <id>" && git push
 ```
 
