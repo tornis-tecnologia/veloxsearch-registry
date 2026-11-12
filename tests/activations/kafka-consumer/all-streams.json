@@ -1,0 +1,32 @@
+{
+  "package_id": "kafka-consumer",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "messages": {
+      "enabled": true,
+      "input": {
+        "brokers": [
+          "kafka-1:9092",
+          "kafka-2:9092"
+        ],
+        "topics": [
+          "app-logs",
+          "audit"
+        ],
+        "client_id": "velox-agent",
+        "group_id": "velox-prod",
+        "poll_ms": 250,
+        "rdkafka": {
+          "rdkafka.security.protocol": "SASL_SSL",
+          "rdkafka.sasl.mechanism": "PLAIN",
+          "rdkafka.session.timeout.ms": "45000"
+        }
+      },
+      "backend": {
+        "parse_payload": true,
+        "delete_after": "21d"
+      }
+    }
+  }
+}

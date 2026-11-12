@@ -1,0 +1,129 @@
+id: events
+title:
+  en: Cluster events
+  es: Eventos del clúster
+  pt: Eventos do cluster
+description:
+  en: Kubernetes Event objects with reason, type, involved object and count.
+  es: Objetos Event de Kubernetes con motivo, tipo, objeto involucrado y contador.
+  pt: Objetos Event do Kubernetes com motivo, tipo, objeto envolvido e contador.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+input:
+  plugin: kubernetes_events
+  fixed:
+    db: '{state_dir}/kubernetes_events-{stream_tag}.db'
+  fields:
+  - name: kube_url
+    type: string
+    default: https://kubernetes.default.svc
+    title:
+      en: API server URL
+      es: URL del servidor de API
+      pt: URL do servidor de API
+    bind:
+      key: kube_url
+  - name: kube_namespace
+    type: string
+    title:
+      en: Namespace
+      es: Namespace
+      pt: Namespace
+    description:
+      en: Only this namespace. Empty = all namespaces.
+      es: Solo este namespace. Vacío = todos.
+      pt: Somente este namespace. Vazio = todos.
+    bind:
+      key: kube_namespace
+  - name: tls_verify
+    type: bool
+    default: true
+    title:
+      en: Verify TLS certificate
+      es: Verificar certificado TLS
+      pt: Verificar certificado TLS
+    bind:
+      key: tls.verify
+  - name: kube_token_file
+    type: string
+    default: /var/run/secrets/kubernetes.io/serviceaccount/token
+    group: advanced
+    title:
+      en: Token file
+      es: Archivo de token
+      pt: Arquivo de token
+    bind:
+      key: kube_token_file
+  - name: kube_ca_file
+    type: string
+    default: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    group: advanced
+    title:
+      en: CA file
+      es: Archivo CA
+      pt: Arquivo CA
+    bind:
+      key: kube_ca_file
+  - name: kube_retention_time
+    type: duration
+    default: 1h
+    group: advanced
+    title:
+      en: Event retention
+      es: Retención de eventos
+      pt: Retenção de eventos
+    bind:
+      key: kube_retention_time
+  - name: interval_sec
+    type: integer
+    default: 0
+    min: 0
+    group: advanced
+    title:
+      en: Reconnect interval (s)
+      es: Intervalo de reconexión (s)
+      pt: Intervalo de reconexão (s)
+    bind:
+      key: interval_sec
+  - name: interval_nsec
+    type: integer
+    default: 500000000
+    min: 0
+    group: advanced
+    title:
+      en: Reconnect interval (ns part)
+      es: Intervalo de reconexión (parte ns)
+      pt: Intervalo de reconexão (parte ns)
+    bind:
+      key: interval_nsec
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 1d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

@@ -1,0 +1,70 @@
+id: health
+title: {en: TCP health checks, es: Comprobaciones TCP, pt: Verificações TCP}
+description:
+  en: Periodically checks that a TCP host and port accept connections and records alive or down.
+  es: Comprueba periódicamente que un host y puerto TCP aceptan conexiones y registra vivo o caído.
+  pt: Verifica periodicamente se um host e porta TCP aceitam conexões e registra ativo ou fora do ar.
+signal: logs
+event_type: logs
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: health
+  fixed:
+    add_host: true
+    add_port: true
+  fields:
+  - name: host
+    type: string
+    required: true
+    title: {en: Host, es: Host, pt: Host}
+    placeholder: db.example.internal
+    bind:
+      key: host
+  - name: port
+    type: integer
+    required: true
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    bind:
+      key: port
+  - name: interval
+    type: integer
+    default: 10
+    min: 1
+    title: {en: Check interval (s), es: Intervalo de comprobación (s), pt: Intervalo de verificação (s)}
+    bind:
+      key: interval_sec
+  - name: alert_only
+    type: bool
+    default: false
+    group: advanced
+    title: {en: Record only when down, es: Registrar solo si está caído, pt: Registrar só quando fora do ar}
+    bind:
+      key: alert
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - content_modifier
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 1gb
+    rollover_max_age: 7d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

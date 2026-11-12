@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First release: error and slowlog streams for MySQL and MariaDB."
+        es: "Primera versión: streams error y slowlog para MySQL y MariaDB."
+        pt: "Primeira versão: streams error e slowlog para MySQL e MariaDB."

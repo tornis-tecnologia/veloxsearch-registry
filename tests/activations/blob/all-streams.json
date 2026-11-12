@@ -1,0 +1,24 @@
+{
+  "package_id": "blob",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "files": {
+      "enabled": true,
+      "input": {
+        "path": "/srv/uploads/*",
+        "exclude": [
+          "*.tmp",
+          "*.part"
+        ],
+        "scan_refresh_interval": "30s",
+        "upload_success_action": "add_suffix",
+        "upload_success_suffix": ".done",
+        "upload_failure_action": "emit_log"
+      },
+      "backend": {
+        "delete_after": "14d"
+      }
+    }
+  }
+}

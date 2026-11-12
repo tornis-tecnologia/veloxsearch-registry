@@ -1,0 +1,35 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {"type": "date"},
+        "log": {"type": "text"},
+        "message": {"type": "text"},
+        "event": {
+          "properties": {
+            "original": {"type": "keyword", "index": false, "doc_values": false}
+          }
+        },
+        "velox": {
+          "properties": {
+            "integration": {"type": "keyword"},
+            "stream": {"type": "keyword"},
+            "package_version": {"type": "keyword"}
+          }
+        },
+        "host": {
+          "properties": {
+            "name": {"type": "keyword"}
+          }
+        }
+      }
+    }
+  }
+}

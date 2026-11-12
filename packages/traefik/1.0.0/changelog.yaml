@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First Spec 2.0 release, migrated from the 1.x integration: access and app streams, ECS field names, router/service/duration."
+        es: "Primera versión Spec 2.0, migrada de la integración 1.x: streams access y app, nombres de campo ECS, router/servicio/duración."
+        pt: "Primeira versão Spec 2.0, migrada da integração 1.x: streams access e app, nomes de campo ECS, router/serviço/duração."

@@ -1,0 +1,100 @@
+{
+  "description": "kafka-consumer/messages: kafka.* metadata, JSON payload into kafka.payload, plain payload kept as message",
+  "processors": [
+    {
+      "rename": {
+        "tag": "topic",
+        "field": "topic",
+        "target_field": "kafka.topic",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "partition",
+        "field": "partition",
+        "target_field": "kafka.partition",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "offset",
+        "field": "offset",
+        "target_field": "kafka.offset",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "key",
+        "field": "key",
+        "target_field": "kafka.key",
+        "ignore_missing": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "drop_raw_meta",
+        "field": [
+          "partition",
+          "offset"
+        ],
+        "ignore_missing": true
+      }
+    },
+    {
+      "json": {
+        "tag": "parse_json",
+        "field": "payload",
+        "target_field": "kafka.payload",
+        "if": "ctx.payload instanceof String && ctx.payload.trim().startsWith('{')",
+        "on_failure": [
+          {
+            "set": {
+              "tag": "unparsed",
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "rename": {
+        "tag": "payload_object",
+        "field": "payload",
+        "target_field": "kafka.payload",
+        "if": "ctx.payload instanceof Map",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "payload_message",
+        "lang": "painless",
+        "source": "ctx.message = ctx.payload.toString();",
+        "if": "ctx.message == null && ctx.payload != null && ctx.kafka?.payload == null"
+      }
+    },
+    {
+      "remove": {
+        "tag": "drop_payload",
+        "field": "payload",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "ts_fallback",
+        "field": "@timestamp",
+        "value": "{{_ingest.timestamp}}",
+        "if": "ctx['@timestamp'] == null"
+      }
+    }
+  ]
+}

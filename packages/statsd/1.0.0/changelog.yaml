@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: events and metrics streams.'
+      es: 'Primera versión: streams events y metrics.'
+      pt: 'Primeira versão: streams events e metrics.'

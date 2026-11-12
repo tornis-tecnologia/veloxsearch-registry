@@ -1,0 +1,39 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "mqtt": {
+      "payload": {
+        "value": 21.5,
+        "sensor": "t-17"
+      },
+      "topic": "factory/line1/temperature"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "message": "RUNNING",
+    "mqtt": {
+      "topic": "factory/line1/status"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "mqtt": {
+      "payload": {
+        "open": true,
+        "by": "badge-9"
+      },
+      "topic": "factory/line2/door"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "event": {
+      "outcome": "unparsed"
+    },
+    "message": "{\"sensor\": \"t-18\", broken",
+    "mqtt": {
+      "topic": "factory/line2/temperature"
+    }
+  }
+]

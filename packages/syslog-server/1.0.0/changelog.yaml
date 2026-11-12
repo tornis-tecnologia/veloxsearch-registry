@@ -1,0 +1,5 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: udp, tcp and unix streams.', es: 'Primera versión: streams udp, tcp and unix.',
+      pt: 'Primeira versão: streams udp, tcp and unix.'}

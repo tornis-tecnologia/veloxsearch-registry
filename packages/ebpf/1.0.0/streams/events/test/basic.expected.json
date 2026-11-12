@@ -1,0 +1,36 @@
+[
+  {
+    "process": {
+      "name": "bash",
+      "pid": 4021
+    },
+    "target_pid": 977,
+    "event": {
+      "kind": "event",
+      "module": "ebpf"
+    },
+    "signal": 9
+  },
+  {
+    "process": {
+      "name": "curl",
+      "pid": 88
+    },
+    "size": 4096,
+    "event": {
+      "kind": "event",
+      "module": "ebpf"
+    },
+    "function": "malloc"
+  },
+  {
+    "process": {
+      "name": "nc"
+    },
+    "event": {
+      "kind": "event",
+      "module": "ebpf"
+    },
+    "port": 8080
+  }
+]

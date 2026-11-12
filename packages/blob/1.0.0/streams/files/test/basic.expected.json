@@ -1,0 +1,29 @@
+[
+  {
+    "file": {
+      "size": 734003200,
+      "name": "db-2025-11-12.dump",
+      "path": "/var/backups/db-2025-11-12.dump"
+    },
+    "message": "uploaded",
+    "event": {
+      "module": "blob"
+    }
+  },
+  {
+    "file": {
+      "size": 1024,
+      "name": "report.pdf",
+      "path": "report.pdf"
+    },
+    "event": {
+      "module": "blob"
+    }
+  },
+  {
+    "message": "record without a path",
+    "event": {
+      "module": "blob"
+    }
+  }
+]

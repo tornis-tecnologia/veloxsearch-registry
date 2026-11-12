@@ -1,0 +1,12 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "type": "counter",
+  "bucket": "app.requests",
+  "value": 1.0,
+  "sample_rate": 1.0,
+  "velox": {
+    "integration": "statsd",
+    "stream": "events",
+    "package_version": "1.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "message": "T=21.4 H=48",
+  "velox": {
+    "integration": "serial",
+    "stream": "lines",
+    "package_version": "1.0.0"
+  }
+}

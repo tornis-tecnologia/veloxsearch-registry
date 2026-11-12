@@ -1,0 +1,57 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "kafka": {
+      "topic": "app-logs",
+      "partition": 3,
+      "offset": 184467,
+      "payload": {
+        "msg": "order placed",
+        "level": "info",
+        "service": "checkout"
+      },
+      "key": "order-1042"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "message": "plain text line",
+    "kafka": {
+      "topic": "app-logs",
+      "partition": 1,
+      "offset": 90
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "kafka": {
+      "topic": "metrics",
+      "partition": 0,
+      "offset": 7,
+      "payload": {
+        "cpu": 0.4
+      },
+      "key": "k"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "event": {
+      "outcome": "unparsed"
+    },
+    "message": "{\"level\":\"warn\" oops",
+    "kafka": {
+      "offset": 12,
+      "topic": "app-logs"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "message": "[1,2,3]",
+    "kafka": {
+      "offset": 13,
+      "topic": "app-logs",
+      "partition": 2
+    }
+  }
+]

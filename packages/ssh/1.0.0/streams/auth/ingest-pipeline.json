@@ -1,0 +1,92 @@
+{
+  "description": "ssh/auth: syslog framing plus sshd logins, invalid users, disconnects and attempt limits",
+  "processors": [
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "log",
+        "patterns": [
+          "^%{SYSLOGTIMESTAMP:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$",
+          "^%{TIMESTAMP_ISO8601:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$"
+        ],
+        "pattern_definitions": {
+          "PROG": "[A-Za-z0-9._/@-]+"
+        },
+        "on_failure": [
+          {
+            "rename": {
+              "field": "log",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "MMM dd HH:mm:ss",
+          "MMM  d HH:mm:ss",
+          "MMM d HH:mm:ss",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "grok": {
+        "tag": "sshd",
+        "if": "ctx.process?.name != null && ctx.process.name.startsWith('sshd') && ctx.message != null",
+        "field": "message",
+        "patterns": [
+          "^(?<_kind>Accepted|Failed) %{NOTSPACE:ssh.method} for (?:invalid user )?%{NOTSPACE:user.name} from %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Invalid user) %{NOTSPACE:user.name} from %{IP:source.ip}(?: port %{POSINT:source.port:int})?",
+          "^(?:error: )?(?<_kind>maximum authentication attempts exceeded) for (?:invalid user )?%{NOTSPACE:user.name} from %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Connection closed by) (?:authenticating |invalid )?user %{NOTSPACE:user.name} %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Connection closed by) %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Disconnected from) (?:authenticating |invalid )?user %{NOTSPACE:user.name} %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Disconnected from) %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^(?<_kind>Received disconnect from) %{IP:source.ip} port %{POSINT:source.port:int}"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "sshd_outcome",
+        "if": "ctx._kind != null",
+        "lang": "painless",
+        "source": "ctx.event = ctx.event == null ? new HashMap() : ctx.event; String k = ctx._kind; if (k == 'Accepted') { ctx.event.action = 'login'; ctx.event.outcome = 'success'; } else if (k == 'Failed') { ctx.event.action = 'login'; ctx.event.outcome = 'failure'; } else if (k == 'Invalid user') { ctx.event.action = 'invalid_user'; ctx.event.outcome = 'failure'; } else if (k == 'maximum authentication attempts exceeded') { ctx.event.action = 'max_auth_attempts'; ctx.event.outcome = 'failure'; } else if (k == 'Connection closed by') { ctx.event.action = 'connection_closed'; ctx.event.outcome = 'unknown'; } else { ctx.event.action = 'disconnect'; ctx.event.outcome = 'unknown'; } ctx.event.category = 'authentication'; ctx.remove('_kind');"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_kind",
+          "log"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

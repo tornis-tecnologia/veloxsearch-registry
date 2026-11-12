@@ -1,0 +1,31 @@
+{
+  "process": {
+    "name": "sshd",
+    "pid": 2231
+  },
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "web-01"
+  },
+  "ssh": {
+    "method": "password"
+  },
+  "source": {
+    "port": 51022,
+    "ip": "203.0.113.9"
+  },
+  "message": "Failed password for invalid user admin from 203.0.113.9 port 51022 ssh2",
+  "event": {
+    "category": "authentication",
+    "action": "login",
+    "outcome": "failure"
+  },
+  "user": {
+    "name": "admin"
+  },
+  "velox": {
+    "integration": "ssh",
+    "stream": "auth",
+    "package_version": "1.0.0"
+  }
+}

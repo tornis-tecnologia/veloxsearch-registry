@@ -1,0 +1,125 @@
+[
+  {
+    "winlog": {
+      "computer_name": "WIN-SRV01",
+      "record_id": 981234,
+      "process": {
+        "pid": 812,
+        "thread": {
+          "id": 4412
+        }
+      },
+      "event_id": 4625,
+      "task": 12544,
+      "keywords": "0x8010000000000000",
+      "provider_guid": "{54849625-5478-4994-A5BA-3E3B0328C30D}",
+      "level": 0,
+      "channel": "Security",
+      "string_inserts": [
+        "S-1-0-0",
+        "-",
+        "admin",
+        "WIN-SRV01"
+      ],
+      "provider_name": "Microsoft-Windows-Security-Auditing",
+      "opcode": 0
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "log": {
+      "level": "information"
+    },
+    "host": {
+      "name": "WIN-SRV01"
+    },
+    "message": "An account failed to log on.",
+    "event": {
+      "code": "4625",
+      "category": "authentication",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "outcome": "failure"
+    },
+    "user": {
+      "id": "S-1-5-18"
+    }
+  },
+  {
+    "winlog": {
+      "channel": "System",
+      "computer_name": "WIN-SRV01",
+      "event_id": 7036,
+      "string_inserts": [
+        "Windows Update",
+        "running"
+      ],
+      "provider_name": "Service Control Manager",
+      "level": 4
+    },
+    "@timestamp": "2026-11-12T10:16:00.000Z",
+    "log": {
+      "level": "information"
+    },
+    "host": {
+      "name": "WIN-SRV01"
+    },
+    "message": "The Windows Update service entered the running state.",
+    "event": {
+      "provider": "Service Control Manager",
+      "code": "7036"
+    }
+  },
+  {
+    "winlog": {
+      "channel": "Application",
+      "computer_name": "WIN-SRV01",
+      "event_id": 1000,
+      "provider_name": "Application Error",
+      "level": 2
+    },
+    "@timestamp": "2026-11-12T10:17:00.123Z",
+    "log": {
+      "level": "error"
+    },
+    "host": {
+      "name": "WIN-SRV01"
+    },
+    "message": "Faulting application name: app.exe",
+    "event": {
+      "provider": "Application Error",
+      "code": "1000"
+    },
+    "user": {
+      "name": "CORP\\svc-app"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:18:00.000Z",
+    "winlog": {
+      "channel": "Security",
+      "computer_name": "WIN-SRV02",
+      "event_id": 4624,
+      "provider_name": "Microsoft-Windows-Security-Auditing",
+      "level": 0
+    },
+    "log": {
+      "level": "information"
+    },
+    "host": {
+      "name": "WIN-SRV02"
+    },
+    "event": {
+      "code": "4624",
+      "category": "authentication",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "outcome": "success"
+    },
+    "user": {
+      "id": "S-1-5-21-1-2-3-1001"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:19:00.000Z",
+    "event": {
+      "original": "<Event xmlns=\"http://schemas.microsoft.com/win/2004/08/events/event\"><System><EventID>1</EventID></System></Event>"
+    }
+  }
+]

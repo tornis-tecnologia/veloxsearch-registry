@@ -1,0 +1,163 @@
+{
+  "description": "syslog-server: RFC 3164 and RFC 5424 messages",
+  "processors": [
+    {
+      "rename": {
+        "tag": "raw",
+        "field": "log",
+        "target_field": "_raw",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{{_raw}}}",
+        "if": "ctx._raw != null"
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "_raw",
+        "ignore_missing": true,
+        "patterns": [
+          "^<%{NONNEGINT:_pri:int}>%{NONNEGINT:_ver} %{NOTSPACE:_ts} %{NOTSPACE:host.name} %{NOTSPACE:process.name} %{NOTSPACE:_pid} %{NOTSPACE:_msgid} (?:-|%{SD:_sd})(?: %{GREEDYDATA:message})?$",
+          "^<%{NONNEGINT:_pri:int}>%{SYSLOGTIMESTAMP:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$",
+          "^<%{NONNEGINT:_pri:int}>%{SYSLOGTIMESTAMP:_ts} %{SYSLOGHOST:host.name} %{GREEDYDATA:message}$"
+        ],
+        "pattern_definitions": {
+          "PROG": "[A-Za-z0-9._/@-]+",
+          "SD": "\\[(?:[^\\]\\\\]|\\\\.)*\\](?:\\[(?:[^\\]\\\\]|\\\\.)*\\])*"
+        },
+        "on_failure": [
+          {
+            "set": {
+              "field": "message",
+              "value": "{{{_raw}}}"
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "decode_pri",
+        "lang": "painless",
+        "if": "ctx._pri != null && ctx._pri >= 0 && ctx._pri <= 191",
+        "source": "int pri = ctx._pri; int fac = pri / 8; int sev = pri % 8; List facs = ['kern','user','mail','daemon','auth','syslog','lpr','news','uucp','cron','authpriv','ftp','ntp','audit','alert','clock','local0','local1','local2','local3','local4','local5','local6','local7']; List sevs = ['emergency','alert','critical','error','warning','notice','info','debug']; Map f = new HashMap(); f.put('code', fac); f.put('name', facs.get(fac)); Map s = new HashMap(); s.put('code', sev); s.put('name', sevs.get(sev)); Map sys = new HashMap(); sys.put('facility', f); sys.put('severity', s); sys.put('priority', pri); Map l = new HashMap(); l.put('syslog', sys); l.put('level', sevs.get(sev)); ctx.log = l;"
+      }
+    },
+    {
+      "set": {
+        "tag": "syslog_version",
+        "field": "log.syslog.version",
+        "value": "{{{_ver}}}",
+        "if": "ctx._ver != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "syslog_msgid",
+        "field": "log.syslog.msgid",
+        "value": "{{{_msgid}}}",
+        "if": "ctx._msgid != null && ctx._msgid != '-'"
+      }
+    },
+    {
+      "set": {
+        "tag": "syslog_sd",
+        "field": "log.syslog.structured_data",
+        "value": "{{{_sd}}}",
+        "if": "ctx._sd != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "pid_from_5424",
+        "field": "process.pid",
+        "value": "{{{_pid}}}",
+        "if": "ctx._pid != null && ctx._pid != '-'"
+      }
+    },
+    {
+      "convert": {
+        "tag": "pid_to_long",
+        "field": "process.pid",
+        "type": "long",
+        "ignore_missing": true,
+        "on_failure": [
+          {
+            "remove": {
+              "field": "process.pid",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "nil_values",
+        "lang": "painless",
+        "source": "for (String k : ['host', 'process']) { def m = ctx.get(k); if (m instanceof Map) { if ('-'.equals(m.get('name'))) { m.remove('name'); } if (m.isEmpty()) { ctx.remove(k); } } }"
+      }
+    },
+    {
+      "gsub": {
+        "tag": "strip_bom",
+        "field": "message",
+        "pattern": "^\\uFEFF",
+        "replacement": "",
+        "ignore_missing": true,
+        "ignore_failure": true,
+        "if": "ctx.message instanceof String"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null && ctx._ts != '-'",
+        "field": "_ts",
+        "formats": [
+          "ISO8601",
+          "MMM dd HH:mm:ss",
+          "MMM  d HH:mm:ss",
+          "MMM d HH:mm:ss"
+        ],
+        "timezone": "UTC",
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_raw",
+          "_ts",
+          "_pri",
+          "_ver",
+          "_pid",
+          "_msgid",
+          "_sd"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

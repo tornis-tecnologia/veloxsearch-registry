@@ -1,0 +1,9 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {"name": "web-01"},
+  "systemd": {"unit": "nginx.service"},
+  "process": {"name": "nginx", "command": "nginx", "pid": 812},
+  "log": {"level": "informational", "syslog": {"priority": 6}},
+  "message": "nginx: configuration file /etc/nginx/nginx.conf test is successful",
+  "velox": {"integration": "system", "stream": "journal", "package_version": "1.0.0"}
+}

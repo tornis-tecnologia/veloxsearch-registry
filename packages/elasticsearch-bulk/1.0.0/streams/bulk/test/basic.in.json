@@ -1,0 +1,34 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "message": "GET /health 200",
+    "host": {
+      "name": "web-01"
+    },
+    "agent": {
+      "type": "filebeat"
+    },
+    "@meta": {
+      "_index": "filebeat-8.15.0",
+      "_op_type": "create"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T12:15:03.000+02:00",
+    "message": "legacy logstash event",
+    "host": "logstash-src-01",
+    "@version": "1"
+  },
+  {
+    "@timestamp": 1762942504000,
+    "message": "epoch millis",
+    "agent": {
+      "hostname": "edge-02"
+    }
+  },
+  {
+    "@timestamp": "garbage",
+    "message": "bad timestamp",
+    "host": 99
+  }
+]

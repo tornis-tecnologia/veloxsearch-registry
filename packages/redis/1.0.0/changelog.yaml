@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "Migrated from the 1.x redis integration (1.0.1) to Spec 2.0: ECS field names, Redis 7 timestamps with year, role and level names."
+        es: "Migrado de la integración redis 1.x (1.0.1) a Spec 2.0: nombres de campo ECS, hora de Redis 7 con año, nombres de rol y nivel."
+        pt: "Migrado da integração redis 1.x (1.0.1) para Spec 2.0: nomes de campo ECS, hora do Redis 7 com ano, nomes de papel e nível."

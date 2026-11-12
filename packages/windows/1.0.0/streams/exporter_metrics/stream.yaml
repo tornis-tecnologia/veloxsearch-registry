@@ -1,0 +1,78 @@
+id: exporter_metrics
+title: {en: Windows Exporter metrics, es: Métricas de Windows Exporter, pt: Métricas do Windows Exporter}
+description:
+  en: Windows Exporter compatible metrics (CPU, memory, disks, network, services, processes) sent to the OTLP endpoint of the policy.
+  es: Métricas compatibles con Windows Exporter (CPU, memoria, discos, red, servicios, procesos) enviadas al endpoint OTLP de la política.
+  pt: Métricas compatíveis com Windows Exporter (CPU, memória, discos, rede, serviços, processos) enviadas ao endpoint OTLP da política.
+signal: metrics
+event_type: metrics
+enabled: false
+os:
+- windows
+input:
+  plugin: windows_exporter_metrics
+  fields:
+  - name: scrape_interval
+    type: integer
+    default: 15
+    title: {en: Scrape interval (s), es: Intervalo de recolección (s), pt: Intervalo de coleta (s)}
+    bind:
+      key: scrape_interval
+    min: 1
+  - name: collectors
+    type: select
+    multi: true
+    default:
+    - cpu
+    - os
+    - net
+    - logical_disk
+    - cs
+    - system
+    - memory
+    options:
+    - cpu
+    - cpu_info
+    - os
+    - net
+    - logical_disk
+    - cs
+    - cache
+    - thermalzone
+    - logon
+    - system
+    - service
+    - tcp
+    - memory
+    - paging_file
+    - process
+    - container
+    title: {en: Collectors, es: Colectores, pt: Coletores}
+    bind:
+      key: metrics
+      join: ','
+  - name: disk_allow
+    type: regex
+    default: .+
+    title: {en: Logical disks to include, es: Discos lógicos a incluir, pt: Discos lógicos a incluir}
+    bind:
+      key: we.logical_disk.allow_disk_regex
+    group: advanced
+  - name: nic_allow
+    type: regex
+    default: .+
+    title: {en: Network interfaces to include, es: Interfaces de red a incluir, pt: Interfaces de rede a incluir}
+    bind:
+      key: we.net.allow_nic_regex
+    group: advanced
+  - name: process_allow
+    type: regex
+    default: .+
+    title: {en: Processes to include, es: Procesos a incluir, pt: Processos a incluir}
+    bind:
+      key: we.process.allow_process_regex
+    group: advanced
+processors:
+  allow:
+  - metrics_selector
+  - labels

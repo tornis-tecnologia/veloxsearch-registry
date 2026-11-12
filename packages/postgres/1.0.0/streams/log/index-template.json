@@ -1,0 +1,103 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "5s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 512
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "original": {
+              "type": "keyword",
+              "index": false,
+              "doc_values": false
+            },
+            "outcome": {
+              "type": "keyword"
+            },
+            "action": {
+              "type": "keyword"
+            },
+            "duration": {
+              "type": "long"
+            }
+          }
+        },
+        "log": {
+          "properties": {
+            "level": {
+              "type": "keyword"
+            }
+          }
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        },
+        "process": {
+          "properties": {
+            "pid": {
+              "type": "long"
+            }
+          }
+        },
+        "user": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "source": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            },
+            "address": {
+              "type": "keyword"
+            },
+            "port": {
+              "type": "long"
+            }
+          }
+        },
+        "postgres": {
+          "properties": {
+            "database": {
+              "type": "keyword"
+            },
+            "statement": {
+              "type": "text"
+            }
+          }
+        }
+      }
+    }
+  }
+}

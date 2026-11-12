@@ -1,0 +1,41 @@
+id: textfile
+title: {en: Textfile collector, es: Textfile collector, pt: Textfile collector}
+description:
+  en: Reads Prometheus text exposition files (*.prom) written by scripts or cron jobs. Needs an OTLP endpoint on the policy.
+  es: Lee archivos de exposición de texto Prometheus (*.prom) escritos por scripts o cron. Requiere un endpoint OTLP en la política.
+  pt: Lê arquivos de exposição de texto Prometheus (*.prom) escritos por scripts ou cron. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+since: 4.0.0
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: prometheus_textfile
+  fields:
+  - name: path
+    type: string
+    default:
+    - /var/lib/prometheus/textfile/*.prom
+    title: {en: Files, es: Archivos, pt: Arquivos}
+    bind:
+      key: path
+      join: ','
+    multi: true
+    required: true
+    description:
+      en: Files or glob patterns to read.
+      es: Archivos o patrones glob a leer.
+      pt: Arquivos ou padrões glob a ler.
+  - name: scrape_interval
+    type: duration
+    default: 10s
+    title: {en: Scrape interval, es: Intervalo de recolección, pt: Intervalo de coleta}
+    bind:
+      key: scrape_interval
+processors:
+  allow:
+  - metrics_selector
+  - labels

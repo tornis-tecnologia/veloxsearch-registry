@@ -1,0 +1,43 @@
+{
+ "package_id": "traefik",
+ "package_version": "1.0.0",
+ "spec_version": "2.0",
+ "streams": {
+  "access": {
+   "enabled": true,
+   "input": {
+    "paths": [
+     "/srv/traefik/access.log"
+    ],
+    "read_from_head": true,
+    "ignore_older": "3d"
+   },
+   "processors": [
+    {
+     "id": "exclude",
+     "enabled": true,
+     "fields": {
+      "rules": [
+       "log ping@internal"
+      ]
+     }
+    }
+   ],
+   "backend": {
+    "delete_after": "45d",
+    "parse_user_agent": false
+   }
+  },
+  "app": {
+   "enabled": true,
+   "input": {
+    "paths": [
+     "/srv/traefik/traefik.log"
+    ]
+   },
+   "backend": {
+    "delete_after": "21d"
+   }
+  }
+ }
+}

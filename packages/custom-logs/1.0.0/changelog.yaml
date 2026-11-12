@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: First release.
+        es: Primera versión.
+        pt: Primeira versão.

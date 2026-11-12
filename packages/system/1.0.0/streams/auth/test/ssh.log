@@ -1,0 +1,4 @@
+Nov 12 10:15:02 web-01 sshd[2231]: Failed password for invalid user admin from 203.0.113.9 port 51022 ssh2
+Nov 12 10:15:09 web-01 sshd[2240]: Accepted publickey for deploy from 10.0.0.5 port 40112 ssh2: ED25519 SHA256:abc
+Nov 12 10:16:00 web-01 sudo:   deploy : TTY=pts/0 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+Nov 12 10:16:01 web-01 sshd[2250]: Disconnected from authenticating user root 198.51.100.7 port 2222 [preauth]

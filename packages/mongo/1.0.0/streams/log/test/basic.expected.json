@@ -1,0 +1,171 @@
+[
+  {
+    "mongo": {
+      "context": "listener",
+      "component": "NETWORK",
+      "id": 23016,
+      "attr": {
+        "port": 27017,
+        "ssl": "off"
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:02.123+00:00\"},\"s\":\"I\",\"c\":\"NETWORK\",\"id\":23016,\"ctx\":\"listener\",\"msg\":\"Waiting for connections\",\"attr\":{\"port\":27017,\"ssl\":\"off\"}}"
+    },
+    "message": "Waiting for connections"
+  },
+  {
+    "mongo": {
+      "context": "listener",
+      "component": "NETWORK",
+      "id": 22943,
+      "attr": {
+        "remote": "10.0.0.5:51234",
+        "connectionId": 12,
+        "connectionCount": 5
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:03.001Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:03.001+00:00\"},\"s\":\"I\",\"c\":\"NETWORK\",\"id\":22943,\"ctx\":\"listener\",\"msg\":\"Connection accepted\",\"attr\":{\"remote\":\"10.0.0.5:51234\",\"connectionId\":12,\"connectionCount\":5}}"
+    },
+    "message": "Connection accepted"
+  },
+  {
+    "mongo": {
+      "context": "conn12",
+      "component": "COMMAND",
+      "id": 51803,
+      "attr": {
+        "keysExamined": 0,
+        "ns": "shop.orders",
+        "planSummary": "COLLSCAN",
+        "docsExamined": 120000,
+        "durationMillis": 152,
+        "type": "command",
+        "command": {
+          "filter": {
+            "customer_id": 42
+          },
+          "find": "orders"
+        }
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:04.500Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "duration": 152000000,
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:04.500+00:00\"},\"s\":\"I\",\"c\":\"COMMAND\",\"id\":51803,\"ctx\":\"conn12\",\"msg\":\"Slow query\",\"attr\":{\"type\":\"command\",\"ns\":\"shop.orders\",\"command\":{\"find\":\"orders\",\"filter\":{\"customer_id\":42}},\"planSummary\":\"COLLSCAN\",\"keysExamined\":0,\"docsExamined\":120000,\"durationMillis\":152}}"
+    },
+    "message": "Slow query"
+  },
+  {
+    "mongo": {
+      "context": "initandlisten",
+      "component": "STORAGE",
+      "id": 22435,
+      "attr": {
+        "error": 13,
+        "message": "[1699783505:250000][1:0x7f][WT_SESSION.open]: Permission denied"
+      }
+    },
+    "@timestamp": "2026-11-12T13:15:05.250Z",
+    "log": {
+      "level": "error"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:05.250-03:00\"},\"s\":\"E\",\"c\":\"STORAGE\",\"id\":22435,\"ctx\":\"initandlisten\",\"msg\":\"WiredTiger error\",\"attr\":{\"error\":13,\"message\":\"[1699783505:250000][1:0x7f][WT_SESSION.open]: Permission denied\"}}"
+    },
+    "message": "WiredTiger error"
+  },
+  {
+    "mongo": {
+      "context": "initandlisten",
+      "component": "CONTROL",
+      "id": 22120,
+      "tags": [
+        "startupWarnings"
+      ]
+    },
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "log": {
+      "level": "warning"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:06.000+00:00\"},\"s\":\"W\",\"c\":\"CONTROL\",\"id\":22120,\"ctx\":\"initandlisten\",\"msg\":\"Access control is not enabled for the database\",\"tags\":[\"startupWarnings\"]}"
+    },
+    "message": "Access control is not enabled for the database"
+  },
+  {
+    "mongo": {
+      "context": "conn12",
+      "component": "QUERY",
+      "id": 20528
+    },
+    "@timestamp": "2026-11-12T10:15:07.000Z",
+    "log": {
+      "level": "debug"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:07.000+00:00\"},\"s\":\"D2\",\"c\":\"QUERY\",\"id\":20528,\"ctx\":\"conn12\",\"msg\":\"Plan cache evicted\"}"
+    },
+    "message": "Plan cache evicted"
+  },
+  {
+    "mongo": {
+      "context": "main",
+      "component": "CONTROL",
+      "id": 4757800,
+      "attr": {
+        "message": "Got signal: 11 (Segmentation fault)."
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:08.000Z",
+    "log": {
+      "level": "fatal"
+    },
+    "event": {
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:08.000+00:00\"},\"s\":\"F\",\"c\":\"CONTROL\",\"id\":4757800,\"ctx\":\"main\",\"msg\":\"Writing fatal message\",\"attr\":{\"message\":\"Got signal: 11 (Segmentation fault).\"}}"
+    },
+    "message": "Writing fatal message"
+  },
+  {
+    "mongo": {
+      "context": "initandlisten",
+      "component": "NETWORK"
+    },
+    "@timestamp": "2019-03-12T10:15:02.123Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "original": "2019-03-12T10:15:02.123+0000 I NETWORK  [initandlisten] waiting for connections on port 27017"
+    },
+    "message": "waiting for connections on port 27017"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "{\"t\":{\"$date\":\"2026-11-12T10:15:09.000+00:00\"},\"s\":\"I\",\"c\":\"NETWORK\",\"id\":22944,\"ctx\":\"conn12\",\"msg\":\"Connection ended\""
+    },
+    "message": "{\"t\":{\"$date\":\"2026-11-12T10:15:09.000+00:00\"},\"s\":\"I\",\"c\":\"NETWORK\",\"id\":22944,\"ctx\":\"conn12\",\"msg\":\"Connection ended\""
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this is neither json nor a mongod text line"
+    },
+    "message": "this is neither json nor a mongod text line"
+  }
+]

@@ -1,0 +1,103 @@
+id: lines
+title:
+  en: Serial lines
+  es: Líneas seriales
+  pt: Linhas seriais
+description:
+  en: Each line read from the serial device as a message.
+  es: Cada línea leída del dispositivo serie como mensaje.
+  pt: Cada linha lida do dispositivo serial como mensagem.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+input:
+  plugin: serial
+  fields:
+  - name: file
+    type: string
+    default: /dev/ttyUSB0
+    required: true
+    title:
+      en: Device
+      es: Dispositivo
+      pt: Dispositivo
+    bind:
+      key: file
+  - name: bitrate
+    type: integer
+    default: 9600
+    required: true
+    min: 50
+    title:
+      en: Bit rate
+      es: Velocidad (baudios)
+      pt: Taxa de bits (baud)
+    description:
+      en: 'Common values: 9600, 19200, 38400, 57600, 115200.'
+      es: 'Valores comunes: 9600, 19200, 38400, 57600, 115200.'
+      pt: 'Valores comuns: 9600, 19200, 38400, 57600, 115200.'
+    bind:
+      key: bitrate
+  - name: separator
+    type: string
+    placeholder: \n
+    title:
+      en: Line separator
+      es: Separador de línea
+      pt: Separador de linha
+    bind:
+      key: separator
+  - name: format
+    type: select
+    default: none
+    options:
+    - none
+    - json
+    group: advanced
+    title:
+      en: Format
+      es: Formato
+      pt: Formato
+    bind:
+      key: format
+  - name: min_bytes
+    type: integer
+    default: 1
+    min: 1
+    group: advanced
+    title:
+      en: Minimum bytes per read
+      es: Bytes mínimos por lectura
+      pt: Bytes mínimos por leitura
+    bind:
+      key: min_bytes
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 2gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

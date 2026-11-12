@@ -1,0 +1,127 @@
+[
+  {
+    "process": {
+      "pid": 1842
+    },
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "log"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:02.123 UTC [1842] LOG:  checkpoint starting: time"
+    },
+    "message": "checkpoint starting: time"
+  },
+  {
+    "process": {
+      "pid": 1900
+    },
+    "@timestamp": "2026-11-12T10:15:03.456Z",
+    "log": {
+      "level": "log"
+    },
+    "message": "duration: 812.400 ms  statement: SELECT o.id, o.total FROM orders o WHERE o.customer_id = 42;",
+    "event": {
+      "duration": 812400000,
+      "original": "2026-11-12 10:15:03.456 UTC [1900] app@shop LOG:  duration: 812.400 ms  statement: SELECT o.id, o.total FROM orders o WHERE o.customer_id = 42;"
+    },
+    "user": {
+      "name": "app"
+    },
+    "postgres": {
+      "statement": "SELECT o.id, o.total FROM orders o WHERE o.customer_id = 42;",
+      "database": "shop"
+    }
+  },
+  {
+    "process": {
+      "pid": 1911
+    },
+    "@timestamp": "2026-11-12T10:15:04.001Z",
+    "log": {
+      "level": "log"
+    },
+    "source": {
+      "port": 51234,
+      "ip": "10.0.0.5"
+    },
+    "message": "connection received: host=10.0.0.5 port=51234",
+    "event": {
+      "action": "connection-received",
+      "original": "2026-11-12 10:15:04.001 UTC [1911] [unknown]@[unknown] LOG:  connection received: host=10.0.0.5 port=51234"
+    }
+  },
+  {
+    "process": {
+      "pid": 1911
+    },
+    "@timestamp": "2026-11-12T10:15:04.020Z",
+    "log": {
+      "level": "log"
+    },
+    "message": "connection authorized: user=app database=shop",
+    "event": {
+      "action": "connection-authorized",
+      "original": "2026-11-12 10:15:04.020 UTC [1911] app@shop LOG:  connection authorized: user=app database=shop"
+    },
+    "user": {
+      "name": "app"
+    },
+    "postgres": {
+      "database": "shop"
+    }
+  },
+  {
+    "process": {
+      "pid": 1911
+    },
+    "@timestamp": "2026-11-12T13:15:05.500Z",
+    "log": {
+      "level": "fatal"
+    },
+    "message": "password authentication failed for user \"app\"",
+    "event": {
+      "original": "2026-11-12 10:15:05.500 -03 [1911] app@shop FATAL:  password authentication failed for user \"app\""
+    },
+    "user": {
+      "name": "app"
+    },
+    "postgres": {
+      "database": "shop"
+    }
+  },
+  {
+    "process": {
+      "pid": 1842
+    },
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "log": {
+      "level": "warning"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:06.000 UTC [1842] WARNING:  could not open statistics file \"pg_stat_tmp/global.stat\""
+    },
+    "message": "could not open statistics file \"pg_stat_tmp/global.stat\""
+  },
+  {
+    "process": {
+      "pid": 77
+    },
+    "@timestamp": "2026-11-12T10:15:07.000Z",
+    "log": {
+      "level": "debug"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:07 UTC [77] DEBUG1:  autovacuum: processing database \"postgres\""
+    },
+    "message": "autovacuum: processing database \"postgres\""
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this line is not a postgres log line"
+    },
+    "message": "this line is not a postgres log line"
+  }
+]

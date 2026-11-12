@@ -1,0 +1,248 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "traefik": {
+      "duration_ms": 12.0,
+      "router": "api@docker",
+      "service": "http://172.18.0.4:8080",
+      "request_count": 1
+    },
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 1532
+        },
+        "status_code": 200
+      }
+    },
+    "client": {
+      "ip": "203.0.113.7"
+    },
+    "message": "203.0.113.7 - - [12/Nov/2026:10:15:02 +0000] \"GET /api/users HTTP/1.1\" 200 1532 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\" 1 \"api@docker\" \"http://172.18.0.4:8080\" 12ms",
+    "event": {
+      "category": "web",
+      "duration": 12000000
+    },
+    "user_agent": {
+      "name": "Chrome",
+      "original": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "os": {
+        "name": "Linux"
+      },
+      "device": {
+        "name": "Other"
+      },
+      "version": "120.0.0.0"
+    },
+    "url": {
+      "original": "/api/users"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "traefik": {
+      "duration_ms": 48.0,
+      "router": "web@docker",
+      "service": "http://172.18.0.5:3000",
+      "request_count": 2
+    },
+    "http": {
+      "request": {
+        "method": "POST",
+        "referrer": "https://app.example.com/"
+      },
+      "version": "2.0",
+      "response": {
+        "body": {
+          "bytes": 0
+        },
+        "status_code": 302
+      }
+    },
+    "client": {
+      "ip": "198.51.100.23"
+    },
+    "message": "198.51.100.23 - alice [12/Nov/2026:10:15:03 +0000] \"POST /login HTTP/2.0\" 302 0 \"https://app.example.com/\" \"curl/8.5.0\" 2 \"web@docker\" \"http://172.18.0.5:3000\" 48ms",
+    "event": {
+      "category": "web",
+      "duration": 48000000
+    },
+    "user": {
+      "name": "alice"
+    },
+    "user_agent": {
+      "name": "curl",
+      "original": "curl/8.5.0",
+      "device": {
+        "name": "Other"
+      },
+      "version": "8.5.0"
+    },
+    "url": {
+      "original": "/login"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T13:15:04.000Z",
+    "traefik": {
+      "duration_ms": 1.0,
+      "router": "web@docker",
+      "service": "http://172.18.0.5:3000",
+      "request_count": 3
+    },
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1",
+      "response": {
+        "status_code": 304
+      }
+    },
+    "client": {
+      "ip": "2001:db8::1f"
+    },
+    "message": "2001:db8::1f - - [12/Nov/2026:10:15:04 -0300] \"GET /static/app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1\" 3 \"web@docker\" \"http://172.18.0.5:3000\" 1ms",
+    "event": {
+      "category": "web",
+      "duration": 1000000
+    },
+    "user_agent": {
+      "name": "Mobile Safari",
+      "original": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1",
+      "os": {
+        "name": "iOS",
+        "version": "17.1",
+        "full": "iOS 17.1"
+      },
+      "device": {
+        "name": "iPhone"
+      },
+      "version": "17.1"
+    },
+    "url": {
+      "original": "/static/app.js"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "traefik": {
+      "duration_ms": 3004.0,
+      "router": "api@docker",
+      "service": "http://172.18.0.4:8080",
+      "request_count": 4
+    },
+    "http": {
+      "request": {
+        "method": "PUT"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 11
+        },
+        "status_code": 502
+      }
+    },
+    "client": {
+      "ip": "10.0.0.9"
+    },
+    "message": "10.0.0.9 - - [12/Nov/2026:10:15:05 +0000] \"PUT /api/orders/12 HTTP/1.1\" 502 11 \"-\" \"python-requests/2.31.0\" 4 \"api@docker\" \"http://172.18.0.4:8080\" 3004ms",
+    "event": {
+      "category": "web",
+      "duration": 3004000000
+    },
+    "user_agent": {
+      "name": "Python Requests",
+      "original": "python-requests/2.31.0",
+      "device": {
+        "name": "Other"
+      },
+      "version": "2.31"
+    },
+    "url": {
+      "original": "/api/orders/12"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "traefik": {
+      "duration_ms": 0.0,
+      "request_count": 5
+    },
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 19
+        },
+        "status_code": 404
+      }
+    },
+    "client": {
+      "ip": "192.0.2.44"
+    },
+    "message": "192.0.2.44 - - [12/Nov/2026:10:15:06 +0000] \"GET /unknown HTTP/1.1\" 404 19 \"-\" \"Go-http-client/1.1\" 5 \"-\" \"-\" 0ms",
+    "event": {
+      "category": "web",
+      "duration": 0
+    },
+    "user_agent": {
+      "name": "Go-http-client",
+      "original": "Go-http-client/1.1",
+      "device": {
+        "name": "Other"
+      },
+      "version": "1.1"
+    },
+    "url": {
+      "original": "/unknown"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:07.000Z",
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 5
+        },
+        "status_code": 200
+      }
+    },
+    "client": {
+      "ip": "203.0.113.50"
+    },
+    "message": "203.0.113.50 - - [12/Nov/2026:10:15:07 +0000] \"GET /plain HTTP/1.1\" 200 5 \"-\" \"wget/1.21\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Other",
+      "device": {
+        "name": "Other"
+      },
+      "original": "wget/1.21"
+    },
+    "url": {
+      "original": "/plain"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "this is not an access log line",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

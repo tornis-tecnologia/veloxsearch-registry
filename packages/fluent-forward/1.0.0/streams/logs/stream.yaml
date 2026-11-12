@@ -1,0 +1,75 @@
+id: logs
+title: {en: Forward events, es: Eventos Forward, pt: Eventos Forward}
+description: {en: Receives events from Fluent Bit or Fluentd over the Forward protocol; records are kept as they arrive., es: Recibe eventos de Fluent Bit o Fluentd por el protocolo Forward; los registros se conservan tal cual llegan., pt: Recebe eventos do Fluent Bit ou do Fluentd pelo protocolo Forward; os registros são mantidos como chegam.}
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+input:
+  plugin: forward
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Interface to bind to (0.0.0.0 = all)., es: Interfaz a la que enlazar (0.0.0.0 = todas)., pt: Interface à qual vincular (0.0.0.0 = todas).}
+    bind: {key: listen}
+  - name: port
+    type: integer
+    default: 24224
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port for the Forward protocol., es: Puerto TCP del protocolo Forward., pt: Porta TCP do protocolo Forward.}
+    bind: {key: port}
+  - name: shared_key
+    type: password
+    title: {en: Shared key, es: Clave compartida, pt: Chave compartilhada}
+    description: {en: Secure Forward shared key; leave empty for plain Forward., es: Clave compartida de Secure Forward; vacía para Forward simple., pt: Chave compartilhada do Secure Forward; vazia para Forward simples.}
+    bind: {key: shared_key}
+  - name: self_hostname
+    type: string
+    default: localhost
+    group: advanced
+    title: {en: Self hostname, es: Hostname propio, pt: Hostname próprio}
+    description: {en: Hostname used in the Secure Forward handshake., es: Hostname usado en el handshake de Secure Forward., pt: Hostname usado no handshake do Secure Forward.}
+    bind: {key: self_hostname}
+  - name: buffer_chunk_size
+    type: size
+    default: '1024000'
+    group: advanced
+    title: {en: Buffer chunk size, es: Tamaño de chunk del búfer, pt: Tamanho do chunk do buffer}
+    bind: {key: buffer_chunk_size}
+  - name: buffer_max_size
+    type: size
+    default: '6144000'
+    group: advanced
+    title: {en: Buffer max size, es: Tamaño máximo del búfer, pt: Tamanho máximo do buffer}
+    description: {en: 'Largest single message accepted, including decompressed data.', es: 'Mayor mensaje aceptado, incluidos los datos descomprimidos.', pt: 'Maior mensagem aceita, incluindo dados descomprimidos.'}
+    bind: {key: buffer_max_size}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex. One rule per line: `<field> <regex>`.', es: 'Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`.', pt: 'Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      placeholder: message ^DEBUG
+      title: {en: Rules, es: Reglas, pt: Regras}
+      bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle: {rollover_max_size: 10gb, rollover_max_age: 1d, delete_after: 30d}
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind: {lifecycle: delete_after}

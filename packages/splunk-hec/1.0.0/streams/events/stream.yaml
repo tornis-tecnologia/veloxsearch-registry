@@ -1,0 +1,73 @@
+id: events
+title: {en: HEC events, es: Eventos HEC, pt: Eventos HEC}
+description: {en: 'Splunk HTTP Event Collector compatible receiver: forwarders and apps that speak HEC send their events to the agent.', es: 'Receptor compatible con Splunk HTTP Event Collector: forwarders y aplicaciones que hablan HEC envían sus eventos al agente.', pt: 'Receptor compatível com o Splunk HTTP Event Collector: forwarders e aplicações que falam HEC enviam seus eventos ao agente.'}
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+input:
+  plugin: splunk
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Interface to bind to (0.0.0.0 = all)., es: Interfaz a la que enlazar (0.0.0.0 = todas)., pt: Interface à qual vincular (0.0.0.0 = todas).}
+    bind: {key: listen}
+  - name: port
+    type: integer
+    default: 8088
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port of the HEC endpoint., es: Puerto TCP del endpoint HEC., pt: Porta TCP do endpoint HEC.}
+    bind: {key: port}
+  - name: splunk_token
+    type: password
+    title: {en: HEC token, es: Token HEC, pt: Token HEC}
+    description: {en: 'Token(s) clients must send, comma-separated. Empty = no authentication.', es: 'Token(s) que los clientes deben enviar, separados por comas. Vacío = sin autenticación.', pt: 'Token(s) que os clientes devem enviar, separados por vírgula. Vazio = sem autenticação.'}
+    bind: {key: splunk_token}
+  - name: buffer_max_size
+    type: size
+    default: 4M
+    group: advanced
+    title: {en: Max request size, es: Tamaño máximo de solicitud, pt: Tamanho máximo da requisição}
+    bind: {key: buffer_max_size}
+  - name: buffer_chunk_size
+    type: size
+    default: 512K
+    group: advanced
+    title: {en: Buffer chunk size, es: Tamaño de chunk del búfer, pt: Tamanho do chunk do buffer}
+    bind: {key: buffer_chunk_size}
+  - name: http2
+    type: bool
+    default: true
+    group: advanced
+    title: {en: HTTP/2, es: HTTP/2, pt: HTTP/2}
+    bind: {key: http2}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex. One rule per line: `<field> <regex>`.', es: 'Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`.', pt: 'Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      placeholder: message ^DEBUG
+      title: {en: Rules, es: Reglas, pt: Regras}
+      bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle: {rollover_max_size: 10gb, rollover_max_age: 1d, delete_after: 30d}
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind: {lifecycle: delete_after}

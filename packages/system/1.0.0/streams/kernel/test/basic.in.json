@@ -1,0 +1,4 @@
+[
+  {"@timestamp": "2026-11-12T10:15:02.000Z", "priority": 3, "sequence": 18231, "sec": 1794500102, "usec": 0, "msg": "Out of memory: Killed process 4321 (java) total-vm:8123456kB"},
+  {"@timestamp": "2026-11-12T10:15:03.000Z", "priority": 6, "sequence": 18232, "sec": 1794500103, "usec": 10, "msg": "usb 1-1: new high-speed USB device number 4 using xhci_hcd"}
+]

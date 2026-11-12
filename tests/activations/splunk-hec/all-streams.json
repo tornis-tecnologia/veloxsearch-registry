@@ -1,0 +1,34 @@
+{
+  "package_id": "splunk-hec",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "events": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 18088,
+        "splunk_token": {
+          "$secret": "hec-token"
+        },
+        "buffer_max_size": "8M",
+        "buffer_chunk_size": "1M",
+        "http2": false
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "splunk.sourcetype ^debug"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "45d"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+[2026/11/12 10:15:02.123456] [ info] [engine] started (pid=1234)
+[2026/11/12 10:15:03.000001] [ warn] [engine] chunk '1-1794478503.1.flb' cannot be retried: task_id=0, input=tail.0 > output=opensearch.0
+[2026/11/12 10:15:04.500000] [error] [http_client] broken connection to os.example.internal:9200 ?
+[2026/11/12 10:15:05] [debug] [input:tail:tail.0] inotify_fs_add(): inode=1234 watch_fd=1 name=/var/log/syslog
+this line has no fluent bit shape

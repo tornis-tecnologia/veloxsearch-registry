@@ -1,0 +1,69 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:00.000Z",
+    "message": "Configuration loaded from file: /etc/traefik/traefik.yml",
+    "log": {
+      "level": "info"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:01.000Z",
+    "message": "Cannot retrieve the ACME certificate for domain \"x.example.com\"",
+    "log": {
+      "level": "error"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "message": "Could not find a valid provider configuration",
+    "log": {
+      "level": "warning"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "message": "Adding route for /api with middlewares [auth]",
+    "log": {
+      "level": "debug"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "message": "Starting provider *docker.Provider",
+    "log": {
+      "level": "info"
+    },
+    "traefik": {
+      "app": {
+        "providerName": "docker"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "message": "Router uses a nonexistent service",
+    "log": {
+      "level": "error"
+    },
+    "traefik": {
+      "app": {
+        "routerName": "web@docker",
+        "entryPointName": "web"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "message": "No domain found in rule Host(`x`)",
+    "log": {
+      "level": "warning"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "@@ garbage that is not a traefik log line @@",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

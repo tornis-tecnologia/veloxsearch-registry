@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/changelog.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — package changelog (changelog.yaml)",
+  "description": "Newest first. The entry for the package's own version is required (R23); the console shows it on the upgrade screen.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["version", "changes"],
+    "properties": {
+      "version": {"$ref": "common.schema.json#/$defs/semver"},
+      "changes": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "description"],
+          "properties": {
+            "type": {"type": "string", "enum": ["enhancement", "bugfix", "breaking-change"]},
+            "description": {"$ref": "common.schema.json#/$defs/i18n"},
+            "link": {"type": "string", "format": "uri"}
+          }
+        }
+      }
+    }
+  }
+}

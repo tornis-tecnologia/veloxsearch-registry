@@ -1,0 +1,100 @@
+{
+  "description": "mongo/log: mongod JSON log (4.4+) with a pre-4.4 text fallback",
+  "processors": [
+    {
+      "script": {
+        "tag": "keep_original",
+        "lang": "painless",
+        "if": "ctx.log != null",
+        "source": "if (ctx.event == null) { ctx.event = new HashMap(); } ctx.event.original = ctx.log;"
+      }
+    },
+    {
+      "json": {
+        "tag": "parse_json",
+        "field": "log",
+        "target_field": "mongo",
+        "if": "ctx.log != null",
+        "on_failure": [
+          {
+            "grok": {
+              "tag": "parse_text",
+              "field": "log",
+              "ignore_missing": true,
+              "patterns": [
+                "\\A%{TIMESTAMP_ISO8601:_ts}\\s+%{WORD:_sev}\\s+%{WORD:mongo.component}\\s+\\[%{DATA:mongo.context}\\]\\s+%{GREEDYDATA:message}"
+              ],
+              "on_failure": [
+                {
+                  "rename": {
+                    "field": "log",
+                    "target_field": "message",
+                    "ignore_missing": true
+                  }
+                },
+                {
+                  "set": {
+                    "field": "event.outcome",
+                    "value": "unparsed"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": "log",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "extract",
+        "if": "ctx.mongo != null && ctx.mongo instanceof Map",
+        "lang": "painless",
+        "source": "\nMap m = ctx.mongo;\nif (m.t instanceof Map && m.t.get('$date') != null) { ctx._ts = m.t.get('$date').toString(); }\nif (m.s != null) { ctx._sev = m.s.toString(); }\nif (m.c != null) { m.component = m.c; }\nif (m.ctx != null) { m.context = m.ctx; }\nif (m.msg != null) { ctx.message = m.msg; }\nif (m.attr instanceof Map && m.attr.durationMillis != null) {\n  if (ctx.event == null) { ctx.event = new HashMap(); }\n  ctx.event.duration = Math.round(((Number) m.attr.durationMillis).doubleValue() * 1000000.0);\n}\nm.remove('t'); m.remove('s'); m.remove('c'); m.remove('ctx'); m.remove('msg');\n"
+      }
+    },
+    {
+      "script": {
+        "tag": "level",
+        "if": "ctx._sev != null",
+        "lang": "painless",
+        "source": "\nString s = ctx._sev;\nString l = 'info';\nif (s == 'F') { l = 'fatal'; } else if (s == 'E') { l = 'error'; } else if (s == 'W') { l = 'warning'; }\nelse if (s == 'I') { l = 'info'; } else if (s.startsWith('D')) { l = 'debug'; }\nMap lg = new HashMap(); lg.put('level', l); ctx.log = lg;\n"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_sev"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release (beta): files stream.'
+      es: 'Primera versión (beta): stream files.'
+      pt: 'Primeira versão (beta): stream files.'

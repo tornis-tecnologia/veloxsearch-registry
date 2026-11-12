@@ -1,0 +1,63 @@
+{
+  "package_id": "windows",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "eventlog": {
+      "enabled": true,
+      "input": {
+        "channels": [
+          "Application",
+          "System",
+          "Security",
+          "Microsoft-Windows-PowerShell/Operational"
+        ],
+        "interval": 5,
+        "read_existing_events": true,
+        "ignore_missing_channels": false,
+        "event_data_as_map": true,
+        "render_event_as_xml": true,
+        "string_inserts": false,
+        "use_ansi": true
+      },
+      "backend": {
+        "delete_after": "90d"
+      }
+    },
+    "eventlog_legacy": {
+      "enabled": true,
+      "input": {
+        "channels": [
+          "Application"
+        ],
+        "interval": 2
+      }
+    },
+    "stats": {
+      "enabled": true,
+      "input": {
+        "interval": 30
+      }
+    },
+    "exporter_metrics": {
+      "enabled": true,
+      "input": {
+        "scrape_interval": 30,
+        "collectors": [
+          "cpu",
+          "memory",
+          "logical_disk"
+        ],
+        "disk_allow": "C:"
+      }
+    },
+    "etw": {
+      "enabled": true,
+      "input": {
+        "session_type": "provider",
+        "provider_name": "Microsoft-Windows-DNSServer",
+        "level": 4
+      }
+    }
+  }
+}

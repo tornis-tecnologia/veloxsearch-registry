@@ -1,0 +1,32 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.003Z",
+  "host": {
+    "name": "fw-edge-01"
+  },
+  "process": {
+    "name": "sshd",
+    "pid": 2231
+  },
+  "message": "Failed password for invalid user admin from 203.0.113.9 port 51022 ssh2",
+  "log": {
+    "level": "notice",
+    "syslog": {
+      "priority": 85,
+      "facility": {
+        "code": 10,
+        "name": "authpriv"
+      },
+      "severity": {
+        "code": 5,
+        "name": "notice"
+      },
+      "version": "1",
+      "msgid": "ID47"
+    }
+  },
+  "velox": {
+    "integration": "syslog-server",
+    "stream": "udp",
+    "package_version": "1.0.0"
+  }
+}

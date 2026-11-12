@@ -1,0 +1,24 @@
+{
+  "package_id": "docker-metrics",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "stats": {
+      "enabled": true,
+      "input": {
+        "interval": 30,
+        "include": [
+          "api",
+          "db"
+        ],
+        "exclude": [
+          "buildkit"
+        ],
+        "path_containers": "/data/docker/containers"
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "ProviderName": "Microsoft-Windows-Kernel-Process",
+  "EventId": 1,
+  "ProcessID": 4412,
+  "velox": {
+    "integration": "windows",
+    "stream": "etw",
+    "package_version": "1.0.0"
+  }
+}

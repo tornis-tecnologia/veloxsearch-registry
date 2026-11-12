@@ -1,0 +1,7 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "message": "GET /health 200 1ms",
+  "event": {"original": "GET /health 200 1ms"},
+  "velox": {"integration": "custom-logs", "stream": "log", "package_version": "1.0.0"},
+  "host": {"name": "app-01"}
+}

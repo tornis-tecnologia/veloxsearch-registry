@@ -1,0 +1,19 @@
+[
+  {
+    "pid": 4021,
+    "comm": "bash",
+    "signal": 9,
+    "target_pid": 977
+  },
+  {
+    "pid": "88",
+    "comm": "curl",
+    "function": "malloc",
+    "size": 4096
+  },
+  {
+    "pid": "not-a-pid",
+    "comm": "nc",
+    "port": 8080
+  }
+]

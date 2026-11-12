@@ -1,0 +1,37 @@
+id: cpu
+title: {en: CPU usage (documents), es: Uso de CPU (documentos), pt: Uso de CPU (documentos)}
+description:
+  en: Periodic CPU usage samples (total and per core) stored as documents in OpenSearch — works without the OTel stack.
+  es: Muestras periódicas de uso de CPU (total y por núcleo) guardadas como documentos en OpenSearch — funciona sin el stack OTel.
+  pt: Amostras periódicas de uso de CPU (total e por núcleo) guardadas como documentos no OpenSearch — funciona sem o stack OTel.
+signal: metrics
+event_type: logs
+enabled: false
+os: [linux]
+
+input:
+  plugin: cpu
+  fields:
+    - name: interval
+      type: integer
+      default: 10
+      min: 1
+      title: {en: Interval (s), es: Intervalo (s), pt: Intervalo (s)}
+      bind: {key: interval_sec}
+
+processors:
+  allow: [throttle, content_modifier]
+
+backend:
+  index_template: index-template.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 1d
+    delete_after: 14d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 14d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}

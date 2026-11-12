@@ -1,0 +1,18 @@
+{
+  "@timestamp": "2026-11-12T10:15:00.111Z",
+  "process": {
+    "pid": 1
+  },
+  "redis": {
+    "role": "master"
+  },
+  "log": {
+    "level": "notice"
+  },
+  "message": "Ready to accept connections tcp",
+  "velox": {
+    "integration": "redis",
+    "stream": "log",
+    "package_version": "1.0.0"
+  }
+}

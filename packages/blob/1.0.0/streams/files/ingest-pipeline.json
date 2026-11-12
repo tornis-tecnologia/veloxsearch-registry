@@ -1,0 +1,61 @@
+{
+  "description": "blob: normalize file records",
+  "processors": [
+    {
+      "set": {
+        "tag": "module",
+        "field": "event.module",
+        "value": "blob"
+      }
+    },
+    {
+      "rename": {
+        "tag": "path",
+        "field": "file_path",
+        "target_field": "file.path",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "size",
+        "field": "file_size",
+        "target_field": "file.size",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "name",
+        "lang": "painless",
+        "if": "ctx.file?.path instanceof String",
+        "source": "String p = ctx.file.path; int i = p.lastIndexOf('/'); ctx.file.name = i >= 0 ? p.substring(i + 1) : p;"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "file_size"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "event.outcome",
+        "value": "unparsed"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}

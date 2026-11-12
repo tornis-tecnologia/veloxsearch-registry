@@ -1,0 +1,136 @@
+id: logs
+title:
+  en: OTLP logs
+  es: Logs OTLP
+  pt: Logs OTLP
+description:
+  en: OpenTelemetry log records received over OTLP/HTTP, with severity, body, trace context, resource and attributes.
+  es: Registros de log OpenTelemetry recibidos por OTLP/HTTP, con severidad, cuerpo, contexto de traza, recurso y atributos.
+  pt: Registros de log OpenTelemetry recebidos por OTLP/HTTP, com severidade, corpo, contexto de trace, recurso e atributos.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: opentelemetry
+  fixed:
+    tag_from_uri: false
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title:
+      en: Listen address
+      es: Dirección de escucha
+      pt: Endereço de escuta
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    default: 4318
+    min: 1
+    max: 65535
+    title:
+      en: Port
+      es: Puerto
+      pt: Porta
+    bind:
+      key: port
+  - name: tls
+    type: bool
+    default: false
+    title:
+      en: Enable TLS
+      es: Activar TLS
+      pt: Ativar TLS
+    bind:
+      key: tls
+  - name: tls_crt_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS certificate
+      es: Certificado TLS
+      pt: Certificado TLS
+    bind:
+      key: tls.crt_file
+  - name: tls_key_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS private key
+      es: Clave privada TLS
+      pt: Chave privada TLS
+    bind:
+      key: tls.key_file
+  - name: tls_key_passwd
+    type: password
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS key passphrase
+      es: Contraseña de la clave TLS
+      pt: Senha da chave TLS
+    bind:
+      key: tls.key_passwd
+  - name: tls_ca_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS CA file
+      es: Archivo CA TLS
+      pt: Arquivo CA TLS
+    bind:
+      key: tls.ca_file
+  - name: buffer_max_size
+    type: size
+    default: 64M
+    group: advanced
+    title:
+      en: Max payload size
+      es: Tamaño máximo del payload
+      pt: Tamanho máximo do payload
+    bind:
+      key: buffer_max_size
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

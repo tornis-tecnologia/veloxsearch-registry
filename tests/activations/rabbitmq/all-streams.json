@@ -1,0 +1,33 @@
+{
+  "package_id": "rabbitmq",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "log": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/srv/rabbitmq/log/*.log"
+        ],
+        "multiline": "none",
+        "read_from_head": true
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log \\[debug\\]"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "replicas": 0,
+        "keep_original": true
+      }
+    }
+  }
+}

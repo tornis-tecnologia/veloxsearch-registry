@@ -1,0 +1,92 @@
+id: syslog
+title: {en: Syslog, es: Syslog, pt: Syslog}
+description:
+  en: System messages from /var/log/syslog or /var/log/messages, parsed into host, process and message.
+  es: Mensajes del sistema de /var/log/syslog o /var/log/messages, separados en host, proceso y mensaje.
+  pt: Mensagens do sistema de /var/log/syslog ou /var/log/messages, separadas em host, processo e mensagem.
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/syslog, /var/log/messages]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: Syslog files to read. Debian-family hosts use /var/log/syslog, RHEL-family /var/log/messages; a missing file is skipped.
+        es: Archivos syslog a leer. Debian usa /var/log/syslog, RHEL /var/log/messages; un archivo ausente se omite.
+        pt: Arquivos syslog a ler. Debian usa /var/log/syslog, RHEL /var/log/messages; arquivo ausente é ignorado.
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      bind: {key: exclude_path, join: ","}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: Ignore files older than, es: Ignorar archivos anteriores a, pt: Ignorar arquivos mais antigos que}
+      bind: {key: ignore_older}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log systemd-logind"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: keep_original
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Keep the raw line, es: Conservar la línea original, pt: Manter a linha original}
+      description:
+        en: Store the unparsed line in event.original as well.
+        es: Guarda también la línea sin procesar en event.original.
+        pt: Guarda também a linha sem processar em event.original.
+      bind: {pipeline_toggle: keep_original}

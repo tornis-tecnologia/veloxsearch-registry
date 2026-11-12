@@ -1,0 +1,42 @@
+[
+  {
+    "process": {
+      "name": "nginx",
+      "pid": 812,
+      "command": "nginx"
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "systemd": {
+      "unit": "nginx.service"
+    },
+    "log": {
+      "level": "informational",
+      "syslog": {
+        "priority": 6
+      }
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "message": "nginx: configuration file /etc/nginx/nginx.conf test is successful"
+  },
+  {
+    "process": {
+      "name": "kernel"
+    },
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "systemd": {
+      "unit": "init.scope"
+    },
+    "log": {
+      "level": "critical",
+      "syslog": {
+        "priority": 2
+      }
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "message": "Out of memory: Killed process 4321 (java)"
+  }
+]

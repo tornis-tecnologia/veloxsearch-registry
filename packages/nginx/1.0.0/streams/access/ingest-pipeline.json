@@ -1,0 +1,111 @@
+{
+  "description": "nginx/access: combined log format into ECS http/url/client/user_agent fields",
+  "processors": [
+    {
+      "rename": {
+        "tag": "message",
+        "field": "log",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "message",
+        "patterns": [
+          "%{IPORHOST:client.ip} %{USER:nginx.access.ident} %{USER:user.name} \\[%{HTTPDATE:_ts}\\] \"(?:%{WORD:http.request.method} %{NOTSPACE:url.original}(?: HTTP/%{NUMBER:http.version})?|%{DATA:nginx.access.raw_request})\" %{NUMBER:http.response.status_code:int} (?:%{NUMBER:http.response.body.bytes:long}|-) \"%{DATA:http.request.referrer}\" \"%{DATA:user_agent.original}\""
+        ],
+        "on_failure": [
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "dd/MMM/yyyy:HH:mm:ss Z"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "dash_user",
+        "if": "ctx.user?.name == '-'",
+        "field": "user.name"
+      }
+    },
+    {
+      "remove": {
+        "tag": "dash_referrer",
+        "if": "ctx.http?.request?.referrer == '-'",
+        "field": "http.request.referrer"
+      }
+    },
+    {
+      "remove": {
+        "tag": "dash_ua",
+        "if": "ctx.user_agent?.original == '-'",
+        "field": "user_agent.original"
+      }
+    },
+    {
+      "remove": {
+        "tag": "dash_ident",
+        "if": "ctx.nginx?.access?.ident == '-'",
+        "field": "nginx.access.ident"
+      }
+    },
+    {
+      "set": {
+        "tag": "category",
+        "if": "ctx.http?.response?.status_code != null",
+        "field": "event.category",
+        "value": "web"
+      }
+    },
+    {
+      "user_agent": {
+        "tag": "user_agent",
+        "if": "ctx.user_agent?.original != null",
+        "field": "user_agent.original",
+        "target_field": "user_agent",
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "prune",
+        "lang": "painless",
+        "source": "for (def k : ['user', 'user_agent', 'nginx', 'traefik', 'http', 'client']) { def v = ctx.get(k); if (v instanceof Map) { for (def k2 : new ArrayList(v.keySet())) { def v2 = v.get(k2); if (v2 instanceof Map) { for (def k3 : new ArrayList(v2.keySet())) { def v3 = v2.get(k3); if (v3 instanceof Map && v3.isEmpty()) { v2.remove(k3); } } if (v2.isEmpty()) { v.remove(k2); } } } if (v.isEmpty()) { ctx.remove(k); } } }"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "log"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

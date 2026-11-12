@@ -1,0 +1,37 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "RecordNumber": 4411,
+    "TimeGenerated": "2026-11-12 10:15:02 +0000",
+    "EventId": 1073748859,
+    "EventType": "Error",
+    "SourceName": "Service Control Manager",
+    "Channel": "System",
+    "ComputerName": "OLD-SRV01",
+    "Message": "The Print Spooler service terminated unexpectedly."
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:02.000Z",
+    "RecordNumber": 4412,
+    "TimeGenerated": "2026-11-12 10:16:02 +0000",
+    "EventId": 4624,
+    "EventType": "AuditSuccess",
+    "SourceName": "Microsoft-Windows-Security-Auditing",
+    "Channel": "Security",
+    "ComputerName": "OLD-SRV01",
+    "Sid": "S-1-5-18"
+  },
+  {
+    "@timestamp": "2026-11-12T10:17:02.000Z",
+    "RecordNumber": 4413,
+    "EventId": 1,
+    "EventType": "Warning",
+    "SourceName": "MyApp",
+    "Channel": "Application",
+    "ComputerName": "OLD-SRV01",
+    "StringInserts": [
+      "a",
+      "b"
+    ]
+  }
+]

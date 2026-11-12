@@ -1,0 +1,4 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: Forward receiver stream.', es: 'Primera versión: stream receptor Forward.', pt: 'Primeira versão: stream receptor Forward.'}

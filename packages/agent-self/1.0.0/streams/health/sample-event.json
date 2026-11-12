@@ -1,0 +1,20 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "health": {
+    "alive": false
+  },
+  "destination": {
+    "address": "db.example.internal",
+    "port": 5432
+  },
+  "event": {
+    "category": "network",
+    "outcome": "failure"
+  },
+  "message": "db.example.internal:5432 is down",
+  "velox": {
+    "integration": "agent-self",
+    "stream": "health",
+    "package_version": "1.0.0"
+  }
+}

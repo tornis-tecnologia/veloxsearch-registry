@@ -1,0 +1,71 @@
+[
+  {
+    "winlog": {
+      "channel": "System",
+      "computer_name": "OLD-SRV01",
+      "record_id": 4411,
+      "event_id": 7035,
+      "provider_name": "Service Control Manager"
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "log": {
+      "level": "error"
+    },
+    "host": {
+      "name": "OLD-SRV01"
+    },
+    "message": "The Print Spooler service terminated unexpectedly.",
+    "event": {
+      "provider": "Service Control Manager",
+      "code": "7035"
+    }
+  },
+  {
+    "winlog": {
+      "channel": "Security",
+      "computer_name": "OLD-SRV01",
+      "record_id": 4412,
+      "event_id": 4624,
+      "provider_name": "Microsoft-Windows-Security-Auditing"
+    },
+    "@timestamp": "2026-11-12T10:16:02.000Z",
+    "log": {
+      "level": "information"
+    },
+    "host": {
+      "name": "OLD-SRV01"
+    },
+    "event": {
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "outcome": "success",
+      "code": "4624"
+    },
+    "user": {
+      "id": "S-1-5-18"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:17:02.000Z",
+    "winlog": {
+      "channel": "Application",
+      "computer_name": "OLD-SRV01",
+      "record_id": 4413,
+      "event_id": 1,
+      "string_inserts": [
+        "a",
+        "b"
+      ],
+      "provider_name": "MyApp"
+    },
+    "log": {
+      "level": "warning"
+    },
+    "host": {
+      "name": "OLD-SRV01"
+    },
+    "event": {
+      "provider": "MyApp",
+      "code": "1"
+    }
+  }
+]

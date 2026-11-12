@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/manifest.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — package manifest (packages/<id>/<version>/manifest.yaml)",
+  "description": "Identity, compatibility, streams, dashboards, file inventory and signature of one immutable package version. Normative text: docs/spec/README.md §4.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version", "id", "version", "release", "title", "summary",
+    "categories", "compatibility", "streams", "files", "signature"
+  ],
+  "properties": {
+    "spec_version": {"const": "2.0"},
+    "id": {"$ref": "common.schema.json#/$defs/package_id"},
+    "version": {"$ref": "common.schema.json#/$defs/semver"},
+    "release": {"$ref": "common.schema.json#/$defs/release"},
+    "title": {"$ref": "common.schema.json#/$defs/i18n"},
+    "summary": {"$ref": "common.schema.json#/$defs/i18n"},
+    "description": {"$ref": "common.schema.json#/$defs/i18n"},
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "custom", "os", "web", "database", "messaging", "container", "kubernetes",
+          "cloud", "network", "security", "observability", "application", "windows",
+          "iot", "agent"
+        ]
+      }
+    },
+    "icon": {"$ref": "common.schema.json#/$defs/relpath"},
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"}
+      }
+    },
+    "license": {"type": "string", "minLength": 1},
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_mesh_version", "min_agent_version", "min_fluent_bit_version", "os"],
+      "properties": {
+        "min_mesh_version": {"$ref": "common.schema.json#/$defs/semver", "description": "Minimum core/Mesh release that reads Spec 2.0 and every feature this package uses."},
+        "min_agent_version": {"$ref": "common.schema.json#/$defs/semver"},
+        "min_fluent_bit_version": {"$ref": "common.schema.json#/$defs/semver", "description": "At least 3.2.0 (YAML configuration with processors)."},
+        "os": {"$ref": "common.schema.json#/$defs/os_list"}
+      }
+    },
+    "streams": {
+      "description": "Stream ids, in display order. Each is the directory streams/<id>/ holding stream.yaml.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "common.schema.json#/$defs/stream_id"}
+    },
+    "dashboards": {
+      "description": "Saved-object ndjson files (visualizations, searches, dashboards). Index patterns are NOT shipped: the Mesh creates one per logs/traces stream and objects reference it as `stream:<id>` (§8).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "common.schema.json#/$defs/relpath"}
+    },
+    "docs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en"],
+      "properties": {
+        "en": {"$ref": "common.schema.json#/$defs/relpath"},
+        "es": {"$ref": "common.schema.json#/$defs/relpath"},
+        "pt": {"$ref": "common.schema.json#/$defs/relpath"}
+      }
+    },
+    "changelog": {"$ref": "common.schema.json#/$defs/relpath"},
+    "files": {
+      "description": "Inventory of every file of this version except manifest.yaml, with its sha256. Fetchers download exactly these; the signature digest covers exactly these plus the manifest (§12).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"$ref": "common.schema.json#/$defs/relpath"},
+          "sha256": {"$ref": "common.schema.json#/$defs/sha256"}
+        }
+      }
+    },
+    "signature": {"$ref": "common.schema.json#/$defs/signature"}
+  }
+}

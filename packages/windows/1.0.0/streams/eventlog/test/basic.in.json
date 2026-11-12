@@ -1,0 +1,64 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "ProviderName": "Microsoft-Windows-Security-Auditing",
+    "ProviderGuid": "{54849625-5478-4994-A5BA-3E3B0328C30D}",
+    "EventID": 4625,
+    "Level": 0,
+    "Channel": "Security",
+    "Computer": "WIN-SRV01",
+    "UserID": "S-1-5-18",
+    "EventRecordID": 981234,
+    "ProcessID": 812,
+    "ThreadID": 4412,
+    "Task": 12544,
+    "Opcode": 0,
+    "Keywords": "0x8010000000000000",
+    "TimeCreated": "2026-11-12 10:15:02 +0000",
+    "Message": "An account failed to log on.",
+    "StringInserts": [
+      "S-1-0-0",
+      "-",
+      "admin",
+      "WIN-SRV01"
+    ]
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:00.000Z",
+    "ProviderName": "Service Control Manager",
+    "EventID": "7036",
+    "Level": 4,
+    "Channel": "System",
+    "Computer": "WIN-SRV01",
+    "TimeCreated": "2026-11-12 10:16:00 +0000",
+    "Message": "The Windows Update service entered the running state.",
+    "StringInserts": [
+      "Windows Update",
+      "running"
+    ]
+  },
+  {
+    "@timestamp": "2026-11-12T10:17:00.000Z",
+    "ProviderName": "Application Error",
+    "EventID": 1000,
+    "Level": 2,
+    "Channel": "Application",
+    "Computer": "WIN-SRV01",
+    "UserName": "CORP\\svc-app",
+    "TimeCreated": "2026-11-12T10:17:00.123Z",
+    "Message": "Faulting application name: app.exe"
+  },
+  {
+    "@timestamp": "2026-11-12T10:18:00.000Z",
+    "ProviderName": "Microsoft-Windows-Security-Auditing",
+    "EventID": 4624,
+    "Level": 0,
+    "Channel": "Security",
+    "Computer": "WIN-SRV02",
+    "UserID": "S-1-5-21-1-2-3-1001"
+  },
+  {
+    "@timestamp": "2026-11-12T10:19:00.000Z",
+    "log": "<Event xmlns=\"http://schemas.microsoft.com/win/2004/08/events/event\"><System><EventID>1</EventID></System></Event>"
+  }
+]

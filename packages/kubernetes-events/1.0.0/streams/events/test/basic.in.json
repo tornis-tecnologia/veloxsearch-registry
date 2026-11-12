@@ -1,0 +1,67 @@
+[
+  {
+    "metadata": {
+      "name": "api-7d9.17",
+      "namespace": "shop"
+    },
+    "reason": "BackOff",
+    "type": "Warning",
+    "message": "Back-off restarting failed container api",
+    "involvedObject": {
+      "kind": "Pod",
+      "name": "api-7d9c-xk2lp",
+      "namespace": "shop",
+      "uid": "u-1"
+    },
+    "count": 14,
+    "firstTimestamp": "2025-11-12T09:58:00Z",
+    "lastTimestamp": "2025-11-12T10:15:02Z",
+    "source": {
+      "component": "kubelet",
+      "host": "node-2"
+    },
+    "reportingComponent": "kubelet"
+  },
+  {
+    "metadata": {
+      "name": "web.18",
+      "namespace": "shop"
+    },
+    "reason": "Pulled",
+    "type": "Normal",
+    "message": "Successfully pulled image \"web:1.4\"",
+    "involvedObject": {
+      "kind": "Pod",
+      "name": "web-5c8d-abcde",
+      "namespace": "shop"
+    },
+    "count": 1,
+    "lastTimestamp": "2025-11-12T10:16:10Z",
+    "source": {
+      "component": "kubelet",
+      "host": "node-1"
+    }
+  },
+  {
+    "metadata": {
+      "name": "node-3.19",
+      "creationTimestamp": "2025-11-12T10:17:00Z"
+    },
+    "reason": "NodeNotReady",
+    "type": "Warning",
+    "message": "Node node-3 status is now: NodeNotReady",
+    "involvedObject": {
+      "kind": "Node",
+      "name": "node-3"
+    },
+    "count": "3",
+    "source": {
+      "component": "node-controller"
+    }
+  },
+  {
+    "message": "event without reason or object",
+    "count": "many",
+    "lastTimestamp": "yesterday"
+  }
+]

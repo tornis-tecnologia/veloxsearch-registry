@@ -1,0 +1,13 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.250Z",
+  "level": "info",
+  "host": "app-01",
+  "service": "orders",
+  "message": "order created",
+  "order_id": "A-1001",
+  "velox": {
+    "integration": "tcp-json",
+    "stream": "json",
+    "package_version": "1.0.0"
+  }
+}

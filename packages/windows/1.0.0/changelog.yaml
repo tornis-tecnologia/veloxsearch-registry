@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: eventlog, eventlog_legacy, stats, exporter_metrics, etw streams.'
+      es: 'Primera versión: streams eventlog, eventlog_legacy, stats, exporter_metrics, etw.'
+      pt: 'Primeira versão: streams eventlog, eventlog_legacy, stats, exporter_metrics, etw.'

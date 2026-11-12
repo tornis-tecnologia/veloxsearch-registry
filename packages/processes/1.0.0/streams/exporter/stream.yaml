@@ -1,0 +1,80 @@
+id: exporter
+title:
+  en: Process metrics (Prometheus)
+  es: Métricas de procesos (Prometheus)
+  pt: Métricas de processos (Prometheus)
+description:
+  en: process-exporter compatible metrics for every process matching a pattern, sent to the deployment's OTLP endpoint. Needs an OTLP endpoint on the policy.
+  es: Métricas compatibles con process-exporter para cada proceso que coincida con un patrón, enviadas al endpoint OTLP del deployment. Requiere un endpoint OTLP en la política.
+  pt: Métricas compatíveis com process-exporter para cada processo que corresponda a um padrão, enviadas ao endpoint OTLP do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: true
+os:
+- linux
+input:
+  plugin: process_exporter_metrics
+  fixed:
+    path.procfs: /proc
+  fields:
+  - name: scrape_interval
+    type: integer
+    default: 5
+    min: 1
+    title:
+      en: Scrape interval (s)
+      es: Intervalo de recolección (s)
+      pt: Intervalo de coleta (s)
+    bind:
+      key: scrape_interval
+  - name: collectors
+    type: select
+    default:
+    - cpu
+    - io
+    - memory
+    - state
+    - context_switches
+    - fd
+    - start_time
+    - thread_wchan
+    - thread
+    multi: true
+    options:
+    - cpu
+    - io
+    - memory
+    - state
+    - context_switches
+    - fd
+    - start_time
+    - thread_wchan
+    - thread
+    title:
+      en: Collectors
+      es: Colectores
+      pt: Coletores
+    bind:
+      key: metrics
+      join: ','
+  - name: process_include_pattern
+    type: regex
+    default: .+
+    title:
+      en: Include processes (regex)
+      es: Procesos incluidos (regex)
+      pt: Processos incluídos (regex)
+    bind:
+      key: process_include_pattern
+  - name: process_exclude_pattern
+    type: regex
+    title:
+      en: Exclude processes (regex)
+      es: Procesos excluidos (regex)
+      pt: Processos excluídos (regex)
+    bind:
+      key: process_exclude_pattern
+processors:
+  allow:
+  - metrics_selector
+  - labels

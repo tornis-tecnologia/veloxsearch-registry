@@ -1,0 +1,6 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "cpu_p": 12.5, "user_p": 9.0, "system_p": 3.5,
+  "cpu0.p_cpu": 20.0, "cpu0.p_user": 15.0, "cpu0.p_system": 5.0,
+  "velox": {"integration": "system", "stream": "cpu", "package_version": "1.0.0"}
+}

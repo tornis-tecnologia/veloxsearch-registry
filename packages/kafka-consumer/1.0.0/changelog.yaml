@@ -1,0 +1,4 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: Kafka messages stream.', es: 'Primera versión: stream de mensajes Kafka.', pt: 'Primeira versão: stream de mensagens Kafka.'}

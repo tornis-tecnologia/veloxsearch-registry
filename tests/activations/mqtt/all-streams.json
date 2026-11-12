@@ -1,0 +1,30 @@
+{
+  "package_id": "mqtt",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "messages": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 11883,
+        "payload_key": "payload"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "mqtt.topic ^\\$SYS"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "parse_payload": false,
+        "delete_after": "7d"
+      }
+    }
+  }
+}

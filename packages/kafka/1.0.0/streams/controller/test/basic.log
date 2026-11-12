@@ -1,0 +1,6 @@
+[2026-11-12 10:15:02,123] INFO [Controller id=1] Starting become controller state transition (kafka.controller.KafkaController)
+[2026-11-12 10:15:02,200] INFO [Controller id=1, targetBrokerId=2] Starting (kafka.controller.RequestSendThread)
+[2026-11-12 10:15:02,300] INFO [Controller id=1] Partitions being reassigned: Map() (kafka.controller.KafkaController)
+[2026-11-12 10:15:03,000] WARN [Controller id=1] Broker 3 is not reachable (kafka.controller.KafkaController)
+[2026-11-12 10:15:04,000] ERROR [Controller id=1] Error while electing or becoming controller on broker 1 (kafka.controller.KafkaController)
+not a controller line

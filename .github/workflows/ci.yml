@@ -35,6 +35,77 @@ jobs:
         # customer's cluster.
         run: scripts/validate.py --expect-signed
 
+  spec:
+    name: Spec 2.0 schemas and examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml jsonschema referencing
+      # Shapes only: schemas are valid, the example package conforms, known-bad
+      # variants are rejected, the example's file inventory is current. The
+      # cross-file rules R1..R24 (docs/spec/README.md §14) land with
+      # scripts/validate_v2.py in phase F3.
+      - run: python3 -I scripts/check_spec.py
+      # The Fluent Bit plugin catalogue: shape, allowlist (R16), i18n (R17).
+      - run: python3 -I scripts/check_catalog.py
+
+  packages:
+    name: Spec 2.0 packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml jsonschema referencing
+      # R1..R23 against the catalogue, plus immutability/additivity against main
+      # (R19/R20/R21). --expect-signed: a placeholder signature cannot reach main.
+      - name: Validate every package version
+        run: |
+          ref=origin/main
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref_name }}" = "main" ]; then ref=HEAD~1; fi
+          python3 -I scripts/validate_v2.py --examples --base-ref "$ref" ${{ github.ref_name == 'main' && '--expect-signed' || '' }}
+      - name: packages/index.json is current
+        run: '[ -d packages ] && python3 -I scripts/build_index.py --check || echo "no packages/ yet"'
+      # Every package renders with its defaults (and every tests/activations
+      # fixture) into a configuration that Fluent Bit 3.2 and the current
+      # release both accept.
+      - name: Render and dry-run with Fluent Bit
+        run: FB_VERSIONS="3.2 latest" scripts/dryrun.sh
+      - name: Dry-run the spec example too
+        run: |
+          out=$(mktemp -d)
+          python3 -I scripts/render.py docs/spec/examples/custom-logs/1.0.0 --activation docs/spec/examples/activations/custom-logs.json > "$out/example.yaml"
+          docker run --rm -e VELOX_OS_USER=u -e VELOX_OS_PASSWORD=p -v "$out:/cfg:ro" fluent/fluent-bit:3.2 /fluent-bit/bin/fluent-bit -c /cfg/example.yaml --dry-run | grep -q "configuration test is successful"
+
+  pipelines:
+    name: Ingest pipeline tests (R24)
+    runs-on: ubuntu-latest
+    services:
+      opensearch:
+        image: opensearchproject/opensearch:2.19.1
+        env:
+          discovery.type: single-node
+          DISABLE_SECURITY_PLUGIN: "true"
+          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd "curl -sf http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s --health-timeout 5s --health-retries 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - run: '[ -d packages ] && OPENSEARCH_URL=http://localhost:9200 python3 -I scripts/pipeline_test.py || echo "no packages/ yet"'
+
   golden:
     name: Byte-equivalence and signatures
     runs-on: ubuntu-latest

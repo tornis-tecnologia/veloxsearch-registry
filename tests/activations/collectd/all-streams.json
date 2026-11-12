@@ -1,0 +1,21 @@
+{
+  "package_id": "collectd",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 35826,
+        "typesdb": [
+          "/usr/share/collectd/types.db",
+          "/etc/collectd/custom_types.db"
+        ]
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

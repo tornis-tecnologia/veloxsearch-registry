@@ -1,0 +1,16 @@
+[
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "original": "2026-11-12T10:15:02.123Z GET /health 200 1ms"
+    },
+    "message": "2026-11-12T10:15:02.123Z GET /health 200 1ms"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "original": "{\"time\":\"2026-11-12T10:15:03.000+0000\",\"level\":\"info\",\"msg\":\"started\"}"
+    },
+    "message": "{\"time\":\"2026-11-12T10:15:03.000+0000\",\"level\":\"info\",\"msg\":\"started\"}"
+  }
+]

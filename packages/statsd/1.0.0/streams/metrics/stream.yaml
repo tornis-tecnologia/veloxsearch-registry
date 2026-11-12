@@ -1,0 +1,45 @@
+id: metrics
+title:
+  en: StatsD metrics
+  es: Métricas StatsD
+  pt: Métricas StatsD
+description:
+  en: StatsD samples converted to metrics and sent to the deployment's OTLP endpoint. Needs an OTLP endpoint on the policy.
+  es: Muestras StatsD convertidas en métricas y enviadas al endpoint OTLP del deployment. Requiere un endpoint OTLP en la política.
+  pt: Amostras StatsD convertidas em métricas e enviadas ao endpoint OTLP do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: statsd
+  fixed:
+    metrics: true
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title:
+      en: Listen address
+      es: Dirección de escucha
+      pt: Endereço de escuta
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    default: 8125
+    min: 1
+    max: 65535
+    title:
+      en: Port
+      es: Puerto
+      pt: Porta
+    bind:
+      key: port
+processors:
+  allow:
+  - metrics_selector
+  - labels

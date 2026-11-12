@@ -1,0 +1,135 @@
+id: json
+title: {en: JSON over TCP, es: JSON por TCP, pt: JSON por TCP}
+description: {en: Receives JSON objects sent over TCP; every object becomes one event., es: Recibe objetos JSON
+    enviados por TCP; cada objeto se convierte en un evento., pt: Recebe objetos JSON enviados por TCP; cada objeto
+    vira um evento.}
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: tcp
+  fixed:
+    format: json
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Network interface to bind; 0.0.0.0 listens on all of them., es: Interfaz de red a escuchar;
+        0.0.0.0 las escucha todas., pt: Interface de rede em que escutar; 0.0.0.0 escuta em todas.}
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    required: true
+    default: 5170
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port to listen on. Ports below 1024 need extra privileges., es: Puerto TCP de escucha.
+        Los puertos menores de 1024 exigen privilegios., pt: Porta TCP de escuta. Portas abaixo de 1024 exigem privilégios.}
+    bind:
+      key: port
+  - name: chunk_size
+    type: integer
+    default: 32
+    group: advanced
+    min: 1
+    title: {en: Chunk size (KB), es: Tamaño de chunk (KB), pt: Tamanho do chunk (KB)}
+    description: {en: 'Initial buffer size in KB, grown as needed.', es: 'Tamaño inicial del búfer en KB, crece
+        según se necesite.', pt: 'Tamanho inicial do buffer em KB, cresce conforme necessário.'}
+    bind:
+      key: chunk_size
+  - name: buffer_size
+    type: integer
+    group: advanced
+    min: 1
+    title: {en: Max buffer size (KB), es: Tamaño máximo del búfer (KB), pt: Tamanho máximo do buffer (KB)}
+    description: {en: Largest single JSON message in KB; empty uses the chunk size., es: Mensaje JSON más grande
+        en KB; vacío usa el tamaño de chunk., pt: Maior mensagem JSON em KB; vazio usa o tamanho do chunk.}
+    bind:
+      key: buffer_size
+  - name: workers
+    type: integer
+    default: 1
+    group: advanced
+    min: 1
+    title: {en: Workers, es: Workers, pt: Workers}
+    description: {en: Listener workers handling connections., es: Workers de escucha que atienden conexiones., pt: Workers
+        de escuta que atendem conexões.}
+    bind:
+      key: workers
+  - name: source_address_key
+    type: string
+    group: advanced
+    title: {en: Sender address key, es: Clave de dirección del remitente, pt: Chave do endereço do remetente}
+    description: {en: Add the sender address to every record under this key; empty adds nothing., es: Agrega la
+        dirección del remitente a cada registro con esta clave; vacío no agrega nada., pt: Adiciona o endereço do
+        remetente a cada registro com esta chave; vazio não adiciona nada.}
+    placeholder: client_addr
+    bind:
+      key: source_address_key
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex, one rule per line: `<field> <regex>`.', es: 'Descarta
+        registros cuyo campo coincide con una regex, una regla por línea: `<field> <regex>`.', pt: 'Descarta registros
+        cujo campo casa com uma regex, uma regra por linha: `<field> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      title: {en: Rules, es: Reglas, pt: Regras}
+      placeholder: level ^debug$
+      bind:
+        key: exclude
+        repeat: true
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after
+  - name: replicas
+    type: integer
+    default: 1
+    group: advanced
+    min: 0
+    title: {en: Replicas, es: Réplicas, pt: Réplicas}
+    bind:
+      template: settings.index.number_of_replicas
+  - name: timezone
+    type: string
+    default: UTC
+    group: advanced
+    title: {en: Timezone, es: Zona horaria, pt: Fuso horário}
+    description: {en: 'Zone assumed for timestamps that carry no offset (e.g. UTC, America/Sao_Paulo).', es: 'Zona
+        que se asume para las marcas de tiempo sin desfase (p. ej. UTC, America/Sao_Paulo).', pt: 'Fuso assumido
+        para os horários sem deslocamento (ex.: UTC, America/Sao_Paulo).'}
+    bind:
+      pipeline_param: timestamp.timezone

@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First release: PostgreSQL server log stream with multi-line joining, level normalisation, durations and connection events."
+        es: "Primera versión: stream del log del servidor PostgreSQL con unión multilínea, niveles normalizados, duraciones y eventos de conexión."
+        pt: "Primeira versão: stream do log do servidor PostgreSQL com junção multilinha, níveis normalizados, durações e eventos de conexão."

@@ -1,0 +1,39 @@
+id: stats
+title: {en: Performance statistics (documents), es: Estadísticas de rendimiento (documentos), pt: Estatísticas de desempenho (documentos)}
+description:
+  en: CPU, memory, disk and network counters sampled periodically and stored as documents in OpenSearch — works without the OTel stack.
+  es: Contadores de CPU, memoria, disco y red muestreados periódicamente y guardados como documentos en OpenSearch — funciona sin el stack OTel.
+  pt: Contadores de CPU, memória, disco e rede amostrados periodicamente e guardados como documentos no OpenSearch — funciona sem o stack OTel.
+signal: metrics
+event_type: logs
+enabled: false
+os:
+- windows
+input:
+  plugin: winstat
+  fields:
+  - name: interval
+    type: integer
+    default: 10
+    title: {en: Interval (s), es: Intervalo (s), pt: Intervalo (s)}
+    bind:
+      key: interval_sec
+    min: 1
+processors:
+  allow:
+  - throttle
+  - content_modifier
+backend:
+  index_template: index-template.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 1d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

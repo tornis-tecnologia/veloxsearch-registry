@@ -1,0 +1,57 @@
+{
+  "package_id": "kafka",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "server": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/srv/kafka/logs/server.log"
+        ],
+        "multiline": "java",
+        "read_from_head": true
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log DEBUG"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "replicas": 0,
+        "keep_original": true
+      }
+    },
+    "controller": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/srv/kafka/logs/controller.log"
+        ],
+        "ignore_older": "3d"
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    },
+    "state_change": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/srv/kafka/logs/state-change.log"
+        ],
+        "multiline": "none"
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

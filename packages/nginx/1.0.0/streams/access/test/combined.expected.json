@@ -1,0 +1,239 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 6123
+        },
+        "status_code": 200
+      }
+    },
+    "client": {
+      "ip": "203.0.113.7"
+    },
+    "message": "203.0.113.7 - - [12/Nov/2026:10:15:02 +0000] \"GET /index.html HTTP/1.1\" 200 6123 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Chrome",
+      "original": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "os": {
+        "name": "Linux"
+      },
+      "device": {
+        "name": "Other"
+      },
+      "version": "120.0.0.0"
+    },
+    "url": {
+      "original": "/index.html"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "http": {
+      "request": {
+        "method": "POST",
+        "referrer": "https://shop.example.com/login"
+      },
+      "version": "2.0",
+      "response": {
+        "body": {
+          "bytes": 54
+        },
+        "status_code": 401
+      }
+    },
+    "client": {
+      "ip": "198.51.100.23"
+    },
+    "message": "198.51.100.23 - alice [12/Nov/2026:10:15:05 +0000] \"POST /api/v1/login HTTP/2.0\" 401 54 \"https://shop.example.com/login\" \"curl/8.5.0\"",
+    "event": {
+      "category": "web"
+    },
+    "user": {
+      "name": "alice"
+    },
+    "user_agent": {
+      "name": "curl",
+      "original": "curl/8.5.0",
+      "device": {
+        "name": "Other"
+      },
+      "version": "8.5.0"
+    },
+    "url": {
+      "original": "/api/v1/login"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T13:15:07.000Z",
+    "http": {
+      "request": {
+        "method": "GET",
+        "referrer": "https://www.google.com/"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 0
+        },
+        "status_code": 304
+      }
+    },
+    "client": {
+      "ip": "2001:db8:85a3::8a2e:370:7334"
+    },
+    "message": "2001:db8:85a3::8a2e:370:7334 - - [12/Nov/2026:10:15:07 -0300] \"GET /products?id=42&sort=asc HTTP/1.1\" 304 0 \"https://www.google.com/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Mobile Safari",
+      "original": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1",
+      "os": {
+        "name": "iOS",
+        "version": "17.1",
+        "full": "iOS 17.1"
+      },
+      "device": {
+        "name": "iPhone"
+      },
+      "version": "17.1"
+    },
+    "url": {
+      "original": "/products?id=42&sort=asc"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:09.000Z",
+    "http": {
+      "request": {
+        "method": "PUT"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 177
+        },
+        "status_code": 500
+      }
+    },
+    "client": {
+      "ip": "10.0.0.5"
+    },
+    "message": "10.0.0.5 - - [12/Nov/2026:10:15:09 +0000] \"PUT /api/v1/items/9 HTTP/1.1\" 500 177 \"-\" \"python-requests/2.31.0\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Python Requests",
+      "original": "python-requests/2.31.0",
+      "device": {
+        "name": "Other"
+      },
+      "version": "2.31"
+    },
+    "url": {
+      "original": "/api/v1/items/9"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:11.000Z",
+    "http": {
+      "request": {
+        "method": "HEAD"
+      },
+      "version": "1.1",
+      "response": {
+        "status_code": 200
+      }
+    },
+    "client": {
+      "ip": "192.0.2.44"
+    },
+    "message": "192.0.2.44 - - [12/Nov/2026:10:15:11 +0000] \"HEAD /healthz HTTP/1.1\" 200 - \"-\" \"kube-probe/1.28\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Other",
+      "device": {
+        "name": "Other"
+      },
+      "original": "kube-probe/1.28"
+    },
+    "url": {
+      "original": "/healthz"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:13.000Z",
+    "http": {
+      "request": {
+        "method": "DELETE"
+      },
+      "version": "1.1",
+      "response": {
+        "body": {
+          "bytes": 153
+        },
+        "status_code": 404
+      }
+    },
+    "client": {
+      "ip": "203.0.113.99"
+    },
+    "message": "203.0.113.99 - - [12/Nov/2026:10:15:13 +0000] \"DELETE /api/v1/items/9 HTTP/1.1\" 404 153 \"-\" \"Go-http-client/1.1\"",
+    "event": {
+      "category": "web"
+    },
+    "user_agent": {
+      "name": "Go-http-client",
+      "original": "Go-http-client/1.1",
+      "device": {
+        "name": "Other"
+      },
+      "version": "1.1"
+    },
+    "url": {
+      "original": "/api/v1/items/9"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:15.000Z",
+    "nginx": {
+      "access": {
+        "raw_request": "\\x16\\x03\\x01\\x02\\x00\\x01\\x00\\x01\\xFC\\x03\\x03"
+      }
+    },
+    "http": {
+      "response": {
+        "body": {
+          "bytes": 157
+        },
+        "status_code": 400
+      }
+    },
+    "client": {
+      "ip": "198.51.100.200"
+    },
+    "message": "198.51.100.200 - - [12/Nov/2026:10:15:15 +0000] \"\\x16\\x03\\x01\\x02\\x00\\x01\\x00\\x01\\xFC\\x03\\x03\" 400 157 \"-\" \"-\"",
+    "event": {
+      "category": "web"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "this line is not an nginx access log",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "package_id": "statsd",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "events": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 18126
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    },
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 18125
+      }
+    }
+  }
+}

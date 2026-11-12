@@ -1,0 +1,18 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "message": "output:opensearch:opensearch.0 HTTP status=503 URI=/_bulk, retrying",
+  "log": {
+    "level": "warn"
+  },
+  "fluentbit": {
+    "component": "engine"
+  },
+  "event": {
+    "original": "[2026/11/12 10:15:02.123456] [ warn] [engine] output:opensearch:opensearch.0 HTTP status=503 URI=/_bulk, retrying"
+  },
+  "velox": {
+    "integration": "agent-self",
+    "stream": "logs",
+    "package_version": "1.0.0"
+  }
+}

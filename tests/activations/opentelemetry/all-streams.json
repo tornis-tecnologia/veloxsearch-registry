@@ -1,0 +1,46 @@
+{
+  "package_id": "opentelemetry",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "logs": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 14318,
+        "buffer_max_size": "32M"
+      },
+      "backend": {
+        "delete_after": "14d"
+      }
+    },
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 14319
+      },
+      "processors": [
+        {
+          "plugin": "metrics_selector",
+          "params": {
+            "action": "INCLUDE",
+            "metric_name": "http_",
+            "operation_type": "PREFIX"
+          }
+        }
+      ]
+    },
+    "traces": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 14320,
+        "raw_traces": true
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

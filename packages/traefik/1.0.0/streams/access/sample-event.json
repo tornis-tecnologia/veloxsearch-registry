@@ -1,0 +1,49 @@
+{
+  "@timestamp": "2026-11-12T10:15:03.000Z",
+  "traefik": {
+    "duration_ms": 48.0,
+    "router": "web@docker",
+    "service": "http://172.18.0.5:3000",
+    "request_count": 2
+  },
+  "http": {
+    "request": {
+      "method": "POST",
+      "referrer": "https://app.example.com/"
+    },
+    "version": "2.0",
+    "response": {
+      "body": {
+        "bytes": 0
+      },
+      "status_code": 302
+    }
+  },
+  "client": {
+    "ip": "198.51.100.23"
+  },
+  "message": "198.51.100.23 - alice [12/Nov/2026:10:15:03 +0000] \"POST /login HTTP/2.0\" 302 0 \"https://app.example.com/\" \"curl/8.5.0\" 2 \"web@docker\" \"http://172.18.0.5:3000\" 48ms",
+  "event": {
+    "category": "web",
+    "duration": 48000000
+  },
+  "user": {
+    "name": "alice"
+  },
+  "user_agent": {
+    "name": "curl",
+    "original": "curl/8.5.0",
+    "device": {
+      "name": "Other"
+    },
+    "version": "8.5.0"
+  },
+  "url": {
+    "original": "/login"
+  },
+  "velox": {
+    "integration": "traefik",
+    "stream": "access",
+    "package_version": "1.0.0"
+  }
+}

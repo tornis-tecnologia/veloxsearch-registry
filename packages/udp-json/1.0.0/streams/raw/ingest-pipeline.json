@@ -1,0 +1,13 @@
+{
+  "description": "raw lines: the line becomes message",
+  "processors": [
+    {
+      "rename": {
+        "tag": "log_to_message",
+        "field": "log",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    }
+  ]
+}

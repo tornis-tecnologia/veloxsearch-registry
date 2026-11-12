@@ -1,0 +1,269 @@
+[
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2231
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "ssh": {
+      "method": "password"
+    },
+    "source": {
+      "port": 51022,
+      "ip": "203.0.113.9"
+    },
+    "message": "Failed password for invalid user admin from 203.0.113.9 port 51022 ssh2",
+    "event": {
+      "category": "authentication",
+      "action": "login",
+      "outcome": "failure"
+    },
+    "user": {
+      "name": "admin"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2240
+    },
+    "@timestamp": "2026-11-12T10:15:09.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "ssh": {
+      "method": "publickey"
+    },
+    "source": {
+      "port": 40112,
+      "ip": "10.0.0.5"
+    },
+    "message": "Accepted publickey for deploy from 10.0.0.5 port 40112 ssh2: ED25519 SHA256:abcdEFGH1234",
+    "event": {
+      "category": "authentication",
+      "action": "login",
+      "outcome": "success"
+    },
+    "user": {
+      "name": "deploy"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2245
+    },
+    "@timestamp": "2026-11-12T10:15:12.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "ssh": {
+      "method": "password"
+    },
+    "source": {
+      "port": 55123,
+      "ip": "2001:db8::7"
+    },
+    "message": "Accepted password for root from 2001:db8::7 port 55123 ssh2",
+    "event": {
+      "category": "authentication",
+      "action": "login",
+      "outcome": "success"
+    },
+    "user": {
+      "name": "root"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2251
+    },
+    "@timestamp": "2026-11-12T10:15:20.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 40222,
+      "ip": "198.51.100.7"
+    },
+    "message": "Invalid user oracle from 198.51.100.7 port 40222",
+    "event": {
+      "category": "authentication",
+      "action": "invalid_user",
+      "outcome": "failure"
+    },
+    "user": {
+      "name": "oracle"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2251
+    },
+    "@timestamp": "2026-11-12T10:15:21.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 40222,
+      "ip": "198.51.100.7"
+    },
+    "message": "Connection closed by invalid user oracle 198.51.100.7 port 40222 [preauth]",
+    "event": {
+      "category": "authentication",
+      "action": "connection_closed",
+      "outcome": "unknown"
+    },
+    "user": {
+      "name": "oracle"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2260
+    },
+    "@timestamp": "2026-11-12T10:15:30.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 2222,
+      "ip": "198.51.100.8"
+    },
+    "message": "Disconnected from authenticating user root 198.51.100.8 port 2222 [preauth]",
+    "event": {
+      "category": "authentication",
+      "action": "disconnect",
+      "outcome": "unknown"
+    },
+    "user": {
+      "name": "root"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2260
+    },
+    "@timestamp": "2026-11-12T10:15:31.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 40112,
+      "ip": "10.0.0.5"
+    },
+    "message": "Disconnected from user deploy 10.0.0.5 port 40112",
+    "event": {
+      "category": "authentication",
+      "action": "disconnect",
+      "outcome": "unknown"
+    },
+    "user": {
+      "name": "deploy"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2270
+    },
+    "@timestamp": "2026-11-12T10:15:40.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 60000,
+      "ip": "203.0.113.50"
+    },
+    "message": "error: maximum authentication attempts exceeded for invalid user test from 203.0.113.50 port 60000 ssh2 [preauth]",
+    "event": {
+      "category": "authentication",
+      "action": "max_auth_attempts",
+      "outcome": "failure"
+    },
+    "user": {
+      "name": "test"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2271
+    },
+    "@timestamp": "2026-11-12T10:15:41.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "source": {
+      "port": 33000,
+      "ip": "192.0.2.10"
+    },
+    "message": "Connection closed by 192.0.2.10 port 33000 [preauth]",
+    "event": {
+      "category": "authentication",
+      "action": "connection_closed",
+      "outcome": "unknown"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd-session",
+      "pid": 2272
+    },
+    "@timestamp": "2026-11-12T10:15:42.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "ssh": {
+      "method": "password"
+    },
+    "source": {
+      "port": 41000,
+      "ip": "203.0.113.77"
+    },
+    "message": "Failed password for ubuntu from 203.0.113.77 port 41000 ssh2",
+    "event": {
+      "category": "authentication",
+      "action": "login",
+      "outcome": "failure"
+    },
+    "user": {
+      "name": "ubuntu"
+    }
+  },
+  {
+    "host": {
+      "name": "web-01"
+    },
+    "process": {
+      "name": "sudo"
+    },
+    "@timestamp": "2026-11-12T10:16:00.000Z",
+    "message": "  deploy : TTY=pts/0 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx"
+  },
+  {
+    "host": {
+      "name": "web-01"
+    },
+    "process": {
+      "name": "CRON",
+      "pid": 999
+    },
+    "@timestamp": "2026-11-03T09:01:00.000Z",
+    "message": "pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "this line is not syslog at all",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

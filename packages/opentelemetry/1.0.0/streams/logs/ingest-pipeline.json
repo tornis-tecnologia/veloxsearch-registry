@@ -1,0 +1,103 @@
+{
+  "description": "opentelemetry/logs: OTLP log records to ECS-style fields",
+  "processors": [
+    {
+      "script": {
+        "tag": "expand_dots",
+        "lang": "painless",
+        "ignore_failure": true,
+        "source": "for (def fld : ['resource', 'attributes']) { if (ctx[fld] instanceof Map) { def out = new HashMap(); for (def e : ((Map) ctx[fld]).entrySet()) { String[] parts = e.getKey().splitOnToken('.'); def cur = out; for (int i = 0; i < parts.length - 1; i++) { if (!(cur.get(parts[i]) instanceof Map)) { cur.put(parts[i], new HashMap()); } cur = cur.get(parts[i]); } cur.put(parts[parts.length - 1], e.getValue()); } ctx[fld] = out; } }"
+      }
+    },
+    {
+      "rename": {
+        "tag": "level",
+        "field": "severity_text",
+        "target_field": "log.level",
+        "ignore_missing": true
+      }
+    },
+    {
+      "lowercase": {
+        "tag": "level_lower",
+        "field": "log.level",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "severity_number",
+        "field": "severity_number",
+        "target_field": "otel.severity_number",
+        "type": "integer",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "severity_number_raw",
+        "field": "severity_number",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "body",
+        "if": "ctx.body != null",
+        "lang": "painless",
+        "source": "if (ctx.body instanceof Map) { def m = ctx.body; if (m.message instanceof String) { ctx.message = m.message; } else if (m.msg instanceof String) { ctx.message = m.msg; } else { ctx.message = m.toString(); } } else { ctx.message = String.valueOf(ctx.body); ctx.remove('body'); }"
+      }
+    },
+    {
+      "script": {
+        "tag": "timestamp",
+        "if": "ctx.time_unix_nano != null",
+        "lang": "painless",
+        "ignore_failure": true,
+        "source": "long ns = Long.parseLong(String.valueOf(ctx.time_unix_nano)); ctx['@timestamp'] = java.time.Instant.ofEpochMilli(ns / 1000000L).toString();"
+      }
+    },
+    {
+      "set": {
+        "tag": "service_name",
+        "field": "service.name",
+        "value": "{{resource.service.name}}",
+        "if": "ctx.resource?.service?.name != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "host_name",
+        "field": "host.name",
+        "value": "{{resource.host.name}}",
+        "if": "ctx.resource?.host?.name != null"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "time_unix_nano",
+          "observed_time_unix_nano"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "event.outcome",
+        "value": "unparsed"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}

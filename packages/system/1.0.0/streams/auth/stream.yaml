@@ -1,0 +1,62 @@
+id: auth
+title: {en: Authentication log, es: Log de autenticación, pt: Log de autenticação}
+description:
+  en: /var/log/auth.log or /var/log/secure — logins, sudo, PAM — with SSH attempts parsed into user, source IP and outcome.
+  es: /var/log/auth.log o /var/log/secure — logins, sudo, PAM — con intentos SSH separados en usuario, IP de origen y resultado.
+  pt: /var/log/auth.log ou /var/log/secure — logins, sudo, PAM — com tentativas SSH separadas em usuário, IP de origem e resultado.
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/auth.log, /var/log/secure]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      bind: {key: path, join: ","}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      bind: {key: read_from_head}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log pam_unix\\(cron:session\\)"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 90d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 90d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}

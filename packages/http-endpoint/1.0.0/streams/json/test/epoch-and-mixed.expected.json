@@ -1,0 +1,34 @@
+[
+  {
+    "host": "edge-1",
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "message": "epoch milliseconds as a number",
+    "level": "info"
+  },
+  {
+    "host": "edge-1",
+    "@timestamp": "2026-11-12T10:15:03.123Z",
+    "message": "epoch milliseconds as a string",
+    "level": "info"
+  },
+  {
+    "host": "edge-2",
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "message": "access-log style time",
+    "level": "info"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "level": "warn",
+    "host": "edge-2",
+    "message": "time wins over timestamp",
+    "timestamp": "2026-11-12T11:00:00Z"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "level": "info",
+    "host": "edge-3",
+    "time": "",
+    "message": "empty time string"
+  }
+]

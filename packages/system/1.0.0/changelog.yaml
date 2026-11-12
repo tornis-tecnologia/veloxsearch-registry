@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First release: syslog, auth, journal, kernel, cpu, mem and host_metrics streams."
+        es: "Primera versión: streams syslog, auth, journal, kernel, cpu, mem y host_metrics."
+        pt: "Primeira versão: streams syslog, auth, journal, kernel, cpu, mem e host_metrics."

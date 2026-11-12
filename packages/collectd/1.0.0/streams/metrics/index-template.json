@@ -1,0 +1,72 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "10s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "dynamic_templates": [
+        {
+          "numbers": {
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "double"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "plugin": {
+          "type": "keyword"
+        },
+        "plugin_instance": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "keyword"
+        },
+        "type_instance": {
+          "type": "keyword"
+        },
+        "dsnames": {
+          "type": "keyword"
+        },
+        "dstypes": {
+          "type": "keyword"
+        },
+        "values": {
+          "type": "double"
+        },
+        "interval": {
+          "type": "double"
+        },
+        "time": {
+          "type": "double"
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

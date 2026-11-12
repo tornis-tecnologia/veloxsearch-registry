@@ -1,0 +1,74 @@
+id: events
+title:
+  en: eBPF events
+  es: Eventos eBPF
+  pt: Eventos eBPF
+description:
+  en: Events emitted by the selected eBPF trace programs, indexed with the originating process.
+  es: Eventos emitidos por los programas de traza eBPF elegidos, indexados con el proceso de origen.
+  pt: Eventos emitidos pelos programas de trace eBPF escolhidos, indexados com o processo de origem.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+input:
+  plugin: ebpf
+  fields:
+  - name: trace
+    type: string
+    default:
+    - trace_signal
+    required: true
+    multi: true
+    placeholder: trace_signal
+    title:
+      en: Trace programs
+      es: Programas de traza
+      pt: Programas de trace
+    description:
+      en: One trace program per entry, e.g. trace_signal, trace_malloc, trace_bind.
+      es: Un programa de traza por entrada, p. ej. trace_signal, trace_malloc, trace_bind.
+      pt: Um programa de trace por entrada, ex. trace_signal, trace_malloc, trace_bind.
+    bind:
+      key: trace
+      repeat: true
+  - name: poll_ms
+    type: integer
+    default: 1000
+    min: 1
+    group: advanced
+    title:
+      en: Poll interval (ms)
+      es: Intervalo de sondeo (ms)
+      pt: Intervalo de polling (ms)
+    bind:
+      key: poll_ms
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 90d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 90d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

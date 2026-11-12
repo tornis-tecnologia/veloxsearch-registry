@@ -1,0 +1,121 @@
+id: server
+title: {en: Broker log, es: Log del broker, pt: Log do broker}
+description:
+  en: "Kafka broker log (server.log): level, logger, context and message, with Java stack traces kept in one event."
+  es: "Log del broker Kafka (server.log): nivel, logger, contexto y mensaje, con los stack traces Java en un solo evento."
+  pt: "Log do broker Kafka (server.log): nível, logger, contexto e mensagem, com stack traces Java em um só evento."
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/kafka/server.log, /opt/kafka/logs/server.log]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: Kafka log files to read.
+        es: Archivos de log de Kafka a leer.
+        pt: Arquivos de log do Kafka a ler.
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      bind: {key: exclude_path, join: ","}
+    - name: multiline
+      type: select
+      default: kafka.server.stacktrace
+      options:
+        - {value: none, title: {en: None (one line per event), es: Ninguno (una línea por evento), pt: Nenhum (uma linha por evento)}}
+        - {value: kafka.server.stacktrace, title: {en: Join stack traces (package parser), es: Unir stack traces (parser del paquete), pt: Juntar stack traces (parser do pacote)}}
+        - java
+      title: {en: Multiline, es: Multilínea, pt: Multilinha}
+      description:
+        en: "Join lines that do not start with `[yyyy-MM-dd ` into the previous entry so a Java stack trace stays in one event. `java` is Fluent Bit's built-in Java parser."
+        es: "Une las líneas que no empiezan con `[yyyy-MM-dd ` a la entrada anterior para que un stack trace Java quede en un solo evento. `java` es el parser Java integrado de Fluent Bit."
+        pt: "Junta as linhas que não começam com `[yyyy-MM-dd ` à entrada anterior para que um stack trace Java fique em um só evento. `java` é o parser Java embutido do Fluent Bit."
+      bind: {key: multiline.parser, omit_if: none}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: Ignore files older than, es: Ignorar archivos anteriores a, pt: Ignorar arquivos mais antigos que}
+      bind: {key: ignore_older}
+
+multiline_parsers:
+  - name: stacktrace
+    title: {en: Log4j entry with stack trace, es: Entrada log4j con stack trace, pt: Entrada log4j com stack trace}
+    type: regex
+    flush_timeout: 2000
+    rules:
+      - {state: start_state, regex: '/^\[\d{4}-\d{2}-\d{2} /', next_state: cont}
+      - {state: cont, regex: '/^(?!\[\d{4}-\d{2}-\d{2} ).*/', next_state: cont}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log DEBUG"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: replicas
+      type: integer
+      default: 1
+      min: 0
+      group: advanced
+      title: {en: Replicas, es: Réplicas, pt: Réplicas}
+      bind: {template: settings.index.number_of_replicas}
+    - name: keep_original
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Keep the raw line, es: Conservar la línea original, pt: Manter a linha original}
+      description:
+        en: Store the unparsed line in event.original as well.
+        es: Guarda también la línea sin procesar en event.original.
+        pt: Guarda também a linha sem processar em event.original.
+      bind: {pipeline_toggle: keep_original}

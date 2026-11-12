@@ -1,0 +1,175 @@
+{
+  "description": "docker-events/events: Docker daemon events (JSON string in `message`, or already structured)",
+  "processors": [
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{message}}",
+        "if": "ctx.message instanceof String && ctx.message.startsWith('{')"
+      }
+    },
+    {
+      "json": {
+        "tag": "parse",
+        "field": "message",
+        "add_to_root": true,
+        "if": "ctx.message instanceof String && ctx.message.startsWith('{')",
+        "on_failure": [
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "set": {
+        "tag": "action",
+        "field": "event.action",
+        "value": "{{Action}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Action != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "type",
+        "field": "docker.type",
+        "value": "{{Type}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Type != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "scope",
+        "field": "docker.scope",
+        "value": "{{scope}}",
+        "ignore_empty_value": true,
+        "if": "ctx.scope != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "status",
+        "field": "docker.status",
+        "value": "{{status}}",
+        "ignore_empty_value": true,
+        "if": "ctx.status != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "actor_id",
+        "field": "docker.actor.id",
+        "value": "{{Actor.ID}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Actor?.ID != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "actor_name",
+        "field": "docker.actor.name",
+        "value": "{{Actor.Attributes.name}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Actor?.Attributes?.name != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "container_id",
+        "field": "container.id",
+        "value": "{{Actor.ID}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Type == 'container' && ctx.Actor?.ID != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "container_name",
+        "field": "container.name",
+        "value": "{{Actor.Attributes.name}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Type == 'container' && ctx.Actor?.Attributes?.name != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "container_image",
+        "field": "container.image.name",
+        "value": "{{Actor.Attributes.image}}",
+        "ignore_empty_value": true,
+        "if": "ctx.Type == 'container' && ctx.Actor?.Attributes?.image != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "exit_code",
+        "field": "docker.exit_code",
+        "value": "{{Actor.Attributes.exitCode}}",
+        "if": "ctx.Actor?.Attributes?.exitCode != null"
+      }
+    },
+    {
+      "convert": {
+        "tag": "exit_code_int",
+        "field": "docker.exit_code",
+        "type": "integer",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "tag": "category",
+        "field": "event.category",
+        "value": "container",
+        "if": "ctx.Type == 'container'"
+      }
+    },
+    {
+      "set": {
+        "tag": "unparsed",
+        "field": "event.outcome",
+        "value": "unparsed",
+        "if": "ctx.Type == null && ctx.Action == null"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "field": "time",
+        "formats": [
+          "UNIX",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "if": "ctx.time != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "message",
+          "Type",
+          "Action",
+          "Actor",
+          "time",
+          "timeNano",
+          "scope",
+          "status",
+          "id",
+          "from"
+        ],
+        "ignore_missing": true,
+        "if": "ctx.event?.outcome != 'unparsed'"
+      }
+    }
+  ]
+}

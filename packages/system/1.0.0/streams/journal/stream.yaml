@@ -1,0 +1,85 @@
+id: journal
+title: {en: systemd journal, es: Journal de systemd, pt: Journal do systemd}
+description:
+  en: Entries from journald, optionally limited to selected units; fields are lower-cased and the message, unit, priority and process are normalized.
+  es: Entradas de journald, opcionalmente limitadas a ciertas units; los campos pasan a minúsculas y se normalizan mensaje, unit, prioridad y proceso.
+  pt: Entradas do journald, opcionalmente limitadas a certas units; campos em minúsculas e mensagem, unit, prioridade e processo normalizados.
+signal: logs
+event_type: logs
+enabled: false
+os: [linux]
+
+input:
+  plugin: systemd
+  fixed:
+    db: "{state_dir}/systemd-{stream_tag}.db"
+    strip_underscores: true
+    lowercase: true
+  fields:
+    - name: units
+      type: string
+      multi: true
+      title: {en: Units, es: Units, pt: Units}
+      description:
+        en: Only these systemd units (e.g. nginx.service). Empty = everything.
+        es: Solo estas units de systemd (p. ej. nginx.service). Vacío = todo.
+        pt: Só estas units do systemd (ex. nginx.service). Vazio = tudo.
+      bind: {key: systemd_filter, repeat: true, prefix: "_SYSTEMD_UNIT="}
+    - name: read_from_tail
+      type: bool
+      default: true
+      group: advanced
+      title: {en: Start from the newest entry, es: Empezar por la entrada más reciente, pt: Começar pela entrada mais recente}
+      bind: {key: read_from_tail}
+    - name: path
+      type: string
+      group: advanced
+      title: {en: Journal path, es: Ruta del journal, pt: Caminho do journal}
+      bind: {key: path}
+    - name: max_entries
+      type: integer
+      default: 5000
+      min: 1
+      group: advanced
+      title: {en: Max entries per cycle, es: Máximo de entradas por ciclo, pt: Máximo de entradas por ciclo}
+      bind: {key: max_entries}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "message session opened"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: drop_raw_fields
+      type: bool
+      default: true
+      group: advanced
+      title: {en: Drop raw journal fields, es: Descartar campos crudos del journal, pt: Descartar campos crus do journal}
+      description:
+        en: Remove the raw journald fields (cursor, boot id, cgroup...) and keep only the normalized ones.
+        es: Elimina los campos crudos de journald (cursor, boot id, cgroup...) y conserva solo los normalizados.
+        pt: Remove os campos crus do journald (cursor, boot id, cgroup...) e mantém só os normalizados.
+      bind: {pipeline_toggle: drop_raw}

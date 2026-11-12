@@ -1,0 +1,122 @@
+[
+  {
+    "process": {
+      "name": "evntslog"
+    },
+    "@timestamp": "2026-11-12T10:15:02.003Z",
+    "log": {
+      "level": "notice",
+      "syslog": {
+        "severity": {
+          "name": "notice",
+          "code": 5
+        },
+        "msgid": "ID47",
+        "structured_data": "[exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"]",
+        "priority": 165,
+        "facility": {
+          "name": "local4",
+          "code": 20
+        },
+        "version": "1"
+      }
+    },
+    "host": {
+      "name": "fw-edge-01.example.com"
+    },
+    "message": "An application event log entry",
+    "event": {
+      "original": "<165>1 2026-11-12T10:15:02.003Z fw-edge-01.example.com evntslog - ID47 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"] ﻿An application event log entry"
+    }
+  },
+  {
+    "process": {
+      "name": "postfix",
+      "pid": 8821
+    },
+    "@timestamp": "2026-11-12T08:15:03.000Z",
+    "log": {
+      "level": "critical",
+      "syslog": {
+        "severity": {
+          "name": "critical",
+          "code": 2
+        },
+        "priority": 34,
+        "facility": {
+          "name": "auth",
+          "code": 4
+        },
+        "version": "1"
+      }
+    },
+    "host": {
+      "name": "mail-01"
+    },
+    "message": "Connection from unknown[203.0.113.50] refused",
+    "event": {
+      "original": "<34>1 2026-11-12T10:15:03+02:00 mail-01 postfix 8821 - - Connection from unknown[203.0.113.50] refused"
+    }
+  },
+  {
+    "process": {
+      "name": "sshd",
+      "pid": 2231
+    },
+    "@timestamp": "2026-11-12T10:15:04.500Z",
+    "log": {
+      "level": "info",
+      "syslog": {
+        "severity": {
+          "name": "info",
+          "code": 6
+        },
+        "msgid": "ID48",
+        "structured_data": "[meta sequenceId=\"7\"][origin ip=\"10.0.0.5\"]",
+        "priority": 86,
+        "facility": {
+          "name": "authpriv",
+          "code": 10
+        },
+        "version": "1"
+      }
+    },
+    "host": {
+      "name": "app-01"
+    },
+    "message": "Accepted publickey for deploy",
+    "event": {
+      "original": "<86>1 2026-11-12T10:15:04.5Z app-01 sshd 2231 ID48 [meta sequenceId=\"7\"][origin ip=\"10.0.0.5\"] Accepted publickey for deploy"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "message from a sender with a nil header",
+    "event": {
+      "original": "<190>1 - - - - - - message from a sender with a nil header"
+    },
+    "log": {
+      "level": "info",
+      "syslog": {
+        "severity": {
+          "name": "info",
+          "code": 6
+        },
+        "priority": 190,
+        "facility": {
+          "name": "local7",
+          "code": 23
+        },
+        "version": "1"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "<34>1 broken header without enough fields"
+    },
+    "message": "<34>1 broken header without enough fields"
+  }
+]

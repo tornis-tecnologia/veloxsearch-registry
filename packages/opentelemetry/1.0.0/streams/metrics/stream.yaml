@@ -1,0 +1,112 @@
+id: metrics
+title:
+  en: OTLP metrics
+  es: Métricas OTLP
+  pt: Métricas OTLP
+description:
+  en: OpenTelemetry metrics received over OTLP/HTTP and forwarded to the deployment's OTLP endpoint. Needs an OTLP endpoint on the policy.
+  es: Métricas OpenTelemetry recibidas por OTLP/HTTP y reenviadas al endpoint OTLP del deployment. Requiere un endpoint OTLP en la política.
+  pt: Métricas OpenTelemetry recebidas por OTLP/HTTP e encaminhadas ao endpoint OTLP do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: opentelemetry
+  fixed:
+    tag_from_uri: false
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title:
+      en: Listen address
+      es: Dirección de escucha
+      pt: Endereço de escuta
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    default: 4319
+    min: 1
+    max: 65535
+    title:
+      en: Port
+      es: Puerto
+      pt: Porta
+    bind:
+      key: port
+  - name: tls
+    type: bool
+    default: false
+    title:
+      en: Enable TLS
+      es: Activar TLS
+      pt: Ativar TLS
+    bind:
+      key: tls
+  - name: tls_crt_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS certificate
+      es: Certificado TLS
+      pt: Certificado TLS
+    bind:
+      key: tls.crt_file
+  - name: tls_key_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS private key
+      es: Clave privada TLS
+      pt: Chave privada TLS
+    bind:
+      key: tls.key_file
+  - name: tls_key_passwd
+    type: password
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS key passphrase
+      es: Contraseña de la clave TLS
+      pt: Senha da chave TLS
+    bind:
+      key: tls.key_passwd
+  - name: tls_ca_file
+    type: string
+    show_if:
+      field: tls
+      equals: true
+    group: advanced
+    title:
+      en: TLS CA file
+      es: Archivo CA TLS
+      pt: Arquivo CA TLS
+    bind:
+      key: tls.ca_file
+  - name: buffer_max_size
+    type: size
+    default: 64M
+    group: advanced
+    title:
+      en: Max payload size
+      es: Tamaño máximo del payload
+      pt: Tamanho máximo do payload
+    bind:
+      key: buffer_max_size
+processors:
+  allow:
+  - metrics_selector
+  - labels

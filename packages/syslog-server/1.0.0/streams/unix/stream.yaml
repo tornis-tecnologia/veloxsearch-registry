@@ -1,0 +1,132 @@
+id: unix
+title: {en: Syslog over a Unix socket, es: Syslog por socket Unix, pt: Syslog por socket Unix}
+description: {en: Creates a Unix datagram socket in the agent state directory for local senders., es: Crea un socket
+    de datagramas Unix en el directorio de estado del agente para emisores locales., pt: Cria um socket de datagramas
+    Unix no diretório de estado do agente para emissores locais.}
+signal: logs
+event_type: logs
+enabled: false
+os:
+- linux
+- darwin
+input:
+  plugin: syslog
+  fixed:
+    mode: unix_udp
+    path: '{state_dir}/syslog-{stream_tag}.sock'
+  fields:
+  - name: unix_perm
+    type: string
+    default: '0644'
+    group: advanced
+    title: {en: Socket permissions, es: Permisos del socket, pt: Permissões do socket}
+    description: {en: Octal permissions of the socket file; widen them if local senders run as other users., es: Permisos
+        octales del archivo de socket; amplíelos si los emisores locales usan otros usuarios., pt: Permissões octais
+        do arquivo de socket; amplie se os emissores locais usarem outros usuários.}
+    bind:
+      key: unix_perm
+    pattern: ^[0-7]{3,4}$
+  - name: buffer_chunk_size
+    type: size
+    default: '32768'
+    group: advanced
+    title: {en: Chunk size, es: Tamaño de chunk, pt: Tamanho do chunk}
+    description: {en: Memory chunk size for incoming messages. In UDP it also caps the message size., es: Tamaño
+        de chunk en memoria para los mensajes entrantes. En UDP también limita el tamaño del mensaje., pt: Tamanho
+        do chunk em memória das mensagens recebidas. Em UDP também limita o tamanho da mensagem.}
+    bind:
+      key: buffer_chunk_size
+  - name: buffer_max_size
+    type: size
+    group: advanced
+    title: {en: Max message size, es: Tamaño máximo del mensaje, pt: Tamanho máximo da mensagem}
+    description: {en: Largest message accepted; empty uses the chunk size., es: Mensaje más grande aceptado; vacío
+        usa el tamaño de chunk., pt: Maior mensagem aceita; vazio usa o tamanho do chunk.}
+    bind:
+      key: buffer_max_size
+  - name: receive_buffer_size
+    type: size
+    group: advanced
+    title: {en: Socket receive buffer, es: Búfer de recepción del socket, pt: Buffer de recepção do socket}
+    description: {en: Raise it for high message rates; the OS default is often too low., es: Súbalo para tasas altas;
+        el valor del SO suele ser bajo., pt: Aumente para taxas altas; o padrão do SO costuma ser baixo.}
+    bind:
+      key: receive_buffer_size
+parsers:
+- name: raw
+  title: {en: Whole message, es: Mensaje completo, pt: Mensagem completa}
+  format: regex
+  regex: ^(?<log>.*)$
+parser_field:
+  default: raw
+  title: {en: Parser, es: Parser, pt: Parser}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex, one rule per line: `log <regex>`.', es: 'Descarta
+        registros cuyo campo coincide con una regex, una regla por línea: `log <regex>`.', pt: 'Descarta registros
+        cujo campo casa com uma regex, uma regra por linha: `log <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      title: {en: Rules, es: Reglas, pt: Regras}
+      placeholder: log CRON
+      bind:
+        key: exclude
+        repeat: true
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after
+  - name: replicas
+    type: integer
+    default: 1
+    group: advanced
+    min: 0
+    title: {en: Replicas, es: Réplicas, pt: Réplicas}
+    bind:
+      template: settings.index.number_of_replicas
+  - name: keep_original
+    type: bool
+    default: false
+    group: advanced
+    title: {en: Keep the raw message, es: Conservar el mensaje original, pt: Manter a mensagem original}
+    description: {en: Store the unparsed message in event.original as well., es: Guarda también el mensaje sin procesar
+        en event.original., pt: Guarda também a mensagem sem processar em event.original.}
+    bind:
+      pipeline_toggle: keep_original
+  - name: timezone
+    type: string
+    default: UTC
+    group: advanced
+    title: {en: Timezone, es: Zona horaria, pt: Fuso horário}
+    description: {en: 'Zone assumed for RFC 3164 timestamps, which carry none (e.g. UTC, America/Sao_Paulo). RFC
+        5424 times keep their own offset.', es: 'Zona que se asume para las marcas de tiempo RFC 3164, que no la
+        traen (p. ej. UTC, America/Sao_Paulo). Las de RFC 5424 conservan su desfase.', pt: 'Fuso assumido para os
+        horários RFC 3164, que não o trazem (ex.: UTC, America/Sao_Paulo). Os do RFC 5424 mantêm o próprio deslocamento.'}
+    bind:
+      pipeline_param: timestamp.timezone

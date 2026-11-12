@@ -1,0 +1,73 @@
+{
+  "description": "fluent-forward/logs: timestamp from common keys, host normalization, records otherwise untouched",
+  "processors": [
+    {
+      "script": {
+        "tag": "ts_pick",
+        "if": "ctx['time'] != null || ctx['timestamp'] != null || ctx['ts'] != null",
+        "lang": "painless",
+        "source": "String[] keys = new String[]{'time','timestamp','ts'}; for (int i = 0; i < keys.length; i++) { def v = ctx[keys[i]]; if (v == null) { continue; } if (v instanceof Number) { double d = v.doubleValue(); ctx._ts_ms = (long)(d >= 1.0E11 ? d : d * 1000.0); } else { String s = v.toString().trim(); try { double d = Double.parseDouble(s); ctx._ts_ms = (long)(d >= 1.0E11 ? d : d * 1000.0); } catch (NumberFormatException e) { ctx._ts_iso = s; } } break; }"
+      }
+    },
+    {
+      "date": {
+        "tag": "ts_iso",
+        "field": "_ts_iso",
+        "target_field": "@timestamp",
+        "formats": [
+          "ISO8601",
+          "yyyy-MM-dd HH:mm:ss",
+          "yyyy-MM-dd HH:mm:ss.SSS"
+        ],
+        "if": "ctx._ts_iso != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "tag": "ts_epoch",
+        "field": "_ts_ms",
+        "target_field": "@timestamp",
+        "formats": [
+          "UNIX_MS"
+        ],
+        "if": "ctx._ts_ms != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "host_name",
+        "lang": "painless",
+        "if": "ctx.host != null && !(ctx.host instanceof Map)",
+        "source": "ctx.host = ['name': ctx.host.toString()];"
+      }
+    },
+    {
+      "script": {
+        "tag": "host_fallback",
+        "lang": "painless",
+        "if": "ctx.hostname instanceof String && (ctx.host == null || ctx.host.name == null)",
+        "source": "if (ctx.host == null) { ctx.host = new HashMap(); } ctx.host.name = ctx.hostname; ctx.remove('hostname');"
+      }
+    },
+    {
+      "set": {
+        "tag": "ts_fallback",
+        "field": "@timestamp",
+        "value": "{{_ingest.timestamp}}",
+        "if": "ctx['@timestamp'] == null"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts_ms",
+          "_ts_iso"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

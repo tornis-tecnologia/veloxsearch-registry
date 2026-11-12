@@ -1,0 +1,82 @@
+{
+  "description": "nginx/error: error.log header (time, level, pid#tid, connection) and the client/server/request/upstream/host tail",
+  "processors": [
+    {
+      "rename": {
+        "tag": "message",
+        "field": "log",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "message",
+        "patterns": [
+          "^(?<_ts>\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}) \\[%{WORD:log.level}\\] %{POSINT:process.pid:long}#%{NUMBER:process.thread.id:long}: (?:\\*%{POSINT:nginx.error.connection_id:long} )?%{GREEDYDATA:message}$"
+        ],
+        "on_failure": [
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "yyyy/MM/dd HH:mm:ss"
+        ],
+        "timezone": "UTC",
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "grok": {
+        "tag": "tail",
+        "if": "ctx.message != null && ctx.message.contains(', client: ')",
+        "field": "message",
+        "patterns": [
+          "^%{GREEDYDATA:message}, client: %{IP:client.ip}(?:, server: %{DATA:nginx.error.server})?(?:, request: \"%{DATA:_request}\")?(?:, subrequest: \"%{DATA:nginx.error.subrequest}\")?(?:, upstream: \"%{DATA:nginx.error.upstream}\")?(?:, host: \"%{DATA:nginx.error.host}\")?(?:, referrer: \"%{DATA:http.request.referrer}\")?$"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "request",
+        "if": "ctx._request != null",
+        "field": "_request",
+        "patterns": [
+          "^%{WORD:http.request.method} %{NOTSPACE:url.original}(?: HTTP/%{NUMBER:http.version})?$"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_request"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

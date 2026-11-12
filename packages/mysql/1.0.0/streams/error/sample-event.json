@@ -1,0 +1,17 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "log": {
+    "level": "warning"
+  },
+  "mysql": {
+    "thread_id": 0,
+    "error_code": "MY-010068",
+    "subsystem": "Server"
+  },
+  "message": "CA certificate ca.pem is self signed.",
+  "velox": {
+    "integration": "mysql",
+    "stream": "error",
+    "package_version": "1.0.0"
+  }
+}

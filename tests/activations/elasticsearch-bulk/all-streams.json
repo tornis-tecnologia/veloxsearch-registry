@@ -1,0 +1,31 @@
+{
+  "package_id": "elasticsearch-bulk",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "bulk": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 19201,
+        "meta_key": "@meta",
+        "hostname": "velox-bulk",
+        "version": "7.17.0"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "message ^DEBUG"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "10d"
+      }
+    }
+  }
+}

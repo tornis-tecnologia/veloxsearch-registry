@@ -1,0 +1,65 @@
+{
+ "package_id": "nginx",
+ "package_version": "1.0.0",
+ "spec_version": "2.0",
+ "streams": {
+  "access": {
+   "enabled": true,
+   "input": {
+    "paths": [
+     "/srv/logs/nginx/*access*.log"
+    ],
+    "exclude_paths": [
+     "*.gz"
+    ],
+    "read_from_head": true,
+    "ignore_older": "2d"
+   },
+   "processors": [
+    {
+     "id": "exclude",
+     "enabled": true,
+     "fields": {
+      "rules": [
+       "log healthz"
+      ]
+     }
+    },
+    {
+     "plugin": "throttle",
+     "params": {
+      "rate": 500,
+      "window": 5
+     }
+    }
+   ],
+   "backend": {
+    "delete_after": "14d",
+    "parse_user_agent": false
+   }
+  },
+  "error": {
+   "enabled": true,
+   "input": {
+    "paths": [
+     "/srv/logs/nginx/error.log"
+    ],
+    "ignore_older": "1d"
+   },
+   "backend": {
+    "delete_after": "60d",
+    "timezone": "America/Sao_Paulo"
+   }
+  },
+  "metrics": {
+   "enabled": true,
+   "input": {
+    "host": "127.0.0.1",
+    "port": 8080,
+    "status_url": "/nginx_status",
+    "nginx_plus": false,
+    "scrape_interval": "30s"
+   }
+  }
+ }
+}

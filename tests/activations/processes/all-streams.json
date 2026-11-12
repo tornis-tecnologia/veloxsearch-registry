@@ -1,0 +1,43 @@
+{
+  "package_id": "processes",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "exporter": {
+      "enabled": true,
+      "input": {
+        "scrape_interval": 15,
+        "collectors": [
+          "cpu",
+          "memory",
+          "fd"
+        ],
+        "process_include_pattern": "^(nginx|postgres)$",
+        "process_exclude_pattern": "^kworker"
+      },
+      "processors": [
+        {
+          "plugin": "metrics_selector",
+          "params": {
+            "action": "INCLUDE",
+            "metric_name": "namedprocess",
+            "operation_type": "PREFIX"
+          }
+        }
+      ]
+    },
+    "process": {
+      "enabled": true,
+      "input": {
+        "proc_name": "nginx",
+        "interval": 30,
+        "mem": true,
+        "fd": false,
+        "alert": true
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

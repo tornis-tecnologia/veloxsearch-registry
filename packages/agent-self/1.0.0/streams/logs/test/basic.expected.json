@@ -1,0 +1,62 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "info"
+    },
+    "fluentbit": {
+      "component": "engine"
+    },
+    "event": {
+      "original": "[2026/11/12 10:15:02.123456] [ info] [engine] started (pid=1234)"
+    },
+    "message": "started (pid=1234)"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "log": {
+      "level": "warn"
+    },
+    "fluentbit": {
+      "component": "engine"
+    },
+    "event": {
+      "original": "[2026/11/12 10:15:03.000001] [ warn] [engine] chunk '1-1794478503.1.flb' cannot be retried: task_id=0, input=tail.0 > output=opensearch.0"
+    },
+    "message": "chunk '1-1794478503.1.flb' cannot be retried: task_id=0, input=tail.0 > output=opensearch.0"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.500Z",
+    "log": {
+      "level": "error"
+    },
+    "fluentbit": {
+      "component": "http_client"
+    },
+    "event": {
+      "original": "[2026/11/12 10:15:04.500000] [error] [http_client] broken connection to os.example.internal:9200 ?"
+    },
+    "message": "broken connection to os.example.internal:9200 ?"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "log": {
+      "level": "debug"
+    },
+    "fluentbit": {
+      "component": "input:tail:tail.0"
+    },
+    "event": {
+      "original": "[2026/11/12 10:15:05] [debug] [input:tail:tail.0] inotify_fs_add(): inode=1234 watch_fd=1 name=/var/log/syslog"
+    },
+    "message": "inotify_fs_add(): inode=1234 watch_fd=1 name=/var/log/syslog"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this line has no fluent bit shape"
+    },
+    "message": "this line has no fluent bit shape"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "message": "Out of memory: Killed process 4321 (java) total-vm:8123456kB",
+    "event": {
+      "sequence": 18231
+    },
+    "log": {
+      "level": "error",
+      "syslog": {
+        "priority": 3
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "message": "usb 1-1: new high-speed USB device number 4 using xhci_hcd",
+    "event": {
+      "sequence": 18232
+    },
+    "log": {
+      "level": "informational",
+      "syslog": {
+        "priority": 6
+      }
+    }
+  }
+]

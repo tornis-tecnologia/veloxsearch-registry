@@ -1,0 +1,92 @@
+id: stats
+title:
+  en: Container stats (documents)
+  es: Estadísticas de contenedores (documentos)
+  pt: Estatísticas de contêineres (documentos)
+description:
+  en: CPU and memory samples per running container, stored as documents in OpenSearch.
+  es: Muestras de CPU y memoria por contenedor en ejecución, guardadas como documentos en OpenSearch.
+  pt: Amostras de CPU e memória por contêiner em execução, guardadas como documentos no OpenSearch.
+signal: metrics
+event_type: logs
+enabled: true
+os:
+- linux
+input:
+  plugin: docker
+  fields:
+  - name: interval
+    type: integer
+    default: 10
+    min: 1
+    title:
+      en: Interval (s)
+      es: Intervalo (s)
+      pt: Intervalo (s)
+    bind:
+      key: interval_sec
+  - name: include
+    type: string
+    multi: true
+    title:
+      en: Include containers
+      es: Contenedores incluidos
+      pt: Contêineres incluídos
+    description:
+      en: Container ids or names to sample. Empty = all.
+      es: Ids o nombres de contenedores a muestrear. Vacío = todos.
+      pt: Ids ou nomes de contêineres a amostrar. Vazio = todos.
+    bind:
+      key: include
+      join: ' '
+  - name: exclude
+    type: string
+    multi: true
+    title:
+      en: Exclude containers
+      es: Contenedores excluidos
+      pt: Contêineres excluídos
+    bind:
+      key: exclude
+      join: ' '
+  - name: path_containers
+    type: string
+    default: /var/lib/docker/containers
+    group: advanced
+    title:
+      en: Containers path
+      es: Ruta de contenedores
+      pt: Caminho dos contêineres
+    bind:
+      key: path.containers
+  - name: path_sysfs
+    type: string
+    default: /sys/fs/cgroup
+    group: advanced
+    title:
+      en: cgroup path
+      es: Ruta de cgroup
+      pt: Caminho do cgroup
+    bind:
+      key: path.sysfs
+processors:
+  allow:
+  - throttle
+  - content_modifier
+backend:
+  index_template: index-template.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 1d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

@@ -1,0 +1,26 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "message": "The Print Spooler service terminated unexpectedly.",
+  "host": {
+    "name": "OLD-SRV01"
+  },
+  "log": {
+    "level": "error"
+  },
+  "event": {
+    "code": "7035",
+    "provider": "Service Control Manager"
+  },
+  "winlog": {
+    "channel": "System",
+    "provider_name": "Service Control Manager",
+    "event_id": 7035,
+    "record_id": 4411,
+    "computer_name": "OLD-SRV01"
+  },
+  "velox": {
+    "integration": "windows",
+    "stream": "eventlog_legacy",
+    "package_version": "1.0.0"
+  }
+}

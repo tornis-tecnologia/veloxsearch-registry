@@ -1,0 +1,20 @@
+{
+  "package_id": "ebpf",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "events": {
+      "enabled": true,
+      "input": {
+        "trace": [
+          "trace_signal",
+          "trace_bind"
+        ],
+        "poll_ms": 500
+      },
+      "backend": {
+        "delete_after": "30d"
+      }
+    }
+  }
+}

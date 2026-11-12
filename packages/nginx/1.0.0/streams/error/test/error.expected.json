@@ -1,0 +1,156 @@
+[
+  {
+    "process": {
+      "pid": 1234,
+      "thread": {
+        "id": 1234
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "nginx": {
+      "error": {
+        "host": "www.example.com",
+        "server": "www.example.com",
+        "connection_id": 5678
+      }
+    },
+    "log": {
+      "level": "error"
+    },
+    "client": {
+      "ip": "203.0.113.9"
+    },
+    "http": {
+      "request": {
+        "method": "GET"
+      },
+      "version": "1.1"
+    },
+    "message": "open() \"/usr/share/nginx/html/missing.png\" failed (2: No such file or directory)",
+    "url": {
+      "original": "/missing.png"
+    }
+  },
+  {
+    "process": {
+      "pid": 1234,
+      "thread": {
+        "id": 1234
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "nginx": {
+      "error": {
+        "host": "api.example.com",
+        "server": "api.example.com",
+        "upstream": "http://127.0.0.1:8080/api/v1/orders",
+        "connection_id": 5679
+      }
+    },
+    "log": {
+      "level": "error"
+    },
+    "client": {
+      "ip": "2001:db8::1"
+    },
+    "http": {
+      "request": {
+        "method": "POST"
+      },
+      "version": "2.0"
+    },
+    "message": "connect() failed (111: Connection refused) while connecting to upstream",
+    "url": {
+      "original": "/api/v1/orders"
+    }
+  },
+  {
+    "process": {
+      "pid": 1235,
+      "thread": {
+        "id": 1235
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "nginx": {
+      "error": {
+        "host": "files.example.com",
+        "server": "_",
+        "upstream": "http://10.0.0.7:9000/download",
+        "connection_id": 5680
+      }
+    },
+    "log": {
+      "level": "warn"
+    },
+    "http": {
+      "request": {
+        "method": "GET",
+        "referrer": "https://www.example.com/"
+      },
+      "version": "1.1"
+    },
+    "client": {
+      "ip": "198.51.100.4"
+    },
+    "message": "an upstream response is buffered to a temporary file /var/cache/nginx/proxy_temp/3/00/0000000003 while reading upstream",
+    "url": {
+      "original": "/download"
+    }
+  },
+  {
+    "process": {
+      "pid": 1,
+      "thread": {
+        "id": 1
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "message": "nginx/1.25.3",
+    "log": {
+      "level": "notice"
+    }
+  },
+  {
+    "process": {
+      "pid": 1236,
+      "thread": {
+        "id": 1236
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "nginx": {
+      "error": {
+        "server": "0.0.0.0:443",
+        "connection_id": 5681
+      }
+    },
+    "log": {
+      "level": "crit"
+    },
+    "client": {
+      "ip": "192.0.2.77"
+    },
+    "message": "SSL_do_handshake() failed (SSL: error:0A000412:SSL routines::sslv3 alert bad certificate:SSL alert number 42) while SSL handshaking"
+  },
+  {
+    "process": {
+      "pid": 1,
+      "thread": {
+        "id": 1
+      }
+    },
+    "@timestamp": "2026-11-12T10:15:07.000Z",
+    "message": "bind() to 0.0.0.0:80 failed (98: Address already in use)",
+    "log": {
+      "level": "emerg"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "nginx: something that is not an error log line",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

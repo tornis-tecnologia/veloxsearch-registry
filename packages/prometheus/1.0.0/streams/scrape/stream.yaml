@@ -1,0 +1,72 @@
+id: scrape
+title: {en: Scrape an exporter, es: Raspar un exporter, pt: Coletar um exporter}
+description:
+  en: Scrapes the /metrics endpoint of a Prometheus exporter or application. Needs an OTLP endpoint on the policy.
+  es: Raspa el endpoint /metrics de un exporter Prometheus o aplicación. Requiere un endpoint OTLP en la política.
+  pt: Coleta o endpoint /metrics de um exporter Prometheus ou aplicação. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: prometheus_scrape
+  fields:
+  - name: host
+    type: string
+    default: localhost
+    title: {en: Host, es: Host, pt: Host}
+    bind:
+      key: host
+    required: true
+  - name: port
+    type: integer
+    default: 9100
+    title: {en: Port, es: Puerto, pt: Porta}
+    bind:
+      key: port
+    min: 1
+    max: 65535
+    required: true
+  - name: metrics_path
+    type: string
+    default: /metrics
+    title: {en: Metrics path, es: Ruta de métricas, pt: Caminho das métricas}
+    bind:
+      key: metrics_path
+  - name: scrape_interval
+    type: duration
+    default: 10s
+    title: {en: Scrape interval, es: Intervalo de recolección, pt: Intervalo de coleta}
+    bind:
+      key: scrape_interval
+  - name: tls
+    type: bool
+    default: false
+    title: {en: Use TLS, es: Usar TLS, pt: Usar TLS}
+    bind:
+      key: tls
+  - name: http_user
+    type: string
+    title: {en: HTTP basic user, es: Usuario HTTP basic, pt: Usuário HTTP basic}
+    bind:
+      key: http_user
+    group: advanced
+  - name: http_passwd
+    type: password
+    title: {en: HTTP basic password, es: Contraseña HTTP basic, pt: Senha HTTP basic}
+    bind:
+      key: http_passwd
+    group: advanced
+  - name: bearer_token
+    type: password
+    title: {en: Bearer token, es: Bearer token, pt: Bearer token}
+    bind:
+      key: bearer_token
+    group: advanced
+processors:
+  allow:
+  - metrics_selector
+  - labels

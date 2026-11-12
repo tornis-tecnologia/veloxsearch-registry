@@ -1,0 +1,179 @@
+{
+  "description": "kubernetes-events: Kubernetes Event objects to kubernetes.event.* fields",
+  "processors": [
+    {
+      "rename": {
+        "tag": "reason",
+        "field": "reason",
+        "target_field": "kubernetes.event.reason",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "type",
+        "field": "type",
+        "target_field": "kubernetes.event.type",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "action",
+        "field": "action",
+        "target_field": "kubernetes.event.action",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "reporter",
+        "field": "reportingComponent",
+        "target_field": "kubernetes.event.reporting_component",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "event_message",
+        "field": "kubernetes.event.message",
+        "value": "{{{message}}}",
+        "if": "ctx.message instanceof String"
+      }
+    },
+    {
+      "convert": {
+        "tag": "count",
+        "field": "count",
+        "target_field": "kubernetes.event.count",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "kind",
+        "field": "involvedObject.kind",
+        "target_field": "kubernetes.event.involved_object.kind",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "name",
+        "field": "involvedObject.name",
+        "target_field": "kubernetes.event.involved_object.name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "namespace",
+        "field": "involvedObject.namespace",
+        "target_field": "kubernetes.event.involved_object.namespace",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "uid",
+        "field": "involvedObject.uid",
+        "target_field": "kubernetes.event.involved_object.uid",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "source_component",
+        "field": "source.component",
+        "target_field": "kubernetes.event.source.component",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "source_host",
+        "field": "source.host",
+        "target_field": "kubernetes.event.source.host",
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "tag": "first_seen",
+        "field": "firstTimestamp",
+        "formats": [
+          "ISO8601"
+        ],
+        "target_field": "kubernetes.event.first_timestamp",
+        "if": "ctx.firstTimestamp != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "field": "lastTimestamp",
+        "formats": [
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "if": "ctx.lastTimestamp != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp_fallback",
+        "field": "metadata.creationTimestamp",
+        "formats": [
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "if": "ctx.lastTimestamp == null && ctx.metadata?.creationTimestamp != null",
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "outcome",
+        "lang": "painless",
+        "if": "ctx.kubernetes?.event?.reason == null",
+        "source": "ctx.event = ctx.event == null ? new HashMap() : ctx.event; ctx.event.outcome = 'unparsed';"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "count",
+          "involvedObject",
+          "source",
+          "firstTimestamp",
+          "lastTimestamp",
+          "metadata",
+          "eventTime",
+          "series",
+          "related",
+          "reportingInstance"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "event.outcome",
+        "value": "unparsed"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}

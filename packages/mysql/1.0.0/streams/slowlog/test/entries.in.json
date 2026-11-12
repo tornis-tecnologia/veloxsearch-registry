@@ -1,0 +1,26 @@
+[
+  {
+    "log": "# Time: 2026-11-12T10:15:02.123456Z\n# User@Host: app[app] @ web-01 [10.0.0.5]  Id:    42\n# Query_time: 1.234567  Lock_time: 0.000123 Rows_sent: 1  Rows_examined: 100000\nSET timestamp=1794478502;\nSELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "# Time: 2026-11-12T10:16:10.000000Z\n# User@Host: report[report] @ localhost []  Id:    43\n# Query_time: 12.500000  Lock_time: 0.000050 Rows_sent: 5000  Rows_examined: 2500000\nuse shop;\nSET timestamp=1794478570;\nSELECT c.name,\n       SUM(o.total)\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.id\n GROUP BY c.name;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "# User@Host: root[root] @  [192.168.1.20]\n# Thread_id: 9  Schema: shop  QC_hit: No\n# Query_time: 3.000211  Lock_time: 0.000090  Rows_sent: 0  Rows_examined: 12\nSET timestamp=1794478600;\nUPDATE orders SET status = 'x' WHERE id < 100;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "# Time: 261112 10:20:00\n# User@Host: app[app] @ db-02 [10.0.0.9]\n# Query_time: 2.000000  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1\nSELECT SLEEP(2);",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "/usr/sbin/mysqld, Version: 8.0.36 (MySQL Community Server - GPL). started with:\nTcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "garbage line that is not a slow log entry",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  }
+]

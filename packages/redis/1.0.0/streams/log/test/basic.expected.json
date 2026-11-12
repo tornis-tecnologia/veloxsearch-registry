@@ -1,0 +1,154 @@
+[
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:15:00.101Z",
+    "log": {
+      "level": "warning"
+    },
+    "event": {
+      "original": "1:C 12 Nov 2026 10:15:00.101 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo"
+    },
+    "message": "oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo",
+    "redis": {
+      "role": "child"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:15:00.102Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "1:C 12 Nov 2026 10:15:00.102 * Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started"
+    },
+    "message": "Redis version=7.2.4, bits=64, commit=00000000, modified=0, pid=1, just started",
+    "redis": {
+      "role": "child"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:15:00.110Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "1:M 12 Nov 2026 10:15:00.110 * Running mode=standalone, port=6379."
+    },
+    "message": "Running mode=standalone, port=6379.",
+    "redis": {
+      "role": "master"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:15:00.111Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "1:M 12 Nov 2026 10:15:00.111 * Ready to accept connections tcp"
+    },
+    "message": "Ready to accept connections tcp",
+    "redis": {
+      "role": "master"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:20:11.500Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "1:S 12 Nov 2026 10:20:11.500 * Connecting to MASTER 10.0.0.5:6379"
+    },
+    "message": "Connecting to MASTER 10.0.0.5:6379",
+    "redis": {
+      "role": "replica"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:21:00.001Z",
+    "log": {
+      "level": "warning"
+    },
+    "event": {
+      "original": "1:X 12 Nov 2026 10:21:00.001 # +sdown master mymaster 10.0.0.5 6379"
+    },
+    "message": "+sdown master mymaster 10.0.0.5 6379",
+    "redis": {
+      "role": "sentinel"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:23:00.000Z",
+    "log": {
+      "level": "debug"
+    },
+    "event": {
+      "original": "1:M 12 Nov 2026 10:23:00.000 . 1 clients connected (0 replicas), 904040 bytes in use"
+    },
+    "message": "1 clients connected (0 replicas), 904040 bytes in use",
+    "redis": {
+      "role": "master"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:24:00.000Z",
+    "log": {
+      "level": "verbose"
+    },
+    "event": {
+      "original": "1:M 12 Nov 2026 10:24:00.000 - DB 0: 12 keys (0 volatile) in 16 slots HT."
+    },
+    "message": "DB 0: 12 keys (0 volatile) in 16 slots HT.",
+    "redis": {
+      "role": "master"
+    }
+  },
+  {
+    "process": {
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:25:00.000Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "1:M 12 Nov 10:25:00.000 * 100 changes in 300 seconds. Saving..."
+    },
+    "message": "100 changes in 300 seconds. Saving...",
+    "redis": {
+      "role": "master"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this is not a redis log line"
+    },
+    "message": "this is not a redis log line"
+  }
+]

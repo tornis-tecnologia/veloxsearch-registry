@@ -1,0 +1,22 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "web-01"
+  },
+  "message": "GET /health 200",
+  "agent": {
+    "type": "filebeat",
+    "version": "8.15.0"
+  },
+  "bulk": {
+    "meta": {
+      "_index": "filebeat-8.15.0",
+      "_op_type": "create"
+    }
+  },
+  "velox": {
+    "integration": "elasticsearch-bulk",
+    "stream": "bulk",
+    "package_version": "1.0.0"
+  }
+}

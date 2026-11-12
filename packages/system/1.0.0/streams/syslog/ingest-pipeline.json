@@ -1,0 +1,74 @@
+{
+  "description": "system/syslog: BSD and RFC 5424-style syslog lines",
+  "processors": [
+    {
+      "script": {
+        "tag": "keep_original",
+        "if": "ctx.log != null",
+        "lang": "painless",
+        "source": "ctx.event = ctx.event == null ? new HashMap() : ctx.event; ctx.event.original = ctx.log;"
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "log",
+        "ignore_missing": true,
+        "patterns": [
+          "^%{SYSLOGTIMESTAMP:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$",
+          "^%{TIMESTAMP_ISO8601:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$"
+        ],
+        "pattern_definitions": {
+          "PROG": "[A-Za-z0-9._/@-]+"
+        },
+        "on_failure": [
+          {
+            "rename": {
+              "field": "log",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "MMM dd HH:mm:ss",
+          "MMM  d HH:mm:ss",
+          "MMM d HH:mm:ss",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "log"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "kafka": {
+    "topic": "app-logs",
+    "partition": 3,
+    "offset": 184467,
+    "key": "order-1042",
+    "payload": {
+      "level": "info",
+      "service": "checkout",
+      "msg": "order placed"
+    }
+  },
+  "velox": {
+    "integration": "kafka-consumer",
+    "stream": "messages",
+    "package_version": "1.0.0"
+  }
+}

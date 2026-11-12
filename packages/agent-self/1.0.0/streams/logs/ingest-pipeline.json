@@ -1,0 +1,87 @@
+{
+  "description": "agent-self/logs: Fluent Bit log lines `[date] [ level] [component] message`",
+  "processors": [
+    {
+      "rename": {
+        "tag": "line",
+        "field": "log",
+        "target_field": "_line",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{_line}}",
+        "if": "ctx._line != null"
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "_line",
+        "ignore_missing": true,
+        "patterns": [
+          "^\\[%{DATA:_ts}\\] \\[\\s*%{WORD:log.level}\\] \\[%{DATA:fluentbit.component}\\] %{GREEDYDATA:message}$",
+          "^\\[%{DATA:_ts}\\] \\[\\s*%{WORD:log.level}\\] %{GREEDYDATA:message}$"
+        ],
+        "on_failure": [
+          {
+            "rename": {
+              "field": "_line",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "lowercase": {
+        "tag": "level",
+        "field": "log.level",
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "yyyy/MM/dd HH:mm:ss.SSSSSSSSS",
+          "yyyy/MM/dd HH:mm:ss.SSSSSS",
+          "yyyy/MM/dd HH:mm:ss.SSS",
+          "yyyy/MM/dd HH:mm:ss",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_line"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

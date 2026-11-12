@@ -1,0 +1,77 @@
+[
+  {
+    "kubernetes": {
+      "event": {
+        "reason": "BackOff",
+        "first_timestamp": "2025-11-12T09:58:00.000Z",
+        "reporting_component": "kubelet",
+        "involved_object": {
+          "name": "api-7d9c-xk2lp",
+          "namespace": "shop",
+          "uid": "u-1",
+          "kind": "Pod"
+        },
+        "count": 14,
+        "source": {
+          "host": "node-2",
+          "component": "kubelet"
+        },
+        "type": "Warning",
+        "message": "Back-off restarting failed container api"
+      }
+    },
+    "@timestamp": "2025-11-12T10:15:02.000Z",
+    "message": "Back-off restarting failed container api"
+  },
+  {
+    "kubernetes": {
+      "event": {
+        "count": 1,
+        "reason": "Pulled",
+        "source": {
+          "host": "node-1",
+          "component": "kubelet"
+        },
+        "type": "Normal",
+        "message": "Successfully pulled image \"web:1.4\"",
+        "involved_object": {
+          "name": "web-5c8d-abcde",
+          "namespace": "shop",
+          "kind": "Pod"
+        }
+      }
+    },
+    "@timestamp": "2025-11-12T10:16:10.000Z",
+    "message": "Successfully pulled image \"web:1.4\""
+  },
+  {
+    "kubernetes": {
+      "event": {
+        "count": 3,
+        "reason": "NodeNotReady",
+        "source": {
+          "component": "node-controller"
+        },
+        "type": "Warning",
+        "message": "Node node-3 status is now: NodeNotReady",
+        "involved_object": {
+          "name": "node-3",
+          "kind": "Node"
+        }
+      }
+    },
+    "@timestamp": "2025-11-12T10:17:00.000Z",
+    "message": "Node node-3 status is now: NodeNotReady"
+  },
+  {
+    "kubernetes": {
+      "event": {
+        "message": "event without reason or object"
+      }
+    },
+    "message": "event without reason or object",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

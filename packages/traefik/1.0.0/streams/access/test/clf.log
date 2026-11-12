@@ -1,0 +1,7 @@
+203.0.113.7 - - [12/Nov/2026:10:15:02 +0000] "GET /api/users HTTP/1.1" 200 1532 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" 1 "api@docker" "http://172.18.0.4:8080" 12ms
+198.51.100.23 - alice [12/Nov/2026:10:15:03 +0000] "POST /login HTTP/2.0" 302 0 "https://app.example.com/" "curl/8.5.0" 2 "web@docker" "http://172.18.0.5:3000" 48ms
+2001:db8::1f - - [12/Nov/2026:10:15:04 -0300] "GET /static/app.js HTTP/1.1" 304 - "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1" 3 "web@docker" "http://172.18.0.5:3000" 1ms
+10.0.0.9 - - [12/Nov/2026:10:15:05 +0000] "PUT /api/orders/12 HTTP/1.1" 502 11 "-" "python-requests/2.31.0" 4 "api@docker" "http://172.18.0.4:8080" 3004ms
+192.0.2.44 - - [12/Nov/2026:10:15:06 +0000] "GET /unknown HTTP/1.1" 404 19 "-" "Go-http-client/1.1" 5 "-" "-" 0ms
+203.0.113.50 - - [12/Nov/2026:10:15:07 +0000] "GET /plain HTTP/1.1" 200 5 "-" "wget/1.21"
+this is not an access log line

@@ -1,0 +1,92 @@
+{
+  "description": "system/journal: normalize journald fields (already lower-cased and underscore-stripped by the input)",
+  "processors": [
+    {
+      "rename": {
+        "tag": "unit",
+        "field": "systemd_unit",
+        "target_field": "systemd.unit",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "host",
+        "field": "hostname",
+        "target_field": "host.name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "ident",
+        "field": "syslog_identifier",
+        "target_field": "process.name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "comm",
+        "field": "comm",
+        "target_field": "process.command",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "pid",
+        "field": "pid",
+        "target_field": "process.pid",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "priority",
+        "field": "priority",
+        "target_field": "log.syslog.priority",
+        "type": "integer",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "severity",
+        "if": "ctx.log?.syslog?.priority != null",
+        "lang": "painless",
+        "source": "def names = ['emergency','alert','critical','error','warning','notice','informational','debug']; int p = ctx.log.syslog.priority; if (p >= 0 && p < 8) { ctx.log.level = names[p]; }"
+      }
+    },
+    {
+      "remove": {
+        "tag": "drop_raw",
+        "field": [
+          "pid",
+          "priority",
+          "cursor",
+          "boot_id",
+          "machine_id",
+          "cap_effective",
+          "systemd_cgroup",
+          "systemd_slice",
+          "systemd_invocation_id",
+          "source_realtime_timestamp",
+          "transport",
+          "stream_id",
+          "selinux_context",
+          "cmdline",
+          "exe",
+          "gid",
+          "uid",
+          "syslog_facility",
+          "runtime_scope"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

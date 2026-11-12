@@ -1,0 +1,51 @@
+id: host_metrics
+title: {en: Host metrics (Prometheus), es: Métricas del host (Prometheus), pt: Métricas do host (Prometheus)}
+description:
+  en: node-exporter compatible metrics (CPU, memory, disks, filesystems, network, load, thermal) sent to the deployment's OTel collector. Needs an OTLP endpoint on the policy.
+  es: Métricas compatibles con node-exporter (CPU, memoria, discos, sistemas de archivos, red, carga, temperatura) enviadas al colector OTel del deployment. Requiere un endpoint OTLP en la política.
+  pt: Métricas compatíveis com node-exporter (CPU, memória, discos, sistemas de arquivos, rede, carga, temperatura) enviadas ao coletor OTel do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: false
+os: [linux]
+
+input:
+  plugin: node_exporter_metrics
+  fixed:
+    path.procfs: /proc
+    path.sysfs: /sys
+  fields:
+    - name: scrape_interval
+      type: integer
+      default: 15
+      min: 1
+      title: {en: Scrape interval (s), es: Intervalo de recolección (s), pt: Intervalo de coleta (s)}
+      bind: {key: scrape_interval}
+    - name: collectors
+      type: select
+      multi: true
+      default: [cpu, meminfo, diskstats, filesystem, netdev, loadavg, uname, stat, time, vmstat]
+      options: [cpu, cpufreq, diskstats, filefd, filesystem, hwmon, loadavg, meminfo, netdev, netstat, nvme, processes, sockstat, stat, systemd, textfile, thermalzone, time, timex, uname, vmstat]
+      title: {en: Collectors, es: Colectores, pt: Coletores}
+      bind: {key: metrics, join: ","}
+    - name: ignore_filesystem_types
+      type: regex
+      default: "^(tmpfs|devtmpfs|overlay|squashfs|proc|sysfs|cgroup2?)$"
+      group: advanced
+      title: {en: Ignore filesystem types, es: Ignorar tipos de sistema de archivos, pt: Ignorar tipos de sistema de arquivos}
+      bind: {key: filesystem.ignore_filesystem_type_regex}
+    - name: ignore_mount_points
+      type: regex
+      default: "^/(dev|proc|sys|run|snap)($|/)"
+      group: advanced
+      title: {en: Ignore mount points, es: Ignorar puntos de montaje, pt: Ignorar pontos de montagem}
+      bind: {key: filesystem.ignore_mount_point_regex}
+    - name: ignore_devices
+      type: regex
+      default: "^(ram|loop|fd|sr|dm-)\\d*$"
+      group: advanced
+      title: {en: Ignore block devices, es: Ignorar dispositivos de bloque, pt: Ignorar dispositivos de bloco}
+      bind: {key: diskstats.ignore_device_regex}
+
+processors:
+  allow: [metrics_selector, labels]

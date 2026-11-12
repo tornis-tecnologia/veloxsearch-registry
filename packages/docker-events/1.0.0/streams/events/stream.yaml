@@ -1,0 +1,68 @@
+id: events
+title: {en: Docker events, es: Eventos de Docker, pt: Eventos do Docker}
+description:
+  en: Docker daemon events with action, container id, name and image lifted into ECS-style fields.
+  es: Eventos del demonio Docker con acción, id, nombre e imagen del contenedor en campos estilo ECS.
+  pt: Eventos do daemon Docker com ação, id, nome e imagem do contêiner em campos estilo ECS.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+input:
+  plugin: docker_events
+  fields:
+  - name: unix_path
+    type: string
+    default: /var/run/docker.sock
+    group: advanced
+    title: {en: Docker socket, es: Socket de Docker, pt: Socket do Docker}
+    bind:
+      key: unix_path
+  - name: buffer_size
+    type: size
+    default: '8192'
+    group: advanced
+    title: {en: Read buffer size, es: Tamaño del búfer de lectura, pt: Tamanho do buffer de leitura}
+    bind:
+      key: buffer_size
+  - name: retry_interval
+    type: integer
+    default: 1
+    min: 1
+    group: advanced
+    title: {en: Reconnect interval (s), es: Intervalo de reconexión (s), pt: Intervalo de reconexão (s)}
+    bind:
+      key: reconnect.retry_interval
+  - name: retry_limits
+    type: integer
+    default: 5
+    min: 0
+    group: advanced
+    title: {en: Reconnect attempts, es: Intentos de reconexión, pt: Tentativas de reconexão}
+    bind:
+      key: reconnect.retry_limits
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

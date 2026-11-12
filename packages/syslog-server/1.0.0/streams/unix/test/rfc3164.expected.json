@@ -1,0 +1,136 @@
+[
+  {
+    "process": {
+      "name": "su",
+      "pid": 2231
+    },
+    "log": {
+      "level": "critical",
+      "syslog": {
+        "severity": {
+          "name": "critical",
+          "code": 2
+        },
+        "priority": 34,
+        "facility": {
+          "name": "auth",
+          "code": 4
+        }
+      }
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "event": {
+      "original": "<34>Nov 12 10:15:02 web-01 su[2231]: 'su root' failed for lonvick on /dev/pts/8"
+    },
+    "message": "'su root' failed for lonvick on /dev/pts/8"
+  },
+  {
+    "process": {
+      "name": "CRON",
+      "pid": 2231
+    },
+    "log": {
+      "level": "notice",
+      "syslog": {
+        "severity": {
+          "name": "notice",
+          "code": 5
+        },
+        "priority": 13,
+        "facility": {
+          "name": "user",
+          "code": 1
+        }
+      }
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "event": {
+      "original": "<13>Nov  3 07:00:01 web-01 CRON[2231]: (root) CMD (command -v debian-sa1 > /dev/null)"
+    },
+    "message": "(root) CMD (command -v debian-sa1 > /dev/null)"
+  },
+  {
+    "log": {
+      "level": "notice",
+      "syslog": {
+        "severity": {
+          "name": "notice",
+          "code": 5
+        },
+        "priority": 189,
+        "facility": {
+          "name": "local7",
+          "code": 23
+        }
+      }
+    },
+    "host": {
+      "name": "sw-core-02"
+    },
+    "event": {
+      "original": "<189>Nov 12 10:15:09 sw-core-02 %LINK-3-UPDOWN: Interface Gi1/0/24, changed state to down"
+    },
+    "message": "%LINK-3-UPDOWN: Interface Gi1/0/24, changed state to down"
+  },
+  {
+    "process": {
+      "name": "kernel"
+    },
+    "log": {
+      "level": "info",
+      "syslog": {
+        "severity": {
+          "name": "info",
+          "code": 6
+        },
+        "priority": 14,
+        "facility": {
+          "name": "user",
+          "code": 1
+        }
+      }
+    },
+    "host": {
+      "name": "db-01"
+    },
+    "event": {
+      "original": "<14>Nov 12 10:15:10 db-01 kernel: [12345.678] usb 1-1: new high-speed USB device number 4"
+    },
+    "message": "[12345.678] usb 1-1: new high-speed USB device number 4"
+  },
+  {
+    "log": {
+      "level": "info",
+      "syslog": {
+        "severity": {
+          "name": "info",
+          "code": 6
+        },
+        "priority": 38,
+        "facility": {
+          "name": "auth",
+          "code": 4
+        }
+      }
+    },
+    "host": {
+      "name": "gw-01"
+    },
+    "event": {
+      "original": "<38>Nov 12 10:15:11 gw-01 plain message without a program tag"
+    },
+    "message": "plain message without a program tag"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this line has no priority and no syslog shape at all"
+    },
+    "message": "this line has no priority and no syslog shape at all"
+  }
+]

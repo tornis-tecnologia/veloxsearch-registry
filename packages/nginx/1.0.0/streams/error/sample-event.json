@@ -1,0 +1,38 @@
+{
+  "process": {
+    "pid": 1234,
+    "thread": {
+      "id": 1234
+    }
+  },
+  "@timestamp": "2026-11-12T10:15:03.000Z",
+  "nginx": {
+    "error": {
+      "host": "api.example.com",
+      "server": "api.example.com",
+      "upstream": "http://127.0.0.1:8080/api/v1/orders",
+      "connection_id": 5679
+    }
+  },
+  "log": {
+    "level": "error"
+  },
+  "client": {
+    "ip": "2001:db8::1"
+  },
+  "http": {
+    "request": {
+      "method": "POST"
+    },
+    "version": "2.0"
+  },
+  "message": "connect() failed (111: Connection refused) while connecting to upstream",
+  "url": {
+    "original": "/api/v1/orders"
+  },
+  "velox": {
+    "integration": "nginx",
+    "stream": "error",
+    "package_version": "1.0.0"
+  }
+}

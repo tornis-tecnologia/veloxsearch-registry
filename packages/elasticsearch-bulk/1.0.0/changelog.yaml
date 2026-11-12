@@ -1,0 +1,4 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: Bulk API receiver stream.', es: 'Primera versión: stream receptor Bulk API.', pt: 'Primeira versão: stream receptor Bulk API.'}

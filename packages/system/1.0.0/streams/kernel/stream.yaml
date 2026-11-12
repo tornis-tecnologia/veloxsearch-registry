@@ -1,0 +1,47 @@
+id: kernel
+title: {en: Kernel log, es: Log del kernel, pt: Log do kernel}
+description:
+  en: Kernel ring buffer (/dev/kmsg) — OOM kills, hardware errors, driver messages — with priority as a level name.
+  es: Búfer del kernel (/dev/kmsg) — OOM kills, errores de hardware, mensajes de drivers — con la prioridad como nombre de nivel.
+  pt: Buffer do kernel (/dev/kmsg) — OOM kills, erros de hardware, mensagens de drivers — com a prioridade como nome de nível.
+signal: logs
+event_type: logs
+enabled: false
+os: [linux]
+
+input:
+  plugin: kmsg
+  fields:
+    - name: prio_level
+      type: select
+      default: 8
+      options:
+        - {value: 0, title: {en: 0 emergency, es: 0 emergencia, pt: 0 emergência}}
+        - {value: 1, title: {en: 1 alert, es: 1 alerta, pt: 1 alerta}}
+        - {value: 2, title: {en: 2 critical, es: 2 crítico, pt: 2 crítico}}
+        - {value: 3, title: {en: 3 error, es: 3 error, pt: 3 erro}}
+        - {value: 4, title: {en: 4 warning, es: 4 aviso, pt: 4 aviso}}
+        - {value: 5, title: {en: 5 notice, es: 5 notificación, pt: 5 notificação}}
+        - {value: 6, title: {en: 6 info, es: 6 info, pt: 6 info}}
+        - {value: 7, title: {en: 7 debug, es: 7 debug, pt: 7 debug}}
+        - {value: 8, title: {en: 8 everything, es: 8 todo, pt: 8 tudo}}
+      title: {en: Maximum priority level, es: Nivel máximo de prioridad, pt: Nível máximo de prioridade}
+      bind: {key: prio_level}
+
+processors:
+  allow: [grep, modify, record_modifier, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}

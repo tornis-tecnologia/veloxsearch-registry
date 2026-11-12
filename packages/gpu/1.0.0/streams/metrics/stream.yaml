@@ -1,0 +1,90 @@
+id: metrics
+title:
+  en: GPU metrics
+  es: Métricas de GPU
+  pt: Métricas de GPU
+description:
+  en: GPU usage, power and temperature sent to the deployment's OTLP endpoint. Needs an OTLP endpoint on the policy.
+  es: Uso, consumo y temperatura de GPU enviados al endpoint OTLP del deployment. Requiere un endpoint OTLP en la política.
+  pt: Uso, consumo e temperatura de GPU enviados ao endpoint OTLP do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: true
+os:
+- linux
+input:
+  plugin: gpu_metrics
+  fields:
+  - name: scrape_interval
+    type: integer
+    default: 5
+    min: 1
+    title:
+      en: Scrape interval (s)
+      es: Intervalo de recolección (s)
+      pt: Intervalo de coleta (s)
+    bind:
+      key: scrape_interval
+  - name: cards_include
+    type: string
+    default: '*'
+    title:
+      en: Include cards
+      es: Tarjetas incluidas
+      pt: Placas incluídas
+    description:
+      en: Card ids to monitor, `*` for all.
+      es: Ids de tarjetas a monitorizar, `*` para todas.
+      pt: Ids de placas a monitorar, `*` para todas.
+    bind:
+      key: cards_include
+  - name: cards_exclude
+    type: string
+    title:
+      en: Exclude cards
+      es: Tarjetas excluidas
+      pt: Placas excluídas
+    bind:
+      key: cards_exclude
+  - name: enable_nvml
+    type: bool
+    since: 5.1.0
+    default: true
+    title:
+      en: Use NVML (NVIDIA)
+      es: Usar NVML (NVIDIA)
+      pt: Usar NVML (NVIDIA)
+    bind:
+      key: enable_nvml
+  - name: enable_power
+    type: bool
+    default: true
+    title:
+      en: Power metrics
+      es: Métricas de consumo
+      pt: Métricas de consumo
+    bind:
+      key: enable_power
+  - name: enable_temperature
+    type: bool
+    default: true
+    title:
+      en: Temperature metrics
+      es: Métricas de temperatura
+      pt: Métricas de temperatura
+    bind:
+      key: enable_temperature
+  - name: path_sysfs
+    type: string
+    default: /sys
+    group: advanced
+    title:
+      en: sysfs path
+      es: Ruta de sysfs
+      pt: Caminho do sysfs
+    bind:
+      key: path_sysfs
+processors:
+  allow:
+  - metrics_selector
+  - labels

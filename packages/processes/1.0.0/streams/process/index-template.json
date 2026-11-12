@@ -1,0 +1,64 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "10s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "dynamic_templates": [
+        {
+          "numbers": {
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "double"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "alive": {
+          "type": "boolean"
+        },
+        "alert": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "long"
+        },
+        "mem": {
+          "type": "object",
+          "dynamic": true
+        },
+        "fd": {
+          "type": "long"
+        },
+        "fd_max": {
+          "type": "long"
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

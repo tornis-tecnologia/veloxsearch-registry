@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: exporter and process streams.'
+      es: 'Primera versión: streams exporter y process.'
+      pt: 'Primeira versão: streams exporter e process.'

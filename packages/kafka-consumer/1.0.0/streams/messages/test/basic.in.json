@@ -1,0 +1,42 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "topic": "app-logs",
+    "partition": 3,
+    "offset": 184467,
+    "key": "order-1042",
+    "payload": "{\"level\":\"info\",\"service\":\"checkout\",\"msg\":\"order placed\"}"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "topic": "app-logs",
+    "partition": 1,
+    "offset": 90,
+    "key": null,
+    "payload": "plain text line"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "topic": "metrics",
+    "partition": 0,
+    "offset": 7,
+    "key": "k",
+    "payload": {
+      "cpu": 0.4
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "topic": "app-logs",
+    "partition": "x",
+    "offset": 12,
+    "payload": "{\"level\":\"warn\" oops"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:06.000Z",
+    "topic": "app-logs",
+    "partition": 2,
+    "offset": 13,
+    "payload": "[1,2,3]"
+  }
+]

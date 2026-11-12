@@ -1,0 +1,92 @@
+id: etw
+title: {en: Event Tracing for Windows, es: Event Tracing for Windows, pt: Event Tracing for Windows}
+description:
+  en: Events from an ETW provider session, or from the kernel logger (process, thread, image load...).
+  es: Eventos de una sesión de proveedor ETW, o del kernel logger (proceso, hilo, carga de imagen...).
+  pt: Eventos de uma sessão de provedor ETW, ou do kernel logger (processo, thread, carga de imagem...).
+signal: logs
+event_type: logs
+enabled: false
+os:
+- windows
+input:
+  plugin: event_tracing_windows
+  fields:
+  - name: session_type
+    type: select
+    default: provider
+    options:
+    - provider
+    - system
+    title: {en: Session type, es: Tipo de sesión, pt: Tipo de sessão}
+    bind:
+      key: session_type
+  - name: provider_name
+    type: string
+    title: {en: Provider name, es: Nombre del proveedor, pt: Nome do provedor}
+    placeholder: Microsoft-Windows-DNSServer
+    show_if:
+      field: session_type
+      equals: provider
+    bind:
+      key: provider_name
+  - name: provider_guid
+    type: string
+    title: {en: Provider GUID, es: GUID del proveedor, pt: GUID do provedor}
+    show_if:
+      field: session_type
+      equals: provider
+    bind:
+      key: provider_guid
+  - name: level
+    type: integer
+    default: 5
+    min: 0
+    max: 255
+    title: {en: Provider level, es: Nivel del proveedor, pt: Nível do provedor}
+    bind:
+      key: level
+  - name: kernel_flags
+    type: select
+    multi: true
+    default:
+    - process
+    - thread
+    - image_load
+    options:
+    - process
+    - thread
+    - image_load
+    - cswitch
+    - tcpip
+    - disk_io
+    title: {en: Kernel flags, es: Flags del kernel, pt: Flags do kernel}
+    show_if:
+      field: session_type
+      equals: system
+    bind:
+      key: kernel_flags
+      join: ','
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

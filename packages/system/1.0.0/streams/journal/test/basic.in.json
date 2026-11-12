@@ -1,0 +1,4 @@
+[
+  {"@timestamp": "2026-11-12T10:15:02.000Z", "message": "nginx: configuration file /etc/nginx/nginx.conf test is successful", "systemd_unit": "nginx.service", "hostname": "web-01", "syslog_identifier": "nginx", "comm": "nginx", "pid": "812", "priority": "6", "cursor": "s=abc", "boot_id": "b1", "machine_id": "m1", "transport": "stdout"},
+  {"@timestamp": "2026-11-12T10:15:03.000Z", "message": "Out of memory: Killed process 4321 (java)", "systemd_unit": "init.scope", "hostname": "web-01", "syslog_identifier": "kernel", "priority": "2", "transport": "kernel"}
+]

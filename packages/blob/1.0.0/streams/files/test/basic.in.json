@@ -1,0 +1,15 @@
+[
+  {
+    "file_path": "/var/backups/db-2025-11-12.dump",
+    "file_size": 734003200,
+    "message": "uploaded"
+  },
+  {
+    "file_path": "report.pdf",
+    "file_size": "1024"
+  },
+  {
+    "file_size": "n/a",
+    "message": "record without a path"
+  }
+]

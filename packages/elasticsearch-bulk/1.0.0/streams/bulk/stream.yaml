@@ -1,0 +1,71 @@
+id: bulk
+title: {en: Bulk API events, es: Eventos de la Bulk API, pt: Eventos da Bulk API}
+description: {en: Emulates an Elasticsearch Bulk API endpoint so Beats and Logstash can send events to the agent., es: Emula un endpoint Bulk API de Elasticsearch para que Beats y Logstash envíen eventos al agente., pt: Emula um endpoint Bulk API do Elasticsearch para que Beats e Logstash enviem eventos ao agente.}
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+input:
+  plugin: elasticsearch
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Interface to bind to (0.0.0.0 = all)., es: Interfaz a la que enlazar (0.0.0.0 = todas)., pt: Interface à qual vincular (0.0.0.0 = todas).}
+    bind: {key: listen}
+  - name: port
+    type: integer
+    default: 9201
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port of the Bulk API endpoint (9201 so it does not clash with a local OpenSearch/Elasticsearch on 9200)., es: Puerto TCP del endpoint Bulk API (9201 para no chocar con un OpenSearch/Elasticsearch local en 9200)., pt: Porta TCP do endpoint Bulk API (9201 para não colidir com um OpenSearch/Elasticsearch local em 9200).}
+    bind: {key: port}
+  - name: meta_key
+    type: string
+    default: '@meta'
+    group: advanced
+    title: {en: Meta key, es: Clave de meta, pt: Chave de meta}
+    description: {en: 'Record field that carries the bulk action metadata. The ingest pipeline moves `@meta` to `bulk.meta`; if you change this key, adapt the pipeline in `@custom`.', es: 'Campo del registro con los metadatos de la acción bulk. El pipeline mueve `@meta` a `bulk.meta`; si cambias esta clave, adapta el pipeline en `@custom`.', pt: 'Campo do registro com os metadados da ação bulk. O pipeline move `@meta` para `bulk.meta`; se alterar esta chave, adapte o pipeline em `@custom`.'}
+    bind: {key: meta_key}
+  - name: hostname
+    type: string
+    default: localhost
+    group: advanced
+    title: {en: Reported hostname, es: Hostname informado, pt: Hostname informado}
+    description: {en: Hostname announced to clients that sniff the cluster., es: Hostname anunciado a los clientes que descubren el cluster., pt: Hostname anunciado aos clientes que descobrem o cluster.}
+    bind: {key: hostname}
+  - name: version
+    type: string
+    default: 8.0.0
+    group: advanced
+    title: {en: Reported version, es: Versión informada, pt: Versão informada}
+    description: {en: Elasticsearch version reported to clients (Beats and Logstash check it)., es: Versión de Elasticsearch informada a los clientes (Beats y Logstash la comprueban)., pt: Versão do Elasticsearch informada aos clientes (Beats e Logstash a verificam).}
+    bind: {key: version}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex. One rule per line: `<field> <regex>`.', es: 'Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`.', pt: 'Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      placeholder: message ^DEBUG
+      title: {en: Rules, es: Reglas, pt: Regras}
+      bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle: {rollover_max_size: 10gb, rollover_max_age: 1d, delete_after: 30d}
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind: {lifecycle: delete_after}

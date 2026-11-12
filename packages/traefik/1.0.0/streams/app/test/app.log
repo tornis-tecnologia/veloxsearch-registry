@@ -1,0 +1,8 @@
+[90m2026-11-12T10:15:00Z[0m [32mINF[0m [1mConfiguration loaded from file: /etc/traefik/traefik.yml[0m
+[90m2026-11-12T10:15:01Z[0m [31mERR[0m [1mCannot retrieve the ACME certificate for domain "x.example.com"[0m
+2026-11-12T10:15:02Z WRN Could not find a valid provider configuration
+2026-11-12T10:15:03Z DBG Adding route for /api with middlewares [auth]
+time="2026-11-12T10:15:04Z" level=info msg="Starting provider *docker.Provider" providerName=docker
+time="2026-11-12T10:15:05Z" level=error msg="Router uses a nonexistent service" routerName=web@docker entryPointName=web
+time="2026-11-12T10:15:06Z" level=warning msg="No domain found in rule Host(`x`)"
+@@ garbage that is not a traefik log line @@

@@ -1,0 +1,17 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "app-07"
+  },
+  "message": "payment authorized",
+  "splunk": {
+    "source": "/var/log/payments.log",
+    "sourcetype": "payments",
+    "index": "main"
+  },
+  "velox": {
+    "integration": "splunk-hec",
+    "stream": "events",
+    "package_version": "1.0.0"
+  }
+}
