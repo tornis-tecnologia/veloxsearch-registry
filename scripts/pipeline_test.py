@@ -94,7 +94,7 @@ def main():
         opener.addheaders = [("Authorization", f"Basic {auth}")]
         urllib.request.install_opener(opener)
 
-    dirs = [pathlib.Path(p) for p in args.paths] or list(L.iter_package_dirs(L.PACKAGES))
+    dirs = [pathlib.Path(p).resolve() for p in args.paths] or list(L.iter_package_dirs(L.PACKAGES))
     failures, untested, passed = [], [], 0
     for vdir in dirs:
         pkg = L.load_package(vdir)

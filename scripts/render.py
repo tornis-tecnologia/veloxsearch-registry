@@ -184,7 +184,7 @@ def compile_policy(pkg: L.Package, activation: dict | None, ctx: dict, cat: L.Ca
         for mp in s.get("multiline_parsers") or []:
             entry = {"name": pname(mp["name"]), **{k: v for k, v in mp.items() if k not in ("name", "title", "rules")}}
             if "rules" in mp:
-                entry["rules"] = [[r["state"], r["regex"], r["next_state"]] for r in mp["rules"]]
+                entry["rules"] = [{"state": r["state"], "regex": r["regex"], "next_state": r["next_state"]} for r in mp["rules"]]
             doc["multiline_parsers"].append(entry)
 
         # input

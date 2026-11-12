@@ -41,9 +41,12 @@ def main():
     manifest = root / "manifest.yaml"
     text = manifest.read_text()
     block = re.compile(r"^files:\n(?:[ \t].*\n|\n)*?(?=^[A-Za-z#]|\Z)", re.M)
-    if not block.search(text):
-        sys.exit(f"{manifest}: no top-level `files:` block to regenerate")
-    new = block.sub(lambda _m: render(inventory(root)) + "\n", text, count=1)
+    if block.search(text):
+        new = block.sub(lambda _m: render(inventory(root)) + "\n", text, count=1)
+    elif re.search(r"^signature:", text, re.M):
+        new = re.sub(r"^signature:", render(inventory(root)) + "\nsignature:", text, count=1, flags=re.M)
+    else:
+        new = text.rstrip("\n") + "\n\n" + render(inventory(root))
     new = re.sub(r"\n{3,}", "\n\n", new)
     if args.check:
         if new != text:
