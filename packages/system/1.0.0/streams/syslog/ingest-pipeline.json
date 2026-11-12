@@ -2,11 +2,11 @@
   "description": "system/syslog: BSD and RFC 5424-style syslog lines",
   "processors": [
     {
-      "set": {
+      "script": {
         "tag": "keep_original",
-        "field": "event.original",
-        "value": "{{log}}",
-        "if": "ctx.log != null"
+        "if": "ctx.log != null",
+        "lang": "painless",
+        "source": "ctx.event = ctx.event == null ? new HashMap() : ctx.event; ctx.event.original = ctx.log;"
       }
     },
     {

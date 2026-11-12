@@ -71,7 +71,7 @@ files:
   - {path: streams/journal/index-template.json, sha256: 90825bf9c0963e913288f16f8c2c79f7f0b38b466d803171e0e65c4aea5c988f}
   - {path: streams/journal/ingest-pipeline.json, sha256: 041caf1fb7fb81609ff3e22835a5e80f69309344933e233aee1025bd00f7fadd}
   - {path: streams/journal/sample-event.json, sha256: c546765e23a22e285ae56ce99d65b031b15bf254e2b42edb87ae4b04365d58c9}
-  - {path: streams/journal/stream.yaml, sha256: e8a5e34fb411c8ba375efc098b6c87f41837ae79663ac25807af93aaf8125f81}
+  - {path: streams/journal/stream.yaml, sha256: 00953bce03619c92e6460d826cd6b7f8ebb647c636cd69df54cc60797b83bc1a}
   - {path: streams/journal/test/basic.expected.json, sha256: 2da74deb945b2d9b12f934aec16732490a70cd07ca464fb2c5128347ec0e8435}
   - {path: streams/journal/test/basic.in.json, sha256: 3197e54288bb9c64190849a68c0a64420d3113fafc23f4bddec51d95040c633c}
   - {path: streams/kernel/index-template.json, sha256: f7ddeb813b73d351e2082247fd3c5641e9372b36f285ab4701e05b9e326a1e9d}
@@ -84,7 +84,7 @@ files:
   - {path: streams/mem/sample-event.json, sha256: 6fe1c48eb01ecd42cb1dde25b8414c25ff7b0965ac394f942f740a1de4a3afcf}
   - {path: streams/mem/stream.yaml, sha256: 3861c1dcc7ae6ae5ae016036231010bb56e8222885bcaa24450411f733633afd}
   - {path: streams/syslog/index-template.json, sha256: cbaef202bf7411af60fa9b906b329793ae0c60cd41a8fb8b340e24a58f3da067}
-  - {path: streams/syslog/ingest-pipeline.json, sha256: df9a509f41e5b66abf75531a1395386c9583455ee2d1312ab5a27de833021b85}
+  - {path: streams/syslog/ingest-pipeline.json, sha256: ef1c5a336931733e9eb8101609bc99ffdf9cdf056799322641a92e73f6dfca51}
   - {path: streams/syslog/sample-event.json, sha256: bf67707d5b7815a956fe3dee45682aa76945a9b7c61bd722ca19c015c83eb235}
   - {path: streams/syslog/stream.yaml, sha256: 3b3505578d57eed53d17a5c32a0bf3af993d2bf2f157f79e71b1603575696b41}
   - {path: streams/syslog/test/basic.expected.json, sha256: b18f316b8c79577292e803e5540d82d28c61fb849d26dff13c92e6f40ef20c6d}

@@ -50,9 +50,14 @@ packages/<id>/<version>/
   `message` and sets `event.outcome: unparsed`.
 - **Timestamps**: parse the log's own time into `@timestamp` with a `date`
   processor; keep the original string out of the document.
-- **Pipelines**: `set` takes `value: "{{field}}"` (OpenSearch has no
-  `copy_from`); never `rename` a field onto itself; `remove` temporaries at
-  the end under `tag: cleanup`.
+- **Pipelines**: to copy a field use a `script` (`ctx.event.original =
+  ctx.log`): OpenSearch has no `copy_from`, and `set` with `{{field}}`
+  JSON-escapes quotes. Never `rename` a field onto itself; `remove`
+  temporaries at the end under `tag: cleanup`.
+- **Toggles**: `pipeline_toggle` removes the tagged processor when the field
+  is `false`, so name the field after what the processor DOES
+  (`keep_original` → the copy processor, `drop_raw_fields` → the remove
+  processor), never the opposite.
 - **Lifecycle** defaults by volume: access logs 20gb/1d/30d, error logs
   10gb/7d/30d, security 90d. Expose `delete_after` as a field.
 - **Dashboards**: 4–7 visualizations, one dashboard `overview`. Local ids,

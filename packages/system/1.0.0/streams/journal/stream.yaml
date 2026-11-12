@@ -73,13 +73,13 @@ backend:
       default: 30d
       title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
       bind: {lifecycle: delete_after}
-    - name: keep_all_fields
+    - name: drop_raw_fields
       type: bool
-      default: false
+      default: true
       group: advanced
-      title: {en: Keep every journal field, es: Conservar todos los campos del journal, pt: Manter todos os campos do journal}
+      title: {en: Drop raw journal fields, es: Descartar campos crudos del journal, pt: Descartar campos crus do journal}
       description:
-        en: Keep the raw journald fields (cursor, boot id, cgroup...) besides the normalized ones.
-        es: Conserva los campos crudos de journald (cursor, boot id, cgroup...) además de los normalizados.
-        pt: Mantém os campos crus do journald (cursor, boot id, cgroup...) além dos normalizados.
+        en: Remove the raw journald fields (cursor, boot id, cgroup...) and keep only the normalized ones.
+        es: Elimina los campos crudos de journald (cursor, boot id, cgroup...) y conserva solo los normalizados.
+        pt: Remove os campos crus do journald (cursor, boot id, cgroup...) e mantém só os normalizados.
       bind: {pipeline_toggle: drop_raw}

@@ -493,8 +493,9 @@ template existir):
 (component templates, pipeline com o processor `pipeline` para `N@custom`
 com `ignore_missing_pipeline: true`, política ISM com `ism_template` para
 `.ds-N-*`, index template com `data_stream: {}`, index pattern e saved
-objects renomeados). Detalhe prático: os pipelines dos pacotes usam `set` com
-`value: "{{campo}}"`, porque o OpenSearch não tem `copy_from`.
+objects renomeados). Detalhe prático: os pipelines dos pacotes copiam campos com `script`
+(`ctx.event.original = ctx.log`): o OpenSearch não tem `copy_from`, e `set`
+com `{{campo}}` escapa aspas.
 
 **Compartilhamento:** os artefatos de `N` são do deployment, não da política.
 Duas políticas na mesma major compartilham `N`. Instale sempre o backend da

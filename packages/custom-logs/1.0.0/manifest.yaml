@@ -39,10 +39,10 @@ files:
   - {path: docs/README.en.md, sha256: 66d75dba217c5b122066b652f0e6da5ef61e04e56ca5cca52753639ebfea9181}
   - {path: img/icon.svg, sha256: 408a34bce8385886f4818e681f583f9a124ddaf5d6c09dc03e17a198ec1e4504}
   - {path: streams/log/index-template.json, sha256: 05194c02eeadb9a7cd6252cda6c764876b8d58251397eb632dbb38ab071c106d}
-  - {path: streams/log/ingest-pipeline.json, sha256: 763f5f46c7a6cf98f1fa9d6885a56147fe5c05bbaeeaca0f903f305017827a28}
+  - {path: streams/log/ingest-pipeline.json, sha256: a87e91e4f03bfc61f25c9781cebe31b92c5a5ca1524e549671e4c279bc9371f7}
   - {path: streams/log/sample-event.json, sha256: 155f009340325aa08c8d10ddb37a29da0a8e9707ab052546c8dc87231ea15fa8}
-  - {path: streams/log/stream.yaml, sha256: 25985bc4db96473dea8e6c1edb39b5b174766fb5a42b99885bb07e5edcde77c4}
-  - {path: streams/log/test/basic.expected.json, sha256: a26aecd6491cbd8cd86f8b71b8a93128aa0e669c7cbeea20a44a95368981f947}
+  - {path: streams/log/stream.yaml, sha256: 16c25f0343388290c476d6164af60d76b77b46e207113ea2ed3ebb5941b2032c}
+  - {path: streams/log/test/basic.expected.json, sha256: f8baccb2ead316ee3512846b96ff77172b0ea0e1836938c5e10b17c4885f88d9}
   - {path: streams/log/test/basic.log, sha256: 7e7be13972d40b942a870922768c1c9752d2bb6ad8d2e0ec823b4059e3f368be}
 
 # Placeholder until a maintainer signs with `velox sign` (Spec 2.0 support).

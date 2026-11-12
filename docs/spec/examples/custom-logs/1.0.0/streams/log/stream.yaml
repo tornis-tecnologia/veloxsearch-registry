@@ -113,7 +113,7 @@ backend:
       type: bool
       default: true
       title: {en: Keep original line, es: Conservar línea original, pt: Manter linha original}
-      bind: {pipeline_toggle: remove_original}
+      bind: {pipeline_toggle: keep_original}
     - name: delete_after
       type: duration
       default: 30d
