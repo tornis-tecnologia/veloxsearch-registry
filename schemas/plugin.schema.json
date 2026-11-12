@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/plugin.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — Fluent Bit plugin catalogue entry (fluent-bit/<version>/<kind>s/<name>.yaml)",
+  "description": "One allow-listed Fluent Bit plugin and its parameters, transcribed from the Fluent Bit manual. Drives form generation for 'add filter/processor' and validates packages' bindings (R4, R6, R12). Plugins that execute code are never catalogued (docs/spec/README.md §9).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "name", "title", "docs_url", "params"],
+  "properties": {
+    "kind": {"type": "string", "enum": ["input", "filter", "processor", "parser_format", "multiline_parser"]},
+    "name": {"$ref": "common.schema.json#/$defs/plugin_name"},
+    "title": {"$ref": "common.schema.json#/$defs/i18n"},
+    "description": {"$ref": "common.schema.json#/$defs/i18n"},
+    "docs_url": {"type": "string", "format": "uri", "pattern": "^https://docs\\.fluentbit\\.io/"},
+    "since": {"$ref": "common.schema.json#/$defs/semver", "description": "First Fluent Bit version shipping the plugin."},
+    "os": {"$ref": "common.schema.json#/$defs/os_list"},
+    "event_types": {
+      "description": "input: event types it emits. filter/processor: event types it accepts.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "common.schema.json#/$defs/event_type"}
+    },
+    "as_processor": {"type": "boolean", "description": "filter: can be attached to an input as a processor (YAML). The compiler prefers that placement (guide §7)."},
+    "requires": {
+      "description": "Host capabilities the plugin needs; shown to the operator, checked by the agent where possible.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "enum": ["root", "systemd", "docker_socket", "podman_socket", "kube_api", "network_listen", "gpu", "ebpf"]}
+    },
+    "verified": {"type": "boolean", "description": "true once every param was checked against the plugin's own manual page."},
+    "params": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/param"}
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"kind": {"const": "input"}}}, "then": {"required": ["event_types", "os"]}},
+    {"if": {"properties": {"kind": {"enum": ["filter", "processor"]}}}, "then": {"required": ["event_types"]}},
+    {"if": {"properties": {"kind": {"const": "filter"}}}, "then": {"required": ["as_processor"]}}
+  ],
+  "$defs": {
+    "param": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "type", "description"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+        "type": {"$ref": "common.schema.json#/$defs/field_type"},
+        "description": {"$ref": "common.schema.json#/$defs/i18n"},
+        "default": {"oneOf": [{"$ref": "common.schema.json#/$defs/scalar"}, {"type": "array", "items": {"$ref": "common.schema.json#/$defs/scalar"}}]},
+        "required": {"type": "boolean", "default": false},
+        "multi": {"type": "string", "enum": ["no", "join", "repeat"], "default": "no", "description": "How the plugin takes several values: not at all, one joined string, or a repeated key (YAML list)."},
+        "join": {"type": "string"},
+        "options": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/scalar"}},
+        "since": {"$ref": "common.schema.json#/$defs/semver"},
+        "advanced": {"type": "boolean", "default": false},
+        "secret": {"type": "boolean", "default": false, "description": "Credential: only bindable from a `password` field."},
+        "operator_settable": {"type": "boolean", "default": true, "description": "false = only a package's `fixed` may set it (e.g. paths outside the agent state dir for `db`)."}
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+# Example catalogue entry (shape only). The real, verified catalogue is built
+# in phase F2 under fluent-bit/<version>/inputs/tail.yaml, one manual page per plugin.
+kind: input
+name: tail
+title: {en: Tail, es: Tail, pt: Tail}
+description:
+  en: Follows text files, like `tail -f`.
+  es: Sigue archivos de texto, como `tail -f`.
+  pt: Acompanha arquivos de texto, como `tail -f`.
+docs_url: https://docs.fluentbit.io/manual/data-pipeline/inputs/tail
+os: [linux, windows, darwin]
+event_types: [logs]
+verified: false
+params:
+  - key: path
+    type: string
+    required: true
+    multi: join
+    join: ","
+    description: {en: "Files to read; wildcards and comma-separated lists allowed."}
+  - key: exclude_path
+    type: string
+    multi: join
+    join: ","
+    description: {en: Files to ignore.}
+  - key: db
+    type: string
+    operator_settable: false
+    description: {en: Offset database file.}
+  - key: mem_buf_limit
+    type: size
+    description: {en: Memory buffer limit for the input.}
+  - key: skip_long_lines
+    type: bool
+    default: false
+    description: {en: Skip lines longer than the buffer instead of stopping.}
+  - key: read_from_head
+    type: bool
+    default: false
+    description: {en: Read new files from the beginning.}
+  - key: refresh_interval
+    type: integer
+    default: 60
+    description: {en: Seconds between scans for new files.}
+  - key: multiline.parser
+    type: string
+    multi: join
+    join: ","
+    description: {en: Built-in or custom multiline parsers.}
+  - key: parser
+    type: string
+    description: {en: Parser applied to each line.}

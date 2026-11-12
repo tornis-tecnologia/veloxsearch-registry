@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/activation.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — activation (what a policy revision stores per package)",
+  "description": "Owned by the core/Mesh, published here so the reference compiler (scripts/render.py) and the core agree on its shape. Secrets never appear: a password field stores {\"$secret\": \"<id>\"} (guide §6).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["package_id", "package_version", "spec_version", "streams"],
+  "properties": {
+    "package_id": {"$ref": "common.schema.json#/$defs/package_id"},
+    "package_version": {"$ref": "common.schema.json#/$defs/semver"},
+    "spec_version": {"const": "2.0"},
+    "streams": {
+      "type": "object",
+      "propertyNames": {"$ref": "common.schema.json#/$defs/stream_id"},
+      "additionalProperties": {"$ref": "#/$defs/stream_activation"}
+    }
+  },
+  "$defs": {
+    "value": {
+      "oneOf": [
+        {"$ref": "common.schema.json#/$defs/scalar"},
+        {"type": "array", "items": {"$ref": "common.schema.json#/$defs/scalar"}},
+        {"$ref": "#/$defs/secret_ref"},
+        {"type": "object", "not": {"required": ["$secret"]}}
+      ]
+    },
+    "secret_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["$secret"],
+      "properties": {"$secret": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"}}
+    },
+    "values": {
+      "type": "object",
+      "propertyNames": {"$ref": "common.schema.json#/$defs/local_id"},
+      "additionalProperties": {"$ref": "#/$defs/value"}
+    },
+    "stream_activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "input": {"$ref": "#/$defs/values"},
+        "parser": {"type": "string"},
+        "processors": {
+          "description": "The full chain, in order: default items by `id` (with enabled + field values), then items the operator added by `plugin` (with params checked against the catalogue).",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["id"],
+                "properties": {
+                  "id": {"$ref": "common.schema.json#/$defs/local_id"},
+                  "enabled": {"type": "boolean"},
+                  "fields": {"$ref": "#/$defs/values"}
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["plugin", "params"],
+                "properties": {
+                  "plugin": {"$ref": "common.schema.json#/$defs/plugin_name"},
+                  "params": {
+                    "type": "object",
+                    "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+                    "additionalProperties": {"$ref": "#/$defs/value"}
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "backend": {"$ref": "#/$defs/values"}
+      }
+    }
+  }
+}

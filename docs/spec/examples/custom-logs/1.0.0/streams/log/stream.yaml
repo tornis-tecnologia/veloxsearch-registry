@@ -1,0 +1,121 @@
+id: log
+title: {en: Log files, es: Archivos de log, pt: Arquivos de log}
+description:
+  en: Tail any log file on the host and ship each line as an event.
+  es: Lee cualquier archivo de log del host y envía cada línea como un evento.
+  pt: Lê qualquer arquivo de log do host e envia cada linha como um evento.
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/*.log]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: Files to read. Wildcards allowed.
+        es: Archivos a leer. Se permiten comodines.
+        pt: Arquivos a ler. Curingas são permitidos.
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      bind: {key: exclude_path, join: ","}
+    - name: multiline
+      type: select
+      default: none
+      options:
+        - {value: none, title: {en: None, es: Ninguno, pt: Nenhum}}
+        - docker
+        - cri
+        - go
+        - java
+        - python
+        - ruby
+      title: {en: Multiline, es: Multilínea, pt: Multilinha}
+      bind: {key: multiline.parser, omit_if: none}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      bind: {key: read_from_head}
+    - name: refresh_interval
+      type: integer
+      default: 60
+      min: 1
+      group: advanced
+      title: {en: Refresh interval (s), es: Intervalo de actualización (s), pt: Intervalo de atualização (s)}
+      bind: {key: refresh_interval}
+
+parsers:
+  - name: json
+    title: {en: JSON, es: JSON, pt: JSON}
+    format: json
+    time_key: time
+    time_format: "%Y-%m-%dT%H:%M:%S.%L%z"
+    time_keep: true
+  - name: logfmt
+    title: {en: logfmt, es: logfmt, pt: logfmt}
+    format: logfmt
+parser_field:
+  title: {en: Parser, es: Parser, pt: Parser}
+  default: none
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop records whose field matches a regex. One rule per line: `<field> <regex>`."
+        es: "Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`."
+        pt: "Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log ^DEBUG"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: replicas
+      type: integer
+      default: 1
+      min: 0
+      group: advanced
+      title: {en: Replicas, es: Réplicas, pt: Réplicas}
+      bind: {template: settings.index.number_of_replicas}
+    - name: keep_original
+      type: bool
+      default: true
+      title: {en: Keep original line, es: Conservar línea original, pt: Manter linha original}
+      bind: {pipeline_toggle: remove_original}
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}

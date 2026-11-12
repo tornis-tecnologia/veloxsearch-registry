@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/stream.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — stream (streams/<id>/stream.yaml)",
+  "description": "One stream: the unit an operator turns on (≈ an Elastic data stream). A Fluent Bit input with its configurable fields, the parsers it offers, its processing chain, and its OpenSearch backend. Normative text: docs/spec/README.md §5.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "signal", "event_type", "input"],
+  "properties": {
+    "id": {"$ref": "common.schema.json#/$defs/stream_id"},
+    "title": {"$ref": "common.schema.json#/$defs/i18n"},
+    "description": {"$ref": "common.schema.json#/$defs/i18n"},
+    "signal": {"$ref": "common.schema.json#/$defs/signal"},
+    "event_type": {"$ref": "common.schema.json#/$defs/event_type"},
+    "enabled": {"type": "boolean", "default": true, "description": "Pre-selected in the form."},
+    "os": {"$ref": "common.schema.json#/$defs/os_list"},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plugin"],
+      "properties": {
+        "plugin": {"$ref": "common.schema.json#/$defs/plugin_name"},
+        "fixed": {"$ref": "common.schema.json#/$defs/fixed"},
+        "fields": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/field"}}
+      }
+    },
+    "parsers": {
+      "description": "Parsers the package defines for this stream. Emitted under `parsers:` with the name prefixed `<integração>.<stream>.`.",
+      "type": "array",
+      "items": {"$ref": "#/$defs/parser"}
+    },
+    "multiline_parsers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/multiline_parser"}
+    },
+    "parser_field": {
+      "description": "The select that picks the input's `parser`. Options are the stream's `parsers` plus `none`.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {"$ref": "common.schema.json#/$defs/i18n"},
+        "default": {"type": "string"},
+        "group": {"type": "string", "enum": ["general", "advanced"]}
+      }
+    },
+    "processors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaults": {
+          "description": "The default chain, in order. Each item can be toggled unless `locked`.",
+          "type": "array",
+          "items": {"$ref": "#/$defs/processor_item"}
+        },
+        "allow": {
+          "description": "Plugins the operator may add after the defaults (filters run as processors, or processors). Must be in the catalogue and accept this stream's event_type (R12).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/plugin_name"}
+        }
+      }
+    },
+    "backend": {"$ref": "#/$defs/backend"}
+  },
+  "allOf": [
+    {
+      "description": "Event-type metrics streams create nothing in OpenSearch (guide §9): only dashboards.",
+      "if": {"properties": {"event_type": {"const": "metrics"}}},
+      "then": {
+        "properties": {
+          "backend": {
+            "properties": {
+              "index_template": false,
+              "ingest_pipeline": false,
+              "custom_hooks": false,
+              "lifecycle": false,
+              "fields": false
+            }
+          }
+        }
+      },
+      "else": {
+        "required": ["backend"],
+        "properties": {"backend": {"required": ["index_template"]}}
+      }
+    }
+  ],
+  "$defs": {
+    "parser": {
+      "description": "Fluent Bit parser definition (keys as in the Fluent Bit manual, data-pipeline/parsers/configuring-parser).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "format"],
+      "properties": {
+        "name": {"$ref": "common.schema.json#/$defs/local_id"},
+        "title": {"$ref": "common.schema.json#/$defs/i18n"},
+        "format": {"type": "string", "enum": ["json", "regex", "ltsv", "logfmt"]},
+        "regex": {"type": "string"},
+        "time_key": {"type": "string"},
+        "time_format": {"type": "string"},
+        "time_keep": {"type": "boolean"},
+        "time_strict": {"type": "boolean"},
+        "time_offset": {"type": "string"},
+        "time_zone": {"type": "string"},
+        "time_system_timezone": {"type": "boolean"},
+        "types": {"type": "string"},
+        "decode_field": {"type": "string"},
+        "decode_field_as": {"type": "string"},
+        "skip_empty_values": {"type": "boolean"},
+        "logfmt_no_bare_keys": {"type": "boolean"}
+      },
+      "if": {"properties": {"format": {"const": "regex"}}},
+      "then": {"required": ["regex"]}
+    },
+    "multiline_parser": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": {"$ref": "common.schema.json#/$defs/local_id"},
+        "title": {"$ref": "common.schema.json#/$defs/i18n"},
+        "type": {"type": "string", "enum": ["regex", "endswith", "equal"]},
+        "flush_timeout": {"type": "integer", "minimum": 1},
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["state", "regex", "next_state"],
+            "properties": {
+              "state": {"type": "string"},
+              "regex": {"type": "string"},
+              "next_state": {"type": "string"}
+            }
+          }
+        },
+        "key_content": {"type": "string"},
+        "key_group": {"type": "string"},
+        "key_pattern": {"type": "string"},
+        "match_string": {"type": "string"},
+        "negate": {"type": "boolean"},
+        "parser": {"type": "string"}
+      },
+      "if": {"properties": {"type": {"const": "regex"}}},
+      "then": {"required": ["rules"]}
+    },
+    "processor_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "plugin", "title"],
+      "properties": {
+        "id": {"$ref": "common.schema.json#/$defs/local_id"},
+        "plugin": {"$ref": "common.schema.json#/$defs/plugin_name"},
+        "title": {"$ref": "common.schema.json#/$defs/i18n"},
+        "description": {"$ref": "common.schema.json#/$defs/i18n"},
+        "enabled": {"type": "boolean", "default": true},
+        "locked": {"type": "boolean", "default": false, "description": "Always on; the operator cannot disable or remove it."},
+        "fixed": {"$ref": "common.schema.json#/$defs/fixed"},
+        "fields": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/field"}}
+      }
+    },
+    "backend": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "index_template": {"$ref": "common.schema.json#/$defs/asset_file", "description": "Mappings + settings, installed as component template N@package (guide §8)."},
+        "ingest_pipeline": {"$ref": "common.schema.json#/$defs/asset_file", "description": "Ingest pipeline N; processors that fields toggle or tune carry a `tag`."},
+        "custom_hooks": {"type": "boolean", "default": true, "description": "Create N@custom (pipeline and component template) when absent, never overwrite."},
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rollover_max_size": {"$ref": "common.schema.json#/$defs/size"},
+            "rollover_max_age": {"$ref": "common.schema.json#/$defs/duration"},
+            "rollover_max_docs": {"type": "integer", "minimum": 1},
+            "delete_after": {"$ref": "common.schema.json#/$defs/duration"}
+          }
+        },
+        "fields": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/field"}}
+      }
+    }
+  }
+}

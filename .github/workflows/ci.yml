@@ -35,6 +35,21 @@ jobs:
         # customer's cluster.
         run: scripts/validate.py --expect-signed
 
+  spec:
+    name: Spec 2.0 schemas and examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml jsonschema referencing
+      # Shapes only: schemas are valid, the example package conforms, known-bad
+      # variants are rejected, the example's file inventory is current. The
+      # cross-file rules R1..R24 (docs/spec/README.md §14) land with
+      # scripts/validate_v2.py in phase F3.
+      - run: python3 -I scripts/check_spec.py
+
   golden:
     name: Byte-equivalence and signatures
     runs-on: ubuntu-latest

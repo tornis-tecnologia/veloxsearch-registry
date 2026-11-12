@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veloxsearch.ai/schemas/registry/2.0/common.schema.json",
+  "title": "VeloxSearch registry Spec 2.0 — shared definitions",
+  "description": "Definitions shared by every Spec 2.0 schema. See docs/spec/README.md for the normative text and the validation rules (R1..R24) that JSON Schema cannot express.",
+  "$defs": {
+    "i18n": {
+      "description": "Localized string. `en` is required by the schema; R17 requires `es` and `pt` on every published package.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en"],
+      "properties": {
+        "en": {"type": "string", "minLength": 1},
+        "es": {"type": "string", "minLength": 1},
+        "pt": {"type": "string", "minLength": 1}
+      }
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "package_id": {
+      "description": "Integration id: lowercase DNS-label, also the directory name under packages/ and the `<integração>` segment of the artifact name.",
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$",
+      "maxLength": 48
+    },
+    "stream_id": {
+      "description": "Stream id: unique in the package, descriptive (`access`, `auth`, `cpu`). The `<stream>` segment of `veloxagent-<stream>.<integração>-v<major>`; no dots (the dot separates stream and integration).",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,31}$"
+    },
+    "local_id": {
+      "description": "Identifier local to a package or stream (field names, processor ids, parser names, saved-object local ids).",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,47}$"
+    },
+    "plugin_name": {
+      "description": "Fluent Bit plugin `name` exactly as used in configuration (tail, node_exporter_metrics, content_modifier...).",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "asset_file": {
+      "description": "A file name inside the stream directory: no path separators, no traversal.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "relpath": {
+      "description": "A path relative to the package version root. Every segment starts with an alphanumeric, so `..`, absolute paths and hidden files are impossible.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*(/[A-Za-z0-9][A-Za-z0-9._-]*)*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "os": {"type": "string", "enum": ["linux", "windows", "darwin"]},
+    "os_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/os"}
+    },
+    "signal": {
+      "description": "What a stream IS for the operator: decides catalogue category, filters and dashboards.",
+      "type": "string",
+      "enum": ["logs", "metrics", "traces"]
+    },
+    "event_type": {
+      "description": "What the Fluent Bit plugin EMITS. Decides the output: logs/traces -> opensearch, metrics -> opentelemetry (guide §9).",
+      "type": "string",
+      "enum": ["logs", "metrics", "traces"]
+    },
+    "release": {"type": "string", "enum": ["ga", "beta", "experimental"]},
+    "duration": {"type": "string", "pattern": "^[0-9]+(ms|s|m|h|d)$"},
+    "size": {"type": "string", "pattern": "^[0-9]+([kKmMgGtT][bB]?|[bB])?$"},
+    "scalar": {"type": ["string", "integer", "number", "boolean"]},
+    "context_string": {
+      "description": "A string that may contain closed-set context references: {stream_tag} {artifact} {state_dir} {integration} {stream} {package_version}. Any other `{...}` is refused (R7).",
+      "type": "string",
+      "not": {"pattern": "[\\u0000-\\u001f]"}
+    },
+    "fixed": {
+      "description": "Plugin keys set by the package that the operator cannot change. Values are scalars or lists of scalars (a list becomes a YAML list: multi-value key).",
+      "type": "object",
+      "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+      "additionalProperties": {
+        "oneOf": [
+          {"$ref": "#/$defs/fixed_scalar"},
+          {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/fixed_scalar"}}
+        ]
+      }
+    },
+    "fixed_scalar": {
+      "oneOf": [
+        {"$ref": "#/$defs/context_string"},
+        {"type": ["integer", "number", "boolean"]}
+      ]
+    },
+    "field_type": {
+      "type": "string",
+      "enum": ["string", "text", "integer", "number", "bool", "select", "duration", "size", "regex", "password", "yaml"]
+    },
+    "bind": {
+      "description": "Where a field's value goes (guide §4.3). Exactly one destination.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["key"],
+          "properties": {
+            "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.]*$", "description": "Fluent Bit plugin key."},
+            "join": {"type": "string", "minLength": 1, "maxLength": 4, "description": "Join a multi value into one string with this separator."},
+            "repeat": {"type": "boolean", "description": "Emit a multi value as a YAML list (multi-value plugin key)."},
+            "omit_if": {"$ref": "#/$defs/scalar", "description": "Leave the key out when the value equals this."},
+            "prefix": {"type": "string", "description": "Literal prepended to each value (e.g. `exclude` rules `<key> <regex>` already carry their key)."}
+          },
+          "not": {"required": ["join", "repeat"]}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["template"],
+          "properties": {
+            "template": {"type": "string", "pattern": "^(settings|mappings)(\\.[A-Za-z0-9_@-]+)+$", "description": "Dotted path inside the component template N@package."}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pipeline_toggle"],
+          "properties": {
+            "pipeline_toggle": {"$ref": "#/$defs/local_id", "description": "`tag` of an ingest-pipeline processor removed when the bool field is false."}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pipeline_param"],
+          "properties": {
+            "pipeline_param": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.[A-Za-z0-9_.]+$", "description": "`<tag>.<param>` of an ingest-pipeline processor."}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["merge"],
+          "properties": {
+            "merge": {"const": true, "description": "Only for `type: yaml`: the object's keys are merged into the plugin's keys. Every key must exist in the plugin catalogue and must not be a key set by `fixed` (R6)."}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lifecycle"],
+          "properties": {
+            "lifecycle": {"type": "string", "enum": ["rollover_max_size", "rollover_max_age", "rollover_max_docs", "delete_after"]}
+          }
+        }
+      ]
+    },
+    "show_if": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field"],
+      "properties": {
+        "field": {"$ref": "#/$defs/local_id"},
+        "equals": {"$ref": "#/$defs/scalar"},
+        "in": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scalar"}}
+      },
+      "oneOf": [{"required": ["equals"]}, {"required": ["in"]}]
+    },
+    "field": {
+      "description": "One configurable parameter rendered as a form control (guide §4.2).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "title", "bind"],
+      "properties": {
+        "name": {"$ref": "#/$defs/local_id"},
+        "type": {"$ref": "#/$defs/field_type"},
+        "title": {"$ref": "#/$defs/i18n"},
+        "description": {"$ref": "#/$defs/i18n"},
+        "placeholder": {"type": "string"},
+        "required": {"type": "boolean", "default": false},
+        "multi": {"type": "boolean", "default": false},
+        "default": {
+          "oneOf": [
+            {"$ref": "#/$defs/scalar"},
+            {"type": "array", "items": {"$ref": "#/$defs/scalar"}},
+            {"type": "object"}
+          ]
+        },
+        "group": {"type": "string", "enum": ["general", "advanced"], "default": "general"},
+        "since": {"$ref": "#/$defs/semver", "description": "Minimum Fluent Bit version; the console hides the field for older agents."},
+        "show_if": {"$ref": "#/$defs/show_if"},
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {"$ref": "#/$defs/scalar"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["value"],
+                "properties": {"value": {"$ref": "#/$defs/scalar"}, "title": {"$ref": "#/$defs/i18n"}}
+              }
+            ]
+          }
+        },
+        "options_from": {"type": "string", "enum": ["parsers", "multiline_parsers"]},
+        "min": {"type": "number"},
+        "max": {"type": "number"},
+        "pattern": {"type": "string"},
+        "bind": {"$ref": "#/$defs/bind"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"type": {"const": "select"}}},
+          "then": {"anyOf": [{"required": ["options"]}, {"required": ["options_from"]}]}
+        },
+        {
+          "if": {"properties": {"type": {"const": "password"}}},
+          "then": {"not": {"required": ["default"]}}
+        },
+        {
+          "if": {"properties": {"type": {"const": "yaml"}}},
+          "then": {"properties": {"group": {"const": "advanced"}}, "required": ["group"]}
+        }
+      ]
+    },
+    "signature": {
+      "description": "ed25519 over the canonical package digest (docs/spec/README.md §12): same algorithm as Spec 1.x signing.md, files enumerated from `files`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "value"],
+      "properties": {
+        "algorithm": {"const": "ed25519"},
+        "key_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+        "value": {"type": "string", "pattern": "^[A-Za-z0-9+/]+={0,2}$"}
+      }
+    }
+  }
+}
