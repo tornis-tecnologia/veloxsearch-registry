@@ -45,7 +45,7 @@
       "additionalProperties": false,
       "required": ["key", "type", "description"],
       "properties": {
-        "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+        "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.*-]*$", "description": "Plugin key. A `*` segment stands for any name (`rdkafka.*`, `collector.*.scrape_interval`)."},
         "type": {"$ref": "common.schema.json#/$defs/field_type"},
         "description": {"$ref": "common.schema.json#/$defs/i18n"},
         "default": {"oneOf": [{"$ref": "common.schema.json#/$defs/scalar"}, {"type": "array", "items": {"$ref": "common.schema.json#/$defs/scalar"}}]},

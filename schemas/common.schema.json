@@ -80,7 +80,7 @@
     "fixed": {
       "description": "Plugin keys set by the package that the operator cannot change. Values are scalars or lists of scalars (a list becomes a YAML list: multi-value key).",
       "type": "object",
-      "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+      "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"},
       "additionalProperties": {
         "oneOf": [
           {"$ref": "#/$defs/fixed_scalar"},
@@ -106,7 +106,7 @@
           "additionalProperties": false,
           "required": ["key"],
           "properties": {
-            "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.]*$", "description": "Fluent Bit plugin key."},
+            "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$", "description": "Fluent Bit plugin key."},
             "join": {"type": "string", "minLength": 1, "maxLength": 4, "description": "Join a multi value into one string with this separator."},
             "repeat": {"type": "boolean", "description": "Emit a multi value as a YAML list (multi-value plugin key)."},
             "omit_if": {"$ref": "#/$defs/scalar", "description": "Leave the key out when the value equals this."},

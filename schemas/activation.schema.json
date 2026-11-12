@@ -67,7 +67,7 @@
                   "plugin": {"$ref": "common.schema.json#/$defs/plugin_name"},
                   "params": {
                     "type": "object",
-                    "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.]*$"},
+                    "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"},
                     "additionalProperties": {"$ref": "#/$defs/value"}
                   }
                 }
