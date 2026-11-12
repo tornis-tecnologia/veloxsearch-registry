@@ -8,6 +8,9 @@ with one document per line `{"log": <line>, "@timestamp": "<fixed>"}`, and
 the result is compared with <case>.expected.json (a list of documents, one
 per line of the .log; keys absent from the expected document are ignored, so
 an expectation can be partial; `null` means the field must be absent).
+A <case>.in.json (a JSON list of documents) is the input for streams whose
+records do not start as a `log` line (journald, kmsg); its expectation is
+<case>.expected.json as well.
 
 A stream whose backend has no `ingest_pipeline` or no test/ directory is
 reported as "no test" (a warning, not a failure) so coverage is visible.
@@ -38,8 +41,12 @@ def simulate(url: str, pipeline: dict, docs: list[dict]) -> list[dict]:
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    with urllib.request.urlopen(req, context=ctx, timeout=60) as r:
-        res = json.load(r)
+    try:
+        with urllib.request.urlopen(req, context=ctx, timeout=60) as r:
+            res = json.load(r)
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode(errors="replace")[:800]
+        raise SystemExit(f"_simulate returned HTTP {e.code}: {detail}")
     out = []
     for d in res["docs"]:
         if "error" in d:
@@ -96,16 +103,22 @@ def main():
             label = f"{pkg.id}/{pkg.version}/{st.id}"
             if not be.get("ingest_pipeline"):
                 continue
-            cases = sorted((st.dir / "test").glob("*.log")) if (st.dir / "test").is_dir() else []
+            tdir = st.dir / "test"
+            cases = (sorted(tdir.glob("*.log")) + sorted(tdir.glob("*.in.json"))) if tdir.is_dir() else []
             if not cases:
                 untested.append(label)
                 continue
             pipeline = L.load_json(st.dir / be["ingest_pipeline"])
             for case in cases:
-                lines = [ln for ln in case.read_text().splitlines() if ln.strip()]
-                docs = [{"log": ln, "@timestamp": FIXED_TS} for ln in lines]
+                if case.name.endswith(".in.json"):
+                    # already-structured input (a journal entry, a kmsg record)
+                    docs = L.load_json(case)
+                    exp_file = case.with_name(case.name[:-len(".in.json")] + ".expected.json")
+                else:
+                    lines = [ln for ln in case.read_text().splitlines() if ln.strip()]
+                    docs = [{"log": ln, "@timestamp": FIXED_TS} for ln in lines]
+                    exp_file = case.with_suffix(".expected.json")
                 got = simulate(url, pipeline, docs)
-                exp_file = case.with_suffix(".expected.json")
                 if args.update:
                     exp_file.write_text(json.dumps(got, indent=2, ensure_ascii=False) + "\n")
                     print(f"updated {exp_file.relative_to(L.ROOT)}")

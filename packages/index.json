@@ -1,0 +1,86 @@
+{
+  "spec_version": "2.0",
+  "generated_at": "2026-11-12T17:49:20Z",
+  "packages": [
+    {
+      "id": "custom-logs",
+      "title": {
+        "en": "Custom logs",
+        "es": "Logs personalizados",
+        "pt": "Logs personalizados"
+      },
+      "summary": {
+        "en": "Collect any log file on the host, with optional parsing and exclusion rules.",
+        "es": "Recolecta cualquier archivo de log del host, con parseo y reglas de exclusión opcionales.",
+        "pt": "Coleta qualquer arquivo de log do host, com parsing e regras de exclusão opcionais."
+      },
+      "categories": [
+        "custom"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "custom-logs/1.0.0/",
+          "manifest_sha256": "8091d109610d2eb1d8754304a24721f224997b50bce3bc78fa36627c3dc76211",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "custom-logs/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "system",
+      "title": {
+        "en": "System",
+        "es": "Sistema",
+        "pt": "Sistema"
+      },
+      "summary": {
+        "en": "Linux host logs and metrics — syslog, auth, journald, kernel, CPU, memory and node-exporter metrics.",
+        "es": "Logs y métricas de hosts Linux — syslog, auth, journald, kernel, CPU, memoria y métricas node-exporter.",
+        "pt": "Logs e métricas de hosts Linux — syslog, auth, journald, kernel, CPU, memória e métricas node-exporter."
+      },
+      "categories": [
+        "os"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "system/1.0.0/",
+          "manifest_sha256": "74e15e349e29496d146f355cf3d897542da3293fc79d4c03e3188a9b6f69373a",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs",
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "system/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    }
+  ]
+}

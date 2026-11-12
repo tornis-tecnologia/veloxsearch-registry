@@ -1,0 +1,78 @@
+{
+  "description": "system/auth: syslog framing plus sshd and sudo details",
+  "processors": [
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "log",
+        "ignore_missing": true,
+        "patterns": [
+          "^%{SYSLOGTIMESTAMP:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$",
+          "^%{TIMESTAMP_ISO8601:_ts} %{SYSLOGHOST:host.name} %{PROG:process.name}(?:\\[%{POSINT:process.pid:int}\\])?: ?%{GREEDYDATA:message}$"
+        ],
+        "pattern_definitions": {"PROG": "[A-Za-z0-9._/@-]+"},
+        "on_failure": [
+          {"rename": {"field": "log", "target_field": "message", "ignore_missing": true}},
+          {"set": {"field": "event.outcome", "value": "unparsed"}}
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": ["MMM dd HH:mm:ss", "MMM  d HH:mm:ss", "MMM d HH:mm:ss", "ISO8601"],
+        "target_field": "@timestamp",
+        "on_failure": [{"remove": {"field": "_ts", "ignore_missing": true}}]
+      }
+    },
+    {
+      "grok": {
+        "tag": "ssh",
+        "if": "ctx.process?.name == 'sshd' && ctx.message != null",
+        "field": "message",
+        "ignore_failure": true,
+        "patterns": [
+          "^%{WORD:_result} %{WORD:ssh.method} for (?:invalid user )?%{USERNAME:user.name} from %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^Invalid user %{USERNAME:user.name} from %{IP:source.ip} port %{POSINT:source.port:int}",
+          "^Disconnected from (?:authenticating |invalid )?user %{USERNAME:user.name} %{IP:source.ip} port %{POSINT:source.port:int}"
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "ssh_outcome",
+        "if": "ctx._result != null",
+        "lang": "painless",
+        "source": "ctx.event = ctx.event == null ? new HashMap() : ctx.event; String r = ctx._result; ctx.event.outcome = r == 'Accepted' ? 'success' : (r == 'Failed' ? 'failure' : r.toLowerCase()); ctx.event.category = 'authentication'; ctx.remove('_result');"
+      }
+    },
+    {
+      "grok": {
+        "tag": "sudo",
+        "if": "ctx.process?.name == 'sudo' && ctx.message != null",
+        "field": "message",
+        "ignore_failure": true,
+        "patterns": [
+          "^\\s*%{USERNAME:user.name} : .*COMMAND=%{GREEDYDATA:process.command_line}"
+        ]
+      }
+    },
+    {
+      "set": {
+        "tag": "sudo_category",
+        "if": "ctx.process?.name == 'sudo' && ctx.process?.command_line != null",
+        "field": "event.category",
+        "value": "process"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": ["_ts", "_result", "log"],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

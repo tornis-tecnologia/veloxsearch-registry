@@ -1,0 +1,7 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {"name": "web-01"},
+  "process": {"name": "systemd", "pid": 1},
+  "message": "Started Daily apt download activities.",
+  "velox": {"integration": "system", "stream": "syslog", "package_version": "1.0.0"}
+}

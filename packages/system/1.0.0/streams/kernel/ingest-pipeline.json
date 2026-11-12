@@ -1,0 +1,17 @@
+{
+  "description": "system/kernel: kmsg records (priority, sequence, msg)",
+  "processors": [
+    {"rename": {"tag": "message", "field": "msg", "target_field": "message", "ignore_missing": true}},
+    {"convert": {"tag": "priority", "field": "priority", "target_field": "log.syslog.priority", "type": "integer", "ignore_missing": true, "ignore_failure": true}},
+    {
+      "script": {
+        "tag": "severity",
+        "if": "ctx.log?.syslog?.priority != null",
+        "lang": "painless",
+        "source": "def names = ['emergency','alert','critical','error','warning','notice','informational','debug']; int p = ctx.log.syslog.priority; if (p >= 0 && p < 8) { ctx.log.level = names[p]; }"
+      }
+    },
+    {"convert": {"tag": "sequence", "field": "sequence", "target_field": "event.sequence", "type": "long", "ignore_missing": true, "ignore_failure": true}},
+    {"remove": {"tag": "cleanup", "field": ["priority", "sequence", "sec", "usec"], "ignore_missing": true}}
+  ]
+}

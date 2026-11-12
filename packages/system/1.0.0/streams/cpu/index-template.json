@@ -1,0 +1,26 @@
+{
+  "template": {
+    "settings": {
+      "index": {"number_of_shards": 1, "number_of_replicas": 1, "refresh_interval": "30s"}
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {"percentages": {"match": "*_p", "mapping": {"type": "float"}}},
+        {"per_core": {"path_match": "cpu*.p_*", "mapping": {"type": "float"}}}
+      ],
+      "properties": {
+        "@timestamp": {"type": "date"},
+        "cpu_p": {"type": "float"},
+        "user_p": {"type": "float"},
+        "system_p": {"type": "float"},
+        "velox": {
+          "properties": {
+            "integration": {"type": "keyword"},
+            "stream": {"type": "keyword"},
+            "package_version": {"type": "keyword"}
+          }
+        }
+      }
+    }
+  }
+}

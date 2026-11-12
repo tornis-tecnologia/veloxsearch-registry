@@ -1,0 +1,17 @@
+{
+  "package_id": "custom-logs",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "log": {
+      "enabled": true,
+      "input": {"paths": ["/srv/app/*.log"], "multiline": "java"},
+      "parser": "json",
+      "processors": [
+        {"id": "exclude", "enabled": true, "fields": {"rules": ["log ^DEBUG"]}},
+        {"plugin": "modify", "params": {"add": ["env prod"]}}
+      ],
+      "backend": {"replicas": 1, "delete_after": "14d"}
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "Mem.total": 16318840, "Mem.used": 9123456, "Mem.free": 7195384,
+  "Swap.total": 2097148, "Swap.used": 0, "Swap.free": 2097148,
+  "velox": {"integration": "system", "stream": "mem", "package_version": "1.0.0"}
+}

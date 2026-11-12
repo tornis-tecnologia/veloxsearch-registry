@@ -1,0 +1,7 @@
+{"package_id":"system","package_version":"1.0.0","spec_version":"2.0","streams":{
+ "syslog":{"enabled":true,"input":{"paths":["/var/log/syslog"]},"processors":[{"id":"exclude","enabled":true,"fields":{"rules":["log systemd-logind"]}},{"plugin":"throttle","params":{"rate":100,"window":5}}]},
+ "auth":{"enabled":true},
+ "journal":{"enabled":true,"input":{"units":["nginx.service","sshd.service"]}},
+ "kernel":{"enabled":true,"input":{"prio_level":4}},
+ "cpu":{"enabled":true},"mem":{"enabled":true,"input":{"interval":30}},
+ "host_metrics":{"enabled":true,"input":{"collectors":["cpu","meminfo","loadavg"]},"processors":[{"plugin":"metrics_selector","params":{"action":"include","metric_name":"/node_cpu/"}}]}}}

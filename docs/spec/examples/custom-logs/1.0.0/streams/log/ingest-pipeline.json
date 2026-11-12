@@ -5,8 +5,8 @@
       "set": {
         "tag": "set_original",
         "field": "event.original",
-        "copy_from": "log",
-        "ignore_empty_value": true
+        "value": "{{log}}",
+        "if": "ctx.log != null"
       }
     },
     {

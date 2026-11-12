@@ -1,0 +1,25 @@
+{
+  "template": {
+    "settings": {
+      "index": {"number_of_shards": 1, "number_of_replicas": 1, "refresh_interval": "30s"}
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {"type": "date"},
+        "Mem.total": {"type": "long"},
+        "Mem.used": {"type": "long"},
+        "Mem.free": {"type": "long"},
+        "Swap.total": {"type": "long"},
+        "Swap.used": {"type": "long"},
+        "Swap.free": {"type": "long"},
+        "velox": {
+          "properties": {
+            "integration": {"type": "keyword"},
+            "stream": {"type": "keyword"},
+            "package_version": {"type": "keyword"}
+          }
+        }
+      }
+    }
+  }
+}

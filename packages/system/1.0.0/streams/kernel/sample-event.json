@@ -1,0 +1,7 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "message": "Out of memory: Killed process 4321 (java) total-vm:8123456kB",
+  "log": {"level": "error", "syslog": {"priority": 3}},
+  "event": {"sequence": 18231},
+  "velox": {"integration": "system", "stream": "kernel", "package_version": "1.0.0"}
+}

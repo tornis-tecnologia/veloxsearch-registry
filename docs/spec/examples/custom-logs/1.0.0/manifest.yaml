@@ -42,7 +42,7 @@ files:
   - {path: docs/README.en.md, sha256: 66d75dba217c5b122066b652f0e6da5ef61e04e56ca5cca52753639ebfea9181}
   - {path: img/icon.svg, sha256: 408a34bce8385886f4818e681f583f9a124ddaf5d6c09dc03e17a198ec1e4504}
   - {path: streams/log/index-template.json, sha256: 05194c02eeadb9a7cd6252cda6c764876b8d58251397eb632dbb38ab071c106d}
-  - {path: streams/log/ingest-pipeline.json, sha256: 5e1624b4598db8c18f61b429f9963a5da9b7b4564861773119923bec3ef42371}
+  - {path: streams/log/ingest-pipeline.json, sha256: 763f5f46c7a6cf98f1fa9d6885a56147fe5c05bbaeeaca0f903f305017827a28}
   - {path: streams/log/sample-event.json, sha256: 155f009340325aa08c8d10ddb37a29da0a8e9707ab052546c8dc87231ea15fa8}
   - {path: streams/log/stream.yaml, sha256: 25985bc4db96473dea8e6c1edb39b5b174766fb5a42b99885bb07e5edcde77c4}
 

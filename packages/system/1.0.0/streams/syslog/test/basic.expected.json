@@ -1,0 +1,51 @@
+[
+  {
+    "process": {
+      "name": "systemd",
+      "pid": 1
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "event": {
+      "original": "Nov 12 10:15:02 web-01 systemd[1]: Started Daily apt download activities."
+    },
+    "message": "Started Daily apt download activities."
+  },
+  {
+    "process": {
+      "name": "CRON",
+      "pid": 2231
+    },
+    "@timestamp": "2026-11-03T07:00:01.000Z",
+    "host": {
+      "name": "web-01"
+    },
+    "event": {
+      "original": "Nov  3 07:00:01 web-01 CRON[2231]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)"
+    },
+    "message": "(root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)"
+  },
+  {
+    "process": {
+      "name": "kernel"
+    },
+    "@timestamp": "2026-11-12T10:15:03.123Z",
+    "host": {
+      "name": "db-01"
+    },
+    "event": {
+      "original": "2026-11-12T10:15:03.123456+00:00 db-01 kernel: [12345.678] usb 1-1: new high-speed USB device number 4 using xhci_hcd"
+    },
+    "message": "[12345.678] usb 1-1: new high-speed USB device number 4 using xhci_hcd"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this line has no syslog shape at all"
+    },
+    "message": "this line has no syslog shape at all"
+  }
+]
