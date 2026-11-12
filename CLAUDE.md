@@ -88,6 +88,10 @@ lado Mesh; este repo tem de ser compatível com ela.
     core. (Recomendação adotada; usuário pode reverter.)
 11. **F4 cobre todos os inputs padrão do Fluent Bit** (exceto os excluídos no
     item 8), mais a migração das 12 integrações de aplicação existentes.
+    Agrupamento final: inputs de host viraram streams de `system` (syslog,
+    auth, journal, kernel, cpu, mem, host_metrics); `kubernetes`, `k8s-events`
+    e `k8s-audit` 1.x continuam só no caminho de cluster (`kubernetes-events`
+    2.0 cobre o input `kubernetes_events`).
 12. **Nome do artefato por stream: `veloxagent-<stream>.<integração>-v<major>`**
     (ex. `veloxagent-access.nginx-v1`). Mesmo nome para data stream, index
     template, ingest pipeline, ISM e index pattern; saved objects `N-<sufixo>`.
@@ -111,6 +115,22 @@ lado Mesh; este repo tem de ser compatível com ela.
     `signature` + sha256 de cada arquivo, lista ordenada, ed25519), com os
     arquivos enumerados pelo inventário `files:`.
 
+## Lições da implementação (valem para novos pacotes)
+
+- `pipeline_toggle` remove o processor quando o campo é `false`: nomear o campo
+  pelo que o processor FAZ (`keep_original` → cópia; `drop_raw_fields` → remove).
+- Copiar campo no ingest pipeline = `script` painless; `set` com `{{campo}}`
+  escapa aspas e `copy_from` não existe no OpenSearch.
+- `pipeline_param` em `if`/`source` só a partir de campo `select` (R15).
+- Teste de pipeline com várias linhas por registro = `test/<caso>.in.json`.
+- Parsers regex do Fluent Bit usam `(?<nome>…)` (Onigmo); o validador converte
+  para `(?P<nome>…)` só para compilar.
+- Plugins mais novos que 3.2: `since` na stream (`fluentbit_logs` 5.0,
+  `prometheus_textfile` 4.0, `gpu_metrics` 4.1); `enable_nvml` 5.1.
+- Output `opensearch` não tem chave `traces`; traces vão como registros.
+- Alguns pacotes precisam de uma stream `enabled: true` ou o render dos
+  padrões não tem input (dry-run trata "no stream enabled" como skip).
+
 ## Pendências (precisam de decisão fora deste repo)
 
 - **Data streams do OpenSearch** em vez de índice simples (exige
@@ -133,7 +153,7 @@ lado Mesh; este repo tem de ser compatível com ela.
 | F1 ✅ | Spec 2.0 em `docs/spec/` + JSON Schemas em `schemas/` + exemplo + `check_spec.py` no CI | — |
 | F2 ✅ | Catálogo `fluent-bit/5.2/` — 84 plugins (49 inputs, 19 filters, 9 processors, 4 formatos de parser, 8 multiline). Descrições parafraseadas do manual; chaves/padrões transcritos. `CONDITIONAL.md` guarda a sintaxe condicional para uma Spec 2.1 | F1 |
 | F3 ✅ | `validate_v2.py` (R1–R23), `build_index.py`, `render.py` (+ `--backend`), `dryrun.sh`, `pipeline_test.py` (R24), `check_catalog.py`; CI jobs `spec`, `packages`, `pipelines` | F1, F2 |
-| F4 🔄 | `custom-logs`, `system` prontos e verificados (dry-run 3.2/4.0/5.x, pipelines no OpenSearch). Demais pacotes em andamento por agentes (ver ondas) | F1–F3 |
+| F4 ✅ | 35 pacotes em `packages/` (ver `packages/index.json`), todos: validate_v2, 51 casos de pipeline no OpenSearch, dry-run 3.2 e latest (exceções: `ebpf` sem plugin na imagem oficial, `windows` não roda em Linux, `gpu` ≥ 4.1). Assinaturas = placeholder | F1–F3 |
 | F5 ✅ | README, CONTRIBUTING, `docs/PACKAGING.md` | — |
 | F6 | PR casado no core: ADR de nomes por stream, signing 2.0, leitura do catálogo v2 pelo Mesh, rota de métricas, migração do caminho de cluster | core |
 

@@ -1,0 +1,17 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "event": {
+    "module": "blob"
+  },
+  "file": {
+    "path": "/var/backups/db-2025-11-12.dump",
+    "name": "db-2025-11-12.dump",
+    "size": 734003200
+  },
+  "message": "uploaded",
+  "velox": {
+    "integration": "blob",
+    "stream": "files",
+    "package_version": "1.0.0"
+  }
+}

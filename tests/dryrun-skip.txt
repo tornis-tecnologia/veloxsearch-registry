@@ -1,0 +1,3 @@
+# <package id>  <reason> — packages scripts/dryrun.sh cannot test because the
+# official fluent/fluent-bit image does not ship the plugin. Keep this short.
+ebpf  the ebpf input is a build-time option (FLB_IN_EBPF) absent from the official image

@@ -1,0 +1,38 @@
+[
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "timestamp": 1794478502123,
+    "level": "info",
+    "host": "edge-1",
+    "message": "epoch milliseconds as a number"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "time": "1794478503123",
+    "level": "info",
+    "host": "edge-1",
+    "message": "epoch milliseconds as a string"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "time": "12/Nov/2026:10:15:04 +0000",
+    "level": "info",
+    "host": "edge-2",
+    "message": "access-log style time"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "time": "2026-11-12T10:15:05Z",
+    "timestamp": "2026-11-12T11:00:00Z",
+    "level": "warn",
+    "host": "edge-2",
+    "message": "time wins over timestamp"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "time": "",
+    "level": "info",
+    "host": "edge-3",
+    "message": "empty time string"
+  }
+]

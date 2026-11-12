@@ -1,0 +1,30 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "app-01"
+  },
+  "process": {
+    "name": "worker",
+    "pid": 3302
+  },
+  "message": "queue drained",
+  "log": {
+    "level": "info",
+    "syslog": {
+      "priority": 134,
+      "facility": {
+        "code": 16,
+        "name": "local0"
+      },
+      "severity": {
+        "code": 6,
+        "name": "info"
+      }
+    }
+  },
+  "velox": {
+    "integration": "syslog-server",
+    "stream": "unix",
+    "package_version": "1.0.0"
+  }
+}

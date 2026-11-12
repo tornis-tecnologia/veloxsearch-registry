@@ -69,6 +69,12 @@ packages/<id>/<version>/
   and update field names to the new mapping.
 - **i18n**: en, es, pt on every title/description, one sentence.
 - **Secrets** (`type: password`) for any credential a plugin takes; never a default.
+- **Newer plugins**: a stream whose input appeared after Fluent Bit 3.2 carries
+  `since: <version>` instead of raising the whole package's floor; a parameter
+  that appeared later carries `since` on the field. Check with
+  `FB_VERSIONS="3.2 4.0 4.1 5.0 latest" scripts/dryrun.sh packages/<id>/<version>`.
+- **Plugins the official image lacks** (`ebpf`) go in `tests/dryrun-skip.txt`
+  with the reason; non-Linux packages are skipped by the dry-run automatically.
 - **Allowed processors** (`processors.allow`): logs streams
   `[grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]`;
   metrics streams `[metrics_selector, labels]`; add `multiline` for stack traces.

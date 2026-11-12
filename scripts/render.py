@@ -45,6 +45,9 @@ class RenderError(Exception):
 # Values: defaults + activation, typed
 # ---------------------------------------------------------------------------
 
+FB_VERSION: str | None = None  # set from the policy context; fields with a newer `since` are dropped
+
+
 def field_values(fields: list[dict], given: dict | None) -> dict:
     given = given or {}
     out = {}
@@ -54,6 +57,8 @@ def field_values(fields: list[dict], given: dict | None) -> dict:
             raise RenderError(f"unknown field {k!r}")
     for f in fields:
         n = f["name"]
+        if FB_VERSION and f.get("since") and L.semver_key(f["since"]) > L.semver_key(FB_VERSION):
+            continue  # the console hides it for agents older than `since`; the compiler omits it
         if n in given:
             v = given[n]
         elif "default" in f:
@@ -165,6 +170,8 @@ def compile_policy(pkg: L.Package, activation: dict | None, ctx: dict, cat: L.Ca
         enabled = sa["enabled"] if sa is not None else s.get("enabled", True)
         if not enabled:
             continue
+        if FB_VERSION and s.get("since") and L.semver_key(s["since"]) > L.semver_key(FB_VERSION):
+            continue  # stream not available on this agent's Fluent Bit
         tag = L.stream_tag(pkg.id, st.id)
         artifact = L.artifact_name(st.id, pkg.id, pkg.version)
         refs = {
@@ -291,8 +298,6 @@ def compile_policy(pkg: L.Package, activation: dict | None, ctx: dict, cat: L.Ca
             }
             if o.get("path"):
                 out["path"] = o["path"]
-            if et == "traces":
-                out["traces"] = "on"
         doc["pipeline"]["outputs"].append(out)
 
     for k in ("parsers", "multiline_parsers"):
@@ -417,6 +422,8 @@ def main():
     if not cdir:
         sys.exit("no catalogue under fluent-bit/")
     cat = L.load_catalog(cdir)
+    global FB_VERSION
+    FB_VERSION = ctx.get("fluent_bit_version")
     try:
         doc = compile_backend(pkg, act) if args.backend else compile_policy(pkg, act, ctx, cat)
     except RenderError as e:

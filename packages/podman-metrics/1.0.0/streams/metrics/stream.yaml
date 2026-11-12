@@ -1,0 +1,45 @@
+id: metrics
+title:
+  en: Podman container metrics
+  es: Métricas de contenedores Podman
+  pt: Métricas de contêineres Podman
+description:
+  en: Per-container CPU, memory, network and disk metrics sent to the deployment's OTLP endpoint. Needs an OTLP endpoint on the policy.
+  es: Métricas de CPU, memoria, red y disco por contenedor enviadas al endpoint OTLP del deployment. Requiere un endpoint OTLP en la política.
+  pt: Métricas de CPU, memória, rede e disco por contêiner enviadas ao endpoint OTLP do deployment. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: true
+os:
+- linux
+input:
+  plugin: podman_metrics
+  fixed:
+    path.config: /var/lib/containers/storage/overlay-containers/containers.json
+    path.sysfs: /sys/fs/cgroup
+    path.procfs: /proc
+  fields:
+  - name: scrape_interval
+    type: integer
+    default: 30
+    min: 1
+    title:
+      en: Scrape interval (s)
+      es: Intervalo de recolección (s)
+      pt: Intervalo de coleta (s)
+    bind:
+      key: scrape_interval
+  - name: scrape_on_start
+    type: bool
+    default: false
+    group: advanced
+    title:
+      en: Scrape on start
+      es: Recolectar al iniciar
+      pt: Coletar ao iniciar
+    bind:
+      key: scrape_on_start
+processors:
+  allow:
+  - metrics_selector
+  - labels

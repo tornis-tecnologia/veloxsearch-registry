@@ -1,0 +1,32 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "message": "An account failed to log on.",
+  "host": {
+    "name": "WIN-SRV01"
+  },
+  "log": {
+    "level": "information"
+  },
+  "event": {
+    "code": "4625",
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "category": "authentication",
+    "outcome": "failure"
+  },
+  "user": {
+    "id": "S-1-5-18"
+  },
+  "winlog": {
+    "channel": "Security",
+    "provider_name": "Microsoft-Windows-Security-Auditing",
+    "event_id": 4625,
+    "level": 0,
+    "record_id": 981234,
+    "computer_name": "WIN-SRV01"
+  },
+  "velox": {
+    "integration": "windows",
+    "stream": "eventlog",
+    "package_version": "1.0.0"
+  }
+}

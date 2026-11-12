@@ -1,0 +1,160 @@
+{
+  "description": "windows/eventlog_legacy: classic winlog records (SourceName, EventId, EventType, ComputerName, ...)",
+  "processors": [
+    {
+      "rename": {
+        "tag": "provider",
+        "field": "SourceName",
+        "target_field": "winlog.provider_name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "provider_ecs",
+        "field": "event.provider",
+        "value": "{{winlog.provider_name}}",
+        "if": "ctx.winlog?.provider_name != null"
+      }
+    },
+    {
+      "convert": {
+        "tag": "event_id",
+        "field": "EventID",
+        "target_field": "winlog.event_id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "event_id_alt",
+        "field": "EventId",
+        "target_field": "EventID",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "event_id2",
+        "field": "EventID",
+        "target_field": "winlog.event_id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "event_id_mask",
+        "if": "ctx.winlog?.event_id != null",
+        "lang": "painless",
+        "source": "ctx.winlog.event_id = ctx.winlog.event_id & 0xFFFFL;"
+      }
+    },
+    {
+      "set": {
+        "tag": "event_code",
+        "field": "event.code",
+        "value": "{{winlog.event_id}}",
+        "if": "ctx.winlog?.event_id != null"
+      }
+    },
+    {
+      "script": {
+        "tag": "level",
+        "if": "ctx.EventType != null",
+        "lang": "painless",
+        "source": "def t = ctx.EventType.toString().toLowerCase(); if (t.contains('error')) { if (ctx.log == null) { ctx.log = [:]; } ctx.log.level = 'error'; } else if (t.contains('warn')) { if (ctx.log == null) { ctx.log = [:]; } ctx.log.level = 'warning'; } else { if (ctx.log == null) { ctx.log = [:]; } ctx.log.level = 'information'; } if (t == 'auditsuccess') { if (ctx.event == null) { ctx.event = [:]; } ctx.event.outcome = 'success'; } else if (t == 'auditfailure') { if (ctx.event == null) { ctx.event = [:]; } ctx.event.outcome = 'failure'; }"
+      }
+    },
+    {
+      "rename": {
+        "tag": "channel",
+        "field": "Channel",
+        "target_field": "winlog.channel",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "computer",
+        "field": "ComputerName",
+        "target_field": "winlog.computer_name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "host",
+        "field": "host.name",
+        "value": "{{winlog.computer_name}}",
+        "if": "ctx.winlog?.computer_name != null"
+      }
+    },
+    {
+      "convert": {
+        "tag": "record_id",
+        "field": "RecordNumber",
+        "target_field": "winlog.record_id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "inserts",
+        "field": "StringInserts",
+        "target_field": "winlog.string_inserts",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "user_id",
+        "field": "Sid",
+        "target_field": "user.id",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "message",
+        "field": "Message",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "field": "TimeGenerated",
+        "if": "ctx.TimeGenerated != null",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss Z",
+          "yyyy-MM-dd HH:mm:ss",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "EventID",
+          "EventType",
+          "EventCategory",
+          "RecordNumber",
+          "TimeGenerated",
+          "TimeWritten",
+          "Data"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

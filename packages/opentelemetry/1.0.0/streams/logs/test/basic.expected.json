@@ -1,0 +1,89 @@
+[
+  {
+    "trace_id": "5b8efff798038103d269b633813fc60c",
+    "@timestamp": "2025-11-12T10:15:02Z",
+    "span_id": "eee19b7ec3c1b174",
+    "resource": {
+      "host": {
+        "name": "web-01"
+      },
+      "service": {
+        "name": "checkout"
+      },
+      "deployment": {
+        "environment": "prod"
+      }
+    },
+    "log": {
+      "level": "error"
+    },
+    "service": {
+      "name": "checkout"
+    },
+    "otel": {
+      "severity_number": 17
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "attributes": {
+      "http": {
+        "method": "POST",
+        "status_code": 502
+      }
+    },
+    "message": "payment declined for order 8841"
+  },
+  {
+    "@timestamp": "2025-11-12T10:15:03Z",
+    "resource": {
+      "service": {
+        "name": "cart"
+      }
+    },
+    "log": {
+      "level": "info"
+    },
+    "service": {
+      "name": "cart"
+    },
+    "otel": {
+      "severity_number": 9
+    },
+    "attributes": {
+      "cart": {
+        "items": 3
+      }
+    },
+    "message": "cart updated"
+  },
+  {
+    "attributes": {
+      "db": {
+        "system": "postgresql"
+      }
+    },
+    "body": {
+      "duration_ms": 1200,
+      "message": "slow query"
+    },
+    "message": "slow query",
+    "log": {
+      "level": "warn"
+    }
+  },
+  {
+    "message": "plain record with nothing else"
+  },
+  {
+    "message": "42",
+    "resource": {
+      "service": {
+        "name": "odd"
+      }
+    },
+    "service": {
+      "name": "odd"
+    }
+  }
+]

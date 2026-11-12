@@ -1,0 +1,14 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "Processor.User": 4.2,
+  "Processor.Privileged": 1.8,
+  "Processor.Total": 6.0,
+  "Memory.Total": 17179869184,
+  "Memory.Available": 9437184000,
+  "Memory.Used": 7742685184,
+  "velox": {
+    "integration": "windows",
+    "stream": "stats",
+    "package_version": "1.0.0"
+  }
+}

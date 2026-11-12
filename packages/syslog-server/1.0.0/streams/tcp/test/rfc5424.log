@@ -1,0 +1,5 @@
+<165>1 2026-11-12T10:15:02.003Z fw-edge-01.example.com evntslog - ID47 [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"] ﻿An application event log entry
+<34>1 2026-11-12T10:15:03+02:00 mail-01 postfix 8821 - - Connection from unknown[203.0.113.50] refused
+<86>1 2026-11-12T10:15:04.5Z app-01 sshd 2231 ID48 [meta sequenceId="7"][origin ip="10.0.0.5"] Accepted publickey for deploy
+<190>1 - - - - - - message from a sender with a nil header
+<34>1 broken header without enough fields

@@ -1,0 +1,35 @@
+{
+  "description": "serial: a serial line becomes the message",
+  "processors": [
+    {
+      "rename": {
+        "tag": "msg",
+        "field": "msg",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "trim": {
+        "tag": "trim",
+        "field": "message",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "event.outcome",
+        "value": "unparsed"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}

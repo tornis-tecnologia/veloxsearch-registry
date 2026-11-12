@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release (beta): lines stream.'
+      es: 'Primera versión (beta): stream lines.'
+      pt: 'Primeira versão (beta): stream lines.'

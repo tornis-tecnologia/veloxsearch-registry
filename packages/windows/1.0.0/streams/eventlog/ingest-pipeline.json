@@ -1,0 +1,248 @@
+{
+  "description": "windows/eventlog: winevtlog records (ProviderName, EventID, Level, Channel, Computer, ...)",
+  "processors": [
+    {
+      "rename": {
+        "tag": "raw",
+        "field": "log",
+        "target_field": "event.original",
+        "ignore_missing": true,
+        "if": "ctx.log instanceof String"
+      }
+    },
+    {
+      "rename": {
+        "tag": "provider",
+        "field": "ProviderName",
+        "target_field": "winlog.provider_name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "provider_ecs",
+        "field": "event.provider",
+        "value": "{{winlog.provider_name}}",
+        "if": "ctx.winlog?.provider_name != null"
+      }
+    },
+    {
+      "rename": {
+        "tag": "provider_guid",
+        "field": "ProviderGuid",
+        "target_field": "winlog.provider_guid",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "event_id",
+        "field": "EventID",
+        "target_field": "winlog.event_id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "tag": "event_code",
+        "field": "event.code",
+        "value": "{{winlog.event_id}}",
+        "if": "ctx.winlog?.event_id != null"
+      }
+    },
+    {
+      "convert": {
+        "tag": "level_value",
+        "field": "Level",
+        "target_field": "winlog.level",
+        "type": "integer",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "tag": "level",
+        "if": "ctx.winlog?.level != null",
+        "lang": "painless",
+        "source": "def n=['information','critical','error','warning','information','verbose']; int l=ctx.winlog.level; if (l>=0 && l<6) { if (ctx.log == null) { ctx.log = [:]; } ctx.log.level = n[l]; }"
+      }
+    },
+    {
+      "rename": {
+        "tag": "channel",
+        "field": "Channel",
+        "target_field": "winlog.channel",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "computer",
+        "field": "Computer",
+        "target_field": "winlog.computer_name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "host",
+        "field": "host.name",
+        "value": "{{winlog.computer_name}}",
+        "if": "ctx.winlog?.computer_name != null"
+      }
+    },
+    {
+      "convert": {
+        "tag": "record_id",
+        "field": "EventRecordID",
+        "target_field": "winlog.record_id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "pid",
+        "field": "ProcessID",
+        "target_field": "winlog.process.pid",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "tid",
+        "field": "ThreadID",
+        "target_field": "winlog.process.thread.id",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "task",
+        "field": "Task",
+        "target_field": "winlog.task",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "opcode",
+        "field": "Opcode",
+        "target_field": "winlog.opcode",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "keywords",
+        "field": "Keywords",
+        "target_field": "winlog.keywords",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "inserts",
+        "field": "StringInserts",
+        "target_field": "winlog.string_inserts",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "user_id",
+        "field": "UserID",
+        "target_field": "user.id",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "user_name",
+        "field": "UserName",
+        "target_field": "user.name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "message",
+        "field": "Message",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "message_fallback",
+        "field": "message",
+        "value": "{{Description}}",
+        "if": "ctx.message == null && ctx.Description != null"
+      }
+    },
+    {
+      "set": {
+        "tag": "auth_category",
+        "field": "event.category",
+        "value": "authentication",
+        "if": "ctx.winlog?.event_id == 4624 || ctx.winlog?.event_id == 4625"
+      }
+    },
+    {
+      "set": {
+        "tag": "auth_success",
+        "field": "event.outcome",
+        "value": "success",
+        "if": "ctx.winlog?.event_id == 4624"
+      }
+    },
+    {
+      "set": {
+        "tag": "auth_failure",
+        "field": "event.outcome",
+        "value": "failure",
+        "if": "ctx.winlog?.event_id == 4625"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "field": "TimeCreated",
+        "if": "ctx.TimeCreated != null",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss Z",
+          "yyyy-MM-dd HH:mm:ss.SSS Z",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "EventID",
+          "Level",
+          "TimeCreated",
+          "EventRecordID",
+          "ProcessID",
+          "ThreadID",
+          "Qualifiers",
+          "ActivityID",
+          "RelatedActivityID",
+          "Description"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

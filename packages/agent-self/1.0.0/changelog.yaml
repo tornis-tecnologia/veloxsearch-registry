@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: logs, health, metrics streams.'
+      es: 'Primera versión: streams logs, health, metrics.'
+      pt: 'Primeira versão: streams logs, health, metrics.'

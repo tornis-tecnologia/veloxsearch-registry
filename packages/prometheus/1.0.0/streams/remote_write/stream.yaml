@@ -1,0 +1,49 @@
+id: remote_write
+title: {en: Remote write receiver, es: Receptor remote write, pt: Receptor remote write}
+description:
+  en: Listens for Prometheus remote-write requests so another Prometheus or agent can push metrics through this host. Needs an OTLP endpoint on the policy.
+  es: Escucha solicitudes remote-write de Prometheus para que otro Prometheus o agente envíe métricas a través de este host. Requiere un endpoint OTLP en la política.
+  pt: Escuta requisições remote-write do Prometheus para que outro Prometheus ou agente envie métricas através deste host. Exige um endpoint OTLP na política.
+signal: metrics
+event_type: metrics
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: prometheus_remote_write
+  fixed:
+    tag_from_uri: false
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    default: 8080
+    title: {en: Port, es: Puerto, pt: Porta}
+    bind:
+      key: port
+    min: 1
+    max: 65535
+  - name: uri
+    type: string
+    title: {en: URI, es: URI, pt: URI}
+    bind:
+      key: uri
+    group: advanced
+    placeholder: /api/prom/push
+  - name: tls
+    type: bool
+    default: false
+    title: {en: Use TLS, es: Usar TLS, pt: Usar TLS}
+    bind:
+      key: tls
+processors:
+  allow:
+  - metrics_selector
+  - labels

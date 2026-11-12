@@ -1,0 +1,18 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "event": {
+    "kind": "event",
+    "module": "ebpf"
+  },
+  "process": {
+    "pid": 4021,
+    "name": "bash"
+  },
+  "signal": 9,
+  "target_pid": 977,
+  "velox": {
+    "integration": "ebpf",
+    "stream": "events",
+    "package_version": "1.0.0"
+  }
+}

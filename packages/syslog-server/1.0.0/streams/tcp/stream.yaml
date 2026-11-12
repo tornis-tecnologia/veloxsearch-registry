@@ -1,0 +1,151 @@
+id: tcp
+title: {en: Syslog over TCP, es: Syslog por TCP, pt: Syslog por TCP}
+description: {en: Receives RFC 3164 and RFC 5424 syslog messages on a TCP port., es: Recibe mensajes syslog RFC
+    3164 y RFC 5424 en un puerto TCP., pt: Recebe mensagens syslog RFC 3164 e RFC 5424 em uma porta TCP.}
+signal: logs
+event_type: logs
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: syslog
+  fixed:
+    mode: tcp
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Network interface to bind; 0.0.0.0 listens on all of them., es: Interfaz de red a escuchar;
+        0.0.0.0 las escucha todas., pt: Interface de rede em que escutar; 0.0.0.0 escuta em todas.}
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    required: true
+    default: 5140
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port to listen on. Ports below 1024 need extra privileges., es: Puerto TCP de escucha.
+        Los puertos menores de 1024 exigen privilegios., pt: Porta TCP de escuta. Portas abaixo de 1024 exigem privilégios.}
+    bind:
+      key: port
+  - name: format
+    type: select
+    default: newline
+    group: advanced
+    options:
+    - newline
+    - octet_counting
+    title: {en: TCP framing, es: Delimitación TCP, pt: Delimitação TCP}
+    description: {en: 'newline: one message per line; octet_counting: RFC 6587 length-prefixed frames.', es: 'newline:
+        un mensaje por línea; octet_counting: tramas con longitud (RFC 6587).', pt: 'newline: uma mensagem por linha;
+        octet_counting: quadros com tamanho (RFC 6587).'}
+    bind:
+      key: format
+  - name: buffer_chunk_size
+    type: size
+    default: '32768'
+    group: advanced
+    title: {en: Chunk size, es: Tamaño de chunk, pt: Tamanho do chunk}
+    description: {en: Memory chunk size for incoming messages., es: Tamaño de chunk en memoria para los mensajes
+        entrantes., pt: Tamanho do chunk em memória das mensagens recebidas.}
+    bind:
+      key: buffer_chunk_size
+  - name: buffer_max_size
+    type: size
+    group: advanced
+    title: {en: Max message size, es: Tamaño máximo del mensaje, pt: Tamanho máximo da mensagem}
+    description: {en: Largest message accepted; empty uses the chunk size., es: Mensaje más grande aceptado; vacío
+        usa el tamaño de chunk., pt: Maior mensagem aceita; vazio usa o tamanho do chunk.}
+    bind:
+      key: buffer_max_size
+  - name: receive_buffer_size
+    type: size
+    group: advanced
+    title: {en: Socket receive buffer, es: Búfer de recepción del socket, pt: Buffer de recepção do socket}
+    description: {en: Raise it for high message rates; the OS default is often too low., es: Súbalo para tasas altas;
+        el valor del SO suele ser bajo., pt: Aumente para taxas altas; o padrão do SO costuma ser baixo.}
+    bind:
+      key: receive_buffer_size
+parsers:
+- name: raw
+  title: {en: Whole message, es: Mensaje completo, pt: Mensagem completa}
+  format: regex
+  regex: ^(?<log>.*)$
+parser_field:
+  default: raw
+  title: {en: Parser, es: Parser, pt: Parser}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex, one rule per line: `log <regex>`.', es: 'Descarta
+        registros cuyo campo coincide con una regex, una regla por línea: `log <regex>`.', pt: 'Descarta registros
+        cujo campo casa com uma regex, uma regra por linha: `log <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      title: {en: Rules, es: Reglas, pt: Regras}
+      placeholder: log CRON
+      bind:
+        key: exclude
+        repeat: true
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after
+  - name: replicas
+    type: integer
+    default: 1
+    group: advanced
+    min: 0
+    title: {en: Replicas, es: Réplicas, pt: Réplicas}
+    bind:
+      template: settings.index.number_of_replicas
+  - name: keep_original
+    type: bool
+    default: false
+    group: advanced
+    title: {en: Keep the raw message, es: Conservar el mensaje original, pt: Manter a mensagem original}
+    description: {en: Store the unparsed message in event.original as well., es: Guarda también el mensaje sin procesar
+        en event.original., pt: Guarda também a mensagem sem processar em event.original.}
+    bind:
+      pipeline_toggle: keep_original
+  - name: timezone
+    type: string
+    default: UTC
+    group: advanced
+    title: {en: Timezone, es: Zona horaria, pt: Fuso horário}
+    description: {en: 'Zone assumed for RFC 3164 timestamps, which carry none (e.g. UTC, America/Sao_Paulo). RFC
+        5424 times keep their own offset.', es: 'Zona que se asume para las marcas de tiempo RFC 3164, que no la
+        traen (p. ej. UTC, America/Sao_Paulo). Las de RFC 5424 conservan su desfase.', pt: 'Fuso assumido para os
+        horários RFC 3164, que não o trazem (ex.: UTC, America/Sao_Paulo). Os do RFC 5424 mantêm o próprio deslocamento.'}
+    bind:
+      pipeline_param: timestamp.timezone

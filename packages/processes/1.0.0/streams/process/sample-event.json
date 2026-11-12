@@ -1,0 +1,15 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "alive": true,
+  "name": "nginx",
+  "pid": 812,
+  "mem.VmPeak": 98304,
+  "mem.VmSize": 90112,
+  "mem.VmRSS": 12288,
+  "fd": 24,
+  "velox": {
+    "integration": "processes",
+    "stream": "process",
+    "package_version": "1.0.0"
+  }
+}

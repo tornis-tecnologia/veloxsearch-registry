@@ -1,0 +1,63 @@
+{
+  "description": "http-endpoint/json: JSON bodies, timestamp from time/timestamp/@timestamp",
+  "processors": [
+    {
+      "rename": {
+        "tag": "remote_addr",
+        "field": "REMOTE_ADDR",
+        "target_field": "source.address",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "pick_timestamp",
+        "lang": "painless",
+        "source": "for (String f : ['time', 'timestamp', '@timestamp']) { def v = ctx.get(f); String s = null; if (v instanceof String) { s = ((String) v).trim(); } else if (v instanceof Number) { s = String.valueOf(((Number) v).longValue()); } if (s == null || s.isEmpty()) { continue; } boolean digits = true; for (int i = 0; i < s.length(); i++) { if (!Character.isDigit(s.charAt(i))) { digits = false; break; } } if (digits && s.length() == 10) { s = Instant.ofEpochSecond(Long.parseLong(s)).toString(); } else if (digits && s.length() == 13) { s = Instant.ofEpochMilli(Long.parseLong(s)).toString(); } ctx._ts = s; ctx._ts_field = f; break; }"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "ISO8601",
+          "yyyy-MM-dd HH:mm:ss",
+          "yyyy-MM-dd HH:mm:ss.SSS",
+          "yyyy/MM/dd HH:mm:ss",
+          "dd/MMM/yyyy:HH:mm:ss Z",
+          "EEE, dd MMM yyyy HH:mm:ss Z"
+        ],
+        "timezone": "UTC",
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "drop_source",
+        "lang": "painless",
+        "if": "ctx._ts != null && ctx._ts_field != '@timestamp'",
+        "source": "ctx.remove(ctx._ts_field);"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_ts_field"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

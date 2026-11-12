@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: scrape, textfile, remote_write streams.'
+      es: 'Primera versión: streams scrape, textfile, remote_write.'
+      pt: 'Primeira versão: streams scrape, textfile, remote_write.'

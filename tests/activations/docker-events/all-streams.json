@@ -1,0 +1,19 @@
+{
+  "package_id": "docker-events",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "events": {
+      "enabled": true,
+      "input": {
+        "unix_path": "/run/docker.sock",
+        "buffer_size": "16384",
+        "retry_interval": 2,
+        "retry_limits": 10
+      },
+      "backend": {
+        "delete_after": "14d"
+      }
+    }
+  }
+}

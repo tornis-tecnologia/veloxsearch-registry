@@ -1,0 +1,36 @@
+{
+  "package_id": "prometheus",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "scrape": {
+      "enabled": true,
+      "input": {
+        "host": "10.0.0.8",
+        "port": 9187,
+        "metrics_path": "/metrics",
+        "scrape_interval": "30s",
+        "tls": true,
+        "http_user": "metrics"
+      }
+    },
+    "textfile": {
+      "enabled": true,
+      "input": {
+        "path": [
+          "/var/lib/node_exporter/*.prom",
+          "/srv/metrics/*.prom"
+        ],
+        "scrape_interval": "1m"
+      }
+    },
+    "remote_write": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 9090,
+        "uri": "/api/v1/write"
+      }
+    }
+  }
+}

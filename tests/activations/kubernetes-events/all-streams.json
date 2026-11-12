@@ -1,0 +1,22 @@
+{
+  "package_id": "kubernetes-events",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "events": {
+      "enabled": true,
+      "input": {
+        "kube_url": "https://10.0.0.1:6443",
+        "kube_namespace": "shop",
+        "tls_verify": false,
+        "kube_token_file": "/etc/velox/kube.token",
+        "kube_ca_file": "/etc/velox/kube-ca.crt",
+        "kube_retention_time": "2h",
+        "interval_sec": 1
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

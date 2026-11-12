@@ -1,0 +1,29 @@
+{
+  "package_id": "agent-self",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "logs": {
+      "enabled": true,
+      "backend": {
+        "delete_after": "7d"
+      }
+    },
+    "health": {
+      "enabled": true,
+      "input": {
+        "host": "db.example.internal",
+        "port": 5432,
+        "interval": 30,
+        "alert_only": true
+      }
+    },
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "scrape_interval": "1m",
+        "scrape_on_start": true
+      }
+    }
+  }
+}

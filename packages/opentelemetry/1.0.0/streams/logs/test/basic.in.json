@@ -1,0 +1,54 @@
+[
+  {
+    "time_unix_nano": "1762942502000000000",
+    "severity_text": "ERROR",
+    "severity_number": 17,
+    "body": "payment declined for order 8841",
+    "trace_id": "5b8efff798038103d269b633813fc60c",
+    "span_id": "eee19b7ec3c1b174",
+    "resource": {
+      "service.name": "checkout",
+      "host.name": "web-01",
+      "deployment.environment": "prod"
+    },
+    "attributes": {
+      "http.method": "POST",
+      "http.status_code": 502
+    }
+  },
+  {
+    "time_unix_nano": 1762942503000000000,
+    "severity_text": "info",
+    "severity_number": "9",
+    "body": "cart updated",
+    "resource": {
+      "service": {
+        "name": "cart"
+      }
+    },
+    "attributes": {
+      "cart.items": 3
+    }
+  },
+  {
+    "severity_text": "WARN",
+    "body": {
+      "message": "slow query",
+      "duration_ms": 1200
+    },
+    "attributes": {
+      "db.system": "postgresql"
+    }
+  },
+  {
+    "body": "plain record with nothing else"
+  },
+  {
+    "time_unix_nano": "not-a-number",
+    "severity_number": "high",
+    "body": 42,
+    "resource": {
+      "service.name": "odd"
+    }
+  }
+]

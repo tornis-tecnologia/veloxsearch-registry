@@ -98,7 +98,7 @@ O manifesto NÃO DEVE declarar output, endpoint, TLS do output, credencial do
 coletor nem `[SERVICE]`: isso é do VeloxMesh (o schema recusa chaves desconhecidas).
 
 - **R3** Cada id em `streams` tem `streams/<id>/stream.yaml` com o mesmo `id`; nenhum diretório de stream fica fora da lista.
-- **R4** `compatibility.min_fluent_bit_version` ≥ `3.2.0`. `compatibility.os` contém o `os` de toda stream.
+- **R4** `compatibility.min_fluent_bit_version` ≥ `3.2.0`. `compatibility.os` contém o `os` de toda stream. `since` de uma stream, se existir, é ≥ o mínimo do pacote; o console esconde a stream e o compilador a ignora em agentes mais antigos.
 
 ---
 
@@ -112,6 +112,7 @@ title: {en, es, pt}
 signal: logs
 event_type: logs
 enabled: true                # pré-selecionada
+since: 5.0.0                 # opcional: Fluent Bit mínimo desta stream (plugin mais novo que o piso do pacote)
 os: [linux, windows, darwin]
 input:    {plugin, fixed, fields}
 parsers:  [...]              # §5.3

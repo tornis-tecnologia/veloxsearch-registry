@@ -1,7 +1,127 @@
 {
   "spec_version": "2.0",
-  "generated_at": "2026-11-12T17:49:20Z",
+  "generated_at": "2026-11-12T18:05:07Z",
   "packages": [
+    {
+      "id": "agent-self",
+      "title": {
+        "en": "Velox Agent self-monitoring",
+        "es": "Autoobservación del Velox Agent",
+        "pt": "Autoobservação do Velox Agent"
+      },
+      "summary": {
+        "en": "The agent watching itself — Fluent Bit logs, TCP health checks and internal metrics.",
+        "es": "El agente observándose a sí mismo — logs de Fluent Bit, health checks TCP y métricas internas.",
+        "pt": "O agente observando a si mesmo — logs do Fluent Bit, health checks TCP e métricas internas."
+      },
+      "categories": [
+        "agent"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "agent-self/1.0.0/",
+          "manifest_sha256": "9147c46d89fee6d79c6536361b2bfa4b57c7620d7768d83dd38b0587d5686aae",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs",
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "agent-self/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "blob",
+      "title": {
+        "en": "Binary files (blob)",
+        "es": "Archivos binarios (blob)",
+        "pt": "Arquivos binários (blob)"
+      },
+      "summary": {
+        "en": "Ingest binary files from a directory and track what was processed.",
+        "es": "Ingiere archivos binarios de un directorio y registra lo procesado.",
+        "pt": "Ingere arquivos binários de um diretório e registra o que foi processado."
+      },
+      "categories": [
+        "custom"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "beta",
+          "path": "blob/1.0.0/",
+          "manifest_sha256": "34ee70b89020e457df52a22f11228921396a7b8d218cf59b8664f2fce3e50dda",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "blob/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "collectd",
+      "title": {
+        "en": "collectd",
+        "es": "collectd",
+        "pt": "collectd"
+      },
+      "summary": {
+        "en": "Receive collectd network-protocol metrics from collectd daemons.",
+        "es": "Recibe métricas del protocolo de red de collectd desde demonios collectd.",
+        "pt": "Recebe métricas do protocolo de rede do collectd de daemons collectd."
+      },
+      "categories": [
+        "observability"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "collectd/1.0.0/",
+          "manifest_sha256": "66dc10552110ceb560cffc76c9999fcc04974c6c2df17db0c7b50cbc74314821",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "collectd/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
     {
       "id": "custom-logs",
       "title": {
@@ -22,7 +142,7 @@
           "version": "1.0.0",
           "release": "ga",
           "path": "custom-logs/1.0.0/",
-          "manifest_sha256": "8091d109610d2eb1d8754304a24721f224997b50bce3bc78fa36627c3dc76211",
+          "manifest_sha256": "a65f1cfcd3a6c7bbd742f888623b79915b8ccf50535195800dbb5178ba04f86a",
           "min_mesh_version": "0.15.0",
           "min_agent_version": "0.2.0",
           "min_fluent_bit_version": "3.2.0",
@@ -40,6 +160,1022 @@
         }
       ],
       "icon": "custom-logs/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "docker-events",
+      "title": {
+        "en": "Docker events",
+        "es": "Eventos de Docker",
+        "pt": "Eventos do Docker"
+      },
+      "summary": {
+        "en": "Docker daemon events — container start, stop, die, OOM, health status, image and network changes.",
+        "es": "Eventos del demonio Docker — inicio, parada, die, OOM, estado de salud, cambios de imagen y red.",
+        "pt": "Eventos do daemon Docker — start, stop, die, OOM, status de saúde, mudanças de imagem e rede."
+      },
+      "categories": [
+        "container"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "docker-events/1.0.0/",
+          "manifest_sha256": "0d1ed77d17a284782224dcb78b099ec3dfa77b060e7378062fb848be7aceff0c",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "docker-events/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "docker-metrics",
+      "title": {
+        "en": "Docker metrics",
+        "es": "Métricas de Docker",
+        "pt": "Métricas do Docker"
+      },
+      "summary": {
+        "en": "CPU and memory usage per Docker container.",
+        "es": "Uso de CPU y memoria por contenedor Docker.",
+        "pt": "Uso de CPU e memória por contêiner Docker."
+      },
+      "categories": [
+        "container"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "docker-metrics/1.0.0/",
+          "manifest_sha256": "573662077926073ecce9545e0c345886e55aeab401eb734c2736fa11c9dd40df",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "docker-metrics/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "ebpf",
+      "title": {
+        "en": "eBPF tracing",
+        "es": "Trazado eBPF",
+        "pt": "Rastreamento eBPF"
+      },
+      "summary": {
+        "en": "Kernel-level events (signals, allocations, binds) captured with eBPF.",
+        "es": "Eventos a nivel de kernel (señales, asignaciones, binds) capturados con eBPF.",
+        "pt": "Eventos em nível de kernel (sinais, alocações, binds) capturados com eBPF."
+      },
+      "categories": [
+        "security"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "experimental",
+          "path": "ebpf/1.0.0/",
+          "manifest_sha256": "83d4a8e56894ad7b62abae8e426ad178a4389e4494fd409095eb850ba4d9c5a6",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "ebpf/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "elasticsearch-bulk",
+      "title": {
+        "en": "Elasticsearch bulk receiver",
+        "es": "Receptor Elasticsearch bulk",
+        "pt": "Receptor Elasticsearch bulk"
+      },
+      "summary": {
+        "en": "Receive Beats and Logstash events through an Elasticsearch Bulk API endpoint.",
+        "es": "Recibe eventos de Beats y Logstash mediante un endpoint Bulk API de Elasticsearch.",
+        "pt": "Recebe eventos de Beats e Logstash por um endpoint Bulk API do Elasticsearch."
+      },
+      "categories": [
+        "application"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "elasticsearch-bulk/1.0.0/",
+          "manifest_sha256": "fb76fc91379fcb69242986d9bb2f8d739296afd4ca8839d955f9dd2724e2acb4",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "elasticsearch-bulk/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "fluent-forward",
+      "title": {
+        "en": "Fluent Forward",
+        "es": "Fluent Forward",
+        "pt": "Fluent Forward"
+      },
+      "summary": {
+        "en": "Receive events from Fluent Bit and Fluentd over the Forward protocol.",
+        "es": "Recibe eventos de Fluent Bit y Fluentd por el protocolo Forward.",
+        "pt": "Recebe eventos do Fluent Bit e do Fluentd pelo protocolo Forward."
+      },
+      "categories": [
+        "agent"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "fluent-forward/1.0.0/",
+          "manifest_sha256": "7af8889f8e4202af947a924d5233ad24e553788346f7a725e2043ea68a406e4b",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "fluent-forward/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "gpu",
+      "title": {
+        "en": "GPU",
+        "es": "GPU",
+        "pt": "GPU"
+      },
+      "summary": {
+        "en": "GPU utilization, power and temperature for NVIDIA and sysfs-exposed cards.",
+        "es": "Utilización, consumo y temperatura de GPU para tarjetas NVIDIA y expuestas por sysfs.",
+        "pt": "Utilização, consumo e temperatura de GPU para placas NVIDIA e expostas via sysfs."
+      },
+      "categories": [
+        "os"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "gpu/1.0.0/",
+          "manifest_sha256": "1ace9800936f80be8e991059ef617037092a759c31a372b9a69151717625a095",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "4.1.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "gpu/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "http-endpoint",
+      "title": {
+        "en": "HTTP endpoint",
+        "es": "Endpoint HTTP",
+        "pt": "Endpoint HTTP"
+      },
+      "summary": {
+        "en": "Receives JSON events posted to an HTTP endpoint on the agent.",
+        "es": "Recibe eventos JSON enviados por POST a un endpoint HTTP del agente.",
+        "pt": "Recebe eventos JSON enviados por POST a um endpoint HTTP do agente."
+      },
+      "categories": [
+        "custom"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "http-endpoint/1.0.0/",
+          "manifest_sha256": "af868fae18101f6bb774c6312eacf8ed9473bbcf52e6e9a55d5e0ea715b841ca",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "http-endpoint/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "kafka",
+      "title": {
+        "en": "Apache Kafka",
+        "es": "Apache Kafka",
+        "pt": "Apache Kafka"
+      },
+      "summary": {
+        "en": "Apache Kafka broker logs: level, logger, context, message, stack traces.",
+        "es": "Logs del broker Apache Kafka: nivel, logger, contexto, mensaje, stack traces.",
+        "pt": "Logs do broker Apache Kafka: nível, logger, contexto, mensagem, stack traces."
+      },
+      "categories": [
+        "messaging"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "kafka/1.0.0/",
+          "manifest_sha256": "7bbe4d9627eaca716be183d5b6df610d244906aa0d390fcdea585ea999db8ca2",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "kafka/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "kafka-consumer",
+      "title": {
+        "en": "Kafka consumer",
+        "es": "Consumidor Kafka",
+        "pt": "Consumidor Kafka"
+      },
+      "summary": {
+        "en": "Consume Kafka topics and index their messages.",
+        "es": "Consume topics de Kafka e indexa sus mensajes.",
+        "pt": "Consome tópicos do Kafka e indexa suas mensagens."
+      },
+      "categories": [
+        "messaging"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "kafka-consumer/1.0.0/",
+          "manifest_sha256": "97679d56c6b08e9901a8fcebc9130a776b0860211ebb27667bb090a0b35eccd6",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "kafka-consumer/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "kubernetes-events",
+      "title": {
+        "en": "Kubernetes events",
+        "es": "Eventos de Kubernetes",
+        "pt": "Eventos do Kubernetes"
+      },
+      "summary": {
+        "en": "Kubernetes API events (scheduling, image pulls, back-offs, node conditions) as searchable logs.",
+        "es": "Eventos de la API de Kubernetes (scheduling, descarga de imágenes, back-offs, condiciones de nodo) como logs consultables.",
+        "pt": "Eventos da API do Kubernetes (scheduling, pull de imagens, back-offs, condições de nó) como logs pesquisáveis."
+      },
+      "categories": [
+        "kubernetes"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "kubernetes-events/1.0.0/",
+          "manifest_sha256": "1da8bd199202a35cc65e67d116c9aa6421fa56ac13cf9bb7bfd5a4035ea50ea4",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "kubernetes-events/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "mongo",
+      "title": {
+        "en": "MongoDB",
+        "es": "MongoDB",
+        "pt": "MongoDB"
+      },
+      "summary": {
+        "en": "MongoDB server log (structured JSON, 4.4+, with a text fallback).",
+        "es": "Log del servidor MongoDB (JSON estructurado, 4.4+, con respaldo de texto).",
+        "pt": "Log do servidor MongoDB (JSON estruturado, 4.4+, com fallback de texto)."
+      },
+      "categories": [
+        "database"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "mongo/1.0.0/",
+          "manifest_sha256": "05ac5bbdf77d6ad0705295c75a7fdd679496429ab2aebc6840e302089a90dc11",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "mongo/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "mqtt",
+      "title": {
+        "en": "MQTT",
+        "es": "MQTT",
+        "pt": "MQTT"
+      },
+      "summary": {
+        "en": "Receive MQTT messages from devices and gateways.",
+        "es": "Recibe mensajes MQTT de dispositivos y gateways.",
+        "pt": "Recebe mensagens MQTT de dispositivos e gateways."
+      },
+      "categories": [
+        "iot"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "mqtt/1.0.0/",
+          "manifest_sha256": "c8130abeaefe005f6828260435cb05b84c7a482f9fb0eebd2c02522bcc3865ab",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "mqtt/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "mysql",
+      "title": {
+        "en": "MySQL / MariaDB",
+        "es": "MySQL / MariaDB",
+        "pt": "MySQL / MariaDB"
+      },
+      "summary": {
+        "en": "MySQL and MariaDB error log and slow query log.",
+        "es": "Log de errores y log de consultas lentas de MySQL y MariaDB.",
+        "pt": "Log de erros e log de consultas lentas do MySQL e MariaDB."
+      },
+      "categories": [
+        "database"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "mysql/1.0.0/",
+          "manifest_sha256": "8bb3489f1bd8e429a5a0de781ac4e705ab25bec5389db2c093e0f4fa8b01a6e1",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "mysql/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "nginx",
+      "title": {
+        "en": "Nginx",
+        "es": "Nginx",
+        "pt": "Nginx"
+      },
+      "summary": {
+        "en": "Nginx access and error logs parsed into ECS fields, plus optional stub_status metrics.",
+        "es": "Logs de acceso y de errores de nginx separados en campos ECS, más métricas opcionales de stub_status.",
+        "pt": "Logs de acesso e de erros do nginx separados em campos ECS, mais métricas opcionais do stub_status."
+      },
+      "categories": [
+        "web"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "nginx/1.0.0/",
+          "manifest_sha256": "5be4aef2435a57b5d21ab4c2f486b188f745fe09a87a72a48b8aa8152bda2e5e",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs",
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "nginx/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "opentelemetry",
+      "title": {
+        "en": "OpenTelemetry",
+        "es": "OpenTelemetry",
+        "pt": "OpenTelemetry"
+      },
+      "summary": {
+        "en": "OTLP receiver for logs, metrics and traces from OpenTelemetry SDKs and collectors.",
+        "es": "Receptor OTLP de logs, métricas y trazas desde SDKs y colectores OpenTelemetry.",
+        "pt": "Receptor OTLP de logs, métricas e traces de SDKs e coletores OpenTelemetry."
+      },
+      "categories": [
+        "observability"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "opentelemetry/1.0.0/",
+          "manifest_sha256": "8a58492ecd919a4f533a51e40a6d961372d57d02538e47ad2e48455fe42c3b53",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs",
+            "metrics",
+            "traces"
+          ],
+          "event_types": [
+            "logs",
+            "metrics",
+            "traces"
+          ]
+        }
+      ],
+      "icon": "opentelemetry/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "podman-metrics",
+      "title": {
+        "en": "Podman metrics",
+        "es": "Métricas de Podman",
+        "pt": "Métricas do Podman"
+      },
+      "summary": {
+        "en": "CPU, memory, network and block I/O metrics of Podman containers.",
+        "es": "Métricas de CPU, memoria, red y E/S de bloque de contenedores Podman.",
+        "pt": "Métricas de CPU, memória, rede e E/S de bloco de contêineres Podman."
+      },
+      "categories": [
+        "container"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "podman-metrics/1.0.0/",
+          "manifest_sha256": "04ef91ae4221f0c584319836ff362af6e0764655d5de7b77178bc535d45bb201",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "podman-metrics/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "postgres",
+      "title": {
+        "en": "PostgreSQL",
+        "es": "PostgreSQL",
+        "pt": "PostgreSQL"
+      },
+      "summary": {
+        "en": "PostgreSQL server log: levels, databases, users, durations and connections.",
+        "es": "Log del servidor PostgreSQL: niveles, bases de datos, usuarios, duraciones y conexiones.",
+        "pt": "Log do servidor PostgreSQL: níveis, bancos de dados, usuários, durações e conexões."
+      },
+      "categories": [
+        "database"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "postgres/1.0.0/",
+          "manifest_sha256": "ce427d80cc0198fbbf06c0d5ff0aff1f8a01de68482a20ab54c4ed9c45529b5d",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "postgres/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "processes",
+      "title": {
+        "en": "Processes",
+        "es": "Procesos",
+        "pt": "Processos"
+      },
+      "summary": {
+        "en": "Per-process CPU, memory, I/O and file descriptors, plus single-process health checks.",
+        "es": "CPU, memoria, E/S y descriptores de archivo por proceso, más comprobaciones de salud de un proceso.",
+        "pt": "CPU, memória, E/S e descritores de arquivo por processo, mais verificações de saúde de um processo."
+      },
+      "categories": [
+        "os"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "processes/1.0.0/",
+          "manifest_sha256": "be09148eebdc7dec10db9f043f3946ff878d38b1be50413c68c5a0c7a1ff1ad2",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "processes/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "prometheus",
+      "title": {
+        "en": "Prometheus",
+        "es": "Prometheus",
+        "pt": "Prometheus"
+      },
+      "summary": {
+        "en": "Prometheus metrics — scrape an exporter, read textfile collectors or receive remote write.",
+        "es": "Métricas Prometheus — raspar un exporter, leer textfile collectors o recibir remote write.",
+        "pt": "Métricas Prometheus — coletar um exporter, ler textfile collectors ou receber remote write."
+      },
+      "categories": [
+        "observability"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "prometheus/1.0.0/",
+          "manifest_sha256": "c8a69d54d5d59c4583fe4de6e4182f4fc750aa5d4d3c09528794bb9282911607",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "prometheus/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "rabbitmq",
+      "title": {
+        "en": "RabbitMQ",
+        "es": "RabbitMQ",
+        "pt": "RabbitMQ"
+      },
+      "summary": {
+        "en": "RabbitMQ node logs: level, Erlang pid, message, client connections.",
+        "es": "Logs del nodo RabbitMQ: nivel, pid de Erlang, mensaje, conexiones de clientes.",
+        "pt": "Logs do nó RabbitMQ: nível, pid do Erlang, mensagem, conexões de clientes."
+      },
+      "categories": [
+        "messaging"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "rabbitmq/1.0.0/",
+          "manifest_sha256": "62056981f01c88c3e0d1a7ae5c2d96f2aa396998bcc825ac1db07c19149aff26",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "rabbitmq/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "redis",
+      "title": {
+        "en": "Redis",
+        "es": "Redis",
+        "pt": "Redis"
+      },
+      "summary": {
+        "en": "Redis server logs: role, level, pid and message.",
+        "es": "Logs del servidor Redis: rol, nivel, pid y mensaje.",
+        "pt": "Logs do servidor Redis: papel, nível, pid e mensagem."
+      },
+      "categories": [
+        "database"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "redis/1.0.0/",
+          "manifest_sha256": "596869d7d71c78fd9801d9f43c0574a0c39d530edce16f07a514818aed801e16",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "redis/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "serial",
+      "title": {
+        "en": "Serial port",
+        "es": "Puerto serie",
+        "pt": "Porta serial"
+      },
+      "summary": {
+        "en": "Read lines from a serial device such as a sensor or an embedded board.",
+        "es": "Lee líneas de un dispositivo serie como un sensor o una placa embebida.",
+        "pt": "Lê linhas de um dispositivo serial como um sensor ou uma placa embarcada."
+      },
+      "categories": [
+        "iot"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "beta",
+          "path": "serial/1.0.0/",
+          "manifest_sha256": "f2d7ec58bd627c5542ac5d7a2a4c824c9ddf1931c92a1eca4aee3824db726675",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "serial/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "splunk-hec",
+      "title": {
+        "en": "Splunk HEC receiver",
+        "es": "Receptor Splunk HEC",
+        "pt": "Receptor Splunk HEC"
+      },
+      "summary": {
+        "en": "Receive events from Splunk HEC clients.",
+        "es": "Recibe eventos de clientes Splunk HEC.",
+        "pt": "Recebe eventos de clientes Splunk HEC."
+      },
+      "categories": [
+        "application"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "splunk-hec/1.0.0/",
+          "manifest_sha256": "9a921f3234a3713b6e8d738394827e0aa8309a24516cdf84377ff7c99c5e09f3",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "splunk-hec/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "ssh",
+      "title": {
+        "en": "SSH",
+        "es": "SSH",
+        "pt": "SSH"
+      },
+      "summary": {
+        "en": "sshd authentication events: logins, failures, invalid users, disconnects and attempt limits.",
+        "es": "Eventos de autenticación de sshd: logins, fallos, usuarios inválidos, desconexiones y límites de intentos.",
+        "pt": "Eventos de autenticação do sshd: logins, falhas, usuários inválidos, desconexões e limites de tentativas."
+      },
+      "categories": [
+        "security"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "ssh/1.0.0/",
+          "manifest_sha256": "d0f37776d251e33f008c02ce0c3a5e44ecd09b3c46e740d1219c2f1936b59d1d",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "ssh/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "statsd",
+      "title": {
+        "en": "StatsD",
+        "es": "StatsD",
+        "pt": "StatsD"
+      },
+      "summary": {
+        "en": "StatsD-compatible UDP listener for application counters, gauges and timers.",
+        "es": "Listener UDP compatible con StatsD para contadores, gauges y timers de aplicaciones.",
+        "pt": "Listener UDP compatível com StatsD para contadores, gauges e timers de aplicações."
+      },
+      "categories": [
+        "observability"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "statsd/1.0.0/",
+          "manifest_sha256": "23101be9d1d3684720b421f234000f93ab56d1be2108c205b01516fd047fe5d2",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "statsd/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "syslog-server",
+      "title": {
+        "en": "Syslog server",
+        "es": "Servidor syslog",
+        "pt": "Servidor syslog"
+      },
+      "summary": {
+        "en": "Receives syslog from network devices and hosts over UDP, TCP or a local Unix socket.",
+        "es": "Recibe syslog de equipos de red y hosts por UDP, TCP o un socket Unix local.",
+        "pt": "Recebe syslog de equipamentos de rede e hosts por UDP, TCP ou um socket Unix local."
+      },
+      "categories": [
+        "network"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "syslog-server/1.0.0/",
+          "manifest_sha256": "2f7cd69a68aec49918382619d640092852342511caaf24e7e97df4373857194a",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "syslog-server/1.0.0/img/icon.svg",
       "latest": "1.0.0"
     },
     {
@@ -62,7 +1198,7 @@
           "version": "1.0.0",
           "release": "ga",
           "path": "system/1.0.0/",
-          "manifest_sha256": "74e15e349e29496d146f355cf3d897542da3293fc79d4c03e3188a9b6f69373a",
+          "manifest_sha256": "c6c1594560247ab5109711c4f80735276fddd195705774dd863032d1983417e5",
           "min_mesh_version": "0.15.0",
           "min_agent_version": "0.2.0",
           "min_fluent_bit_version": "3.2.0",
@@ -80,6 +1216,164 @@
         }
       ],
       "icon": "system/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "tcp-json",
+      "title": {
+        "en": "TCP JSON",
+        "es": "TCP JSON",
+        "pt": "TCP JSON"
+      },
+      "summary": {
+        "en": "Receives JSON objects or plain text lines sent over a TCP port.",
+        "es": "Recibe objetos JSON o líneas de texto enviados a un puerto TCP.",
+        "pt": "Recebe objetos JSON ou linhas de texto enviados a uma porta TCP."
+      },
+      "categories": [
+        "custom"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "tcp-json/1.0.0/",
+          "manifest_sha256": "563ac2675efe2c7a4b9cfd1fc6149f440786b053d6dfafdc3560fd2194be48af",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "tcp-json/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "traefik",
+      "title": {
+        "en": "Traefik",
+        "es": "Traefik",
+        "pt": "Traefik"
+      },
+      "summary": {
+        "en": "Traefik access logs (with router, service and duration) and Traefik's own log.",
+        "es": "Logs de acceso de Traefik (con router, servicio y duración) y el log propio de Traefik.",
+        "pt": "Logs de acesso do Traefik (com router, serviço e duração) e o log do próprio Traefik."
+      },
+      "categories": [
+        "web"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "traefik/1.0.0/",
+          "manifest_sha256": "ffa69976c50007fd4ca57ec64e05da14ab9e990dea17ff33160878edca7299aa",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "traefik/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "udp-json",
+      "title": {
+        "en": "UDP JSON",
+        "es": "UDP JSON",
+        "pt": "UDP JSON"
+      },
+      "summary": {
+        "en": "Receives JSON objects or plain text lines sent as UDP datagrams.",
+        "es": "Recibe objetos JSON o líneas de texto enviados como datagramas UDP.",
+        "pt": "Recebe objetos JSON ou linhas de texto enviados como datagramas UDP."
+      },
+      "categories": [
+        "custom"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "udp-json/1.0.0/",
+          "manifest_sha256": "64ebffe63f7159e8127f0efd21b6f5cda31c368ca7ea02d8a873ff2aa1f645f7",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "linux",
+            "windows",
+            "darwin"
+          ],
+          "signals": [
+            "logs"
+          ],
+          "event_types": [
+            "logs"
+          ]
+        }
+      ],
+      "icon": "udp-json/1.0.0/img/icon.svg",
+      "latest": "1.0.0"
+    },
+    {
+      "id": "windows",
+      "title": {
+        "en": "Windows",
+        "es": "Windows",
+        "pt": "Windows"
+      },
+      "summary": {
+        "en": "Windows host logs and metrics — Event Log, legacy winlog, performance statistics, exporter metrics and ETW.",
+        "es": "Logs y métricas de hosts Windows — Registro de eventos, winlog clásico, estadísticas de rendimiento, métricas de exporter y ETW.",
+        "pt": "Logs e métricas de hosts Windows — Event Log, winlog clássico, estatísticas de desempenho, métricas de exporter e ETW."
+      },
+      "categories": [
+        "windows"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "release": "ga",
+          "path": "windows/1.0.0/",
+          "manifest_sha256": "cd66f09ceb053eb3c4e2a05602dd8d4aaa778de07305c1214b3226bb25d47e47",
+          "min_mesh_version": "0.15.0",
+          "min_agent_version": "0.2.0",
+          "min_fluent_bit_version": "3.2.0",
+          "os": [
+            "windows"
+          ],
+          "signals": [
+            "logs",
+            "metrics"
+          ],
+          "event_types": [
+            "logs",
+            "metrics"
+          ]
+        }
+      ],
+      "icon": "windows/1.0.0/img/icon.svg",
       "latest": "1.0.0"
     }
   ]

@@ -1,0 +1,13 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "id": "8b1c2f9a4e7d",
+  "name": "/api",
+  "cpu_used": 1832000000,
+  "mem_used": 268435456,
+  "mem_limit": 1073741824,
+  "velox": {
+    "integration": "docker-metrics",
+    "stream": "stats",
+    "package_version": "1.0.0"
+  }
+}

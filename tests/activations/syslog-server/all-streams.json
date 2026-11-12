@@ -1,0 +1,50 @@
+{
+  "package_id": "syslog-server",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "udp": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 1514,
+        "buffer_chunk_size": "65535",
+        "buffer_max_size": "131072",
+        "receive_buffer_size": "4M"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log CRON"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "replicas": 0,
+        "keep_original": true,
+        "timezone": "America/Sao_Paulo"
+      }
+    },
+    "tcp": {
+      "enabled": true,
+      "input": {
+        "listen": "0.0.0.0",
+        "port": 1601,
+        "format": "octet_counting",
+        "buffer_chunk_size": "65535"
+      }
+    },
+    "unix": {
+      "enabled": true,
+      "input": {
+        "unix_perm": "0660",
+        "buffer_max_size": "65535"
+      }
+    }
+  }
+}

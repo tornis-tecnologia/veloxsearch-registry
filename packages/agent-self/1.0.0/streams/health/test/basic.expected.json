@@ -1,0 +1,47 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "destination": {
+      "port": 5432,
+      "address": "db.example.internal"
+    },
+    "health": {
+      "alive": true
+    },
+    "event": {
+      "category": "network",
+      "outcome": "success"
+    },
+    "message": "db.example.internal:5432 is up"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:12.000Z",
+    "destination": {
+      "port": 5432,
+      "address": "db.example.internal"
+    },
+    "health": {
+      "alive": false
+    },
+    "event": {
+      "category": "network",
+      "outcome": "failure"
+    },
+    "message": "db.example.internal:5432 is down"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:22.000Z",
+    "destination": {
+      "port": 443,
+      "address": "10.0.0.5"
+    },
+    "health": {
+      "alive": true
+    },
+    "event": {
+      "category": "network",
+      "outcome": "success"
+    },
+    "message": "10.0.0.5:443 is up"
+  }
+]

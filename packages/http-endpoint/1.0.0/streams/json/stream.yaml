@@ -1,0 +1,219 @@
+id: json
+title: {en: JSON over HTTP, es: JSON por HTTP, pt: JSON por HTTP}
+description: {en: 'Accepts POST requests whose body is a JSON object, or a list of them; every object becomes one
+    event.', es: 'Acepta solicitudes POST cuyo cuerpo es un objeto JSON, o una lista; cada objeto se convierte en
+    un evento.', pt: 'Aceita requisições POST cujo corpo é um objeto JSON, ou uma lista; cada objeto vira um evento.'}
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: http
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Network interface to bind; 0.0.0.0 listens on all of them., es: Interfaz de red a escuchar;
+        0.0.0.0 las escucha todas., pt: Interface de rede em que escutar; 0.0.0.0 escuta em todas.}
+    bind:
+      key: listen
+  - name: port
+    type: integer
+    required: true
+    default: 8888
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: HTTP port to listen on. Ports below 1024 need extra privileges., es: Puerto HTTP de escucha.
+        Los puertos menores de 1024 exigen privilegios., pt: Porta HTTP de escuta. Portas abaixo de 1024 exigem
+        privilégios.}
+    bind:
+      key: port
+  - name: add_remote_addr
+    type: bool
+    default: false
+    title: {en: Record the client address, es: Registrar la dirección del cliente, pt: Registrar o endereço do cliente}
+    description: {en: Add the client address (taken from X-Forwarded-For) to each event as source.address., es: Agrega
+        la dirección del cliente (tomada de X-Forwarded-For) a cada evento como source.address., pt: Adiciona o
+        endereço do cliente (obtido de X-Forwarded-For) a cada evento como source.address.}
+    bind:
+      key: add_remote_addr
+  - name: enable_health_endpoint
+    type: bool
+    default: false
+    title: {en: Health endpoint, es: Endpoint de salud, pt: Endpoint de saúde}
+    description: {en: Serve GET /health for load balancers and monitors., es: Sirve GET /health para balanceadores
+        y monitores., pt: Serve GET /health para balanceadores e monitores.}
+    bind:
+      key: enable_health_endpoint
+  - name: successful_response_code
+    type: select
+    default: 201
+    group: advanced
+    options:
+    - 200
+    - 201
+    - 204
+    title: {en: Success status code, es: Código de estado de éxito, pt: Código de status de sucesso}
+    description: {en: HTTP status returned to the sender when the body was accepted., es: Estado HTTP devuelto al
+        emisor cuando se aceptó el cuerpo., pt: Status HTTP retornado ao emissor quando o corpo foi aceito.}
+    bind:
+      key: successful_response_code
+  - name: success_header
+    type: string
+    multi: true
+    group: advanced
+    title: {en: Extra success headers, es: Encabezados extra de éxito, pt: Cabeçalhos extras de sucesso}
+    description: {en: 'Headers added to successful responses, one `Name value` per line.', es: 'Encabezados agregados
+        a las respuestas exitosas, un `Nombre valor` por línea.', pt: 'Cabeçalhos adicionados às respostas de sucesso,
+        um `Nome valor` por linha.'}
+    placeholder: X-Collector velox
+    bind:
+      key: success_header
+      repeat: true
+  - name: buffer_chunk_size
+    type: size
+    default: 512K
+    group: advanced
+    title: {en: Chunk size, es: Tamaño de chunk, pt: Tamanho do chunk}
+    description: {en: Chunk size for incoming bodies., es: Tamaño de chunk de los cuerpos entrantes., pt: Tamanho
+        do chunk dos corpos recebidos.}
+    bind:
+      key: buffer_chunk_size
+  - name: buffer_max_size
+    type: size
+    default: 4M
+    group: advanced
+    title: {en: Max body size, es: Tamaño máximo del cuerpo, pt: Tamanho máximo do corpo}
+    description: {en: Largest request body accepted., es: Cuerpo de solicitud más grande aceptado., pt: Maior corpo
+        de requisição aceito.}
+    bind:
+      key: buffer_max_size
+  - name: http_server_workers
+    type: integer
+    default: 1
+    group: advanced
+    min: 1
+    title: {en: Workers, es: Workers, pt: Workers}
+    description: {en: Listener worker threads., es: Hilos worker de escucha., pt: Threads worker de escuta.}
+    bind:
+      key: http_server.workers
+  - name: http_server_max_connections
+    type: integer
+    default: 0
+    group: advanced
+    min: 0
+    title: {en: Max connections, es: Máximo de conexiones, pt: Máximo de conexões}
+    description: {en: Concurrent connection cap; 0 is unlimited., es: Límite de conexiones concurrentes; 0 es ilimitado.,
+      pt: Limite de conexões simultâneas; 0 é ilimitado.}
+    bind:
+      key: http_server.max_connections
+  - name: oauth2_validate
+    type: bool
+    default: false
+    group: advanced
+    title: {en: Require an OAuth 2.0 token, es: Exigir token OAuth 2.0, pt: Exigir token OAuth 2.0}
+    description: {en: Validate the JWT bearer token of every request against the issuer below., es: Valida el JWT
+        bearer de cada solicitud contra el emisor indicado., pt: Valida o JWT bearer de cada requisição contra o
+        emissor abaixo.}
+    bind:
+      key: oauth2.validate
+  - name: oauth2_issuer
+    type: string
+    group: advanced
+    show_if:
+      field: oauth2_validate
+      equals: true
+    title: {en: Token issuer, es: Emisor del token, pt: Emissor do token}
+    description: {en: Expected iss claim; required when validating., es: Claim iss esperado; obligatorio al validar.,
+      pt: Claim iss esperado; obrigatório ao validar.}
+    placeholder: https://idp.example.com/
+    bind:
+      key: oauth2.issuer
+  - name: oauth2_jwks_url
+    type: string
+    group: advanced
+    show_if:
+      field: oauth2_validate
+      equals: true
+    title: {en: JWKS URL, es: URL JWKS, pt: URL JWKS}
+    description: {en: Endpoint with the public keys; required when validating., es: Endpoint con las claves públicas;
+        obligatorio al validar., pt: Endpoint com as chaves públicas; obrigatório ao validar.}
+    placeholder: https://idp.example.com/.well-known/jwks.json
+    bind:
+      key: oauth2.jwks_url
+  - name: oauth2_allowed_audience
+    type: string
+    group: advanced
+    show_if:
+      field: oauth2_validate
+      equals: true
+    title: {en: Allowed audience, es: Audiencia permitida, pt: Audiência permitida}
+    description: {en: Audience claim to enforce; empty accepts any., es: Claim de audiencia a exigir; vacío acepta
+        cualquiera., pt: Claim de audiência a exigir; vazio aceita qualquer.}
+    bind:
+      key: oauth2.allowed_audience
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex, one rule per line: `<field> <regex>`.', es: 'Descarta
+        registros cuyo campo coincide con una regex, una regla por línea: `<field> <regex>`.', pt: 'Descarta registros
+        cujo campo casa com uma regex, uma regra por linha: `<field> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      title: {en: Rules, es: Reglas, pt: Regras}
+      placeholder: level ^debug$
+      bind:
+        key: exclude
+        repeat: true
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after
+  - name: replicas
+    type: integer
+    default: 1
+    group: advanced
+    min: 0
+    title: {en: Replicas, es: Réplicas, pt: Réplicas}
+    bind:
+      template: settings.index.number_of_replicas
+  - name: timezone
+    type: string
+    default: UTC
+    group: advanced
+    title: {en: Timezone, es: Zona horaria, pt: Fuso horário}
+    description: {en: 'Zone assumed for timestamps that carry no offset (e.g. UTC, America/Sao_Paulo).', es: 'Zona
+        que se asume para las marcas de tiempo sin desfase (p. ej. UTC, America/Sao_Paulo).', pt: 'Fuso assumido
+        para os horários sem deslocamento (ex.: UTC, America/Sao_Paulo).'}
+    bind:
+      pipeline_param: timestamp.timezone

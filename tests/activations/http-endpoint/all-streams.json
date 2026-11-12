@@ -1,0 +1,44 @@
+{
+  "package_id": "http-endpoint",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "json": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 9888,
+        "add_remote_addr": true,
+        "enable_health_endpoint": true,
+        "successful_response_code": 200,
+        "success_header": [
+          "X-Collector velox"
+        ],
+        "buffer_chunk_size": "1M",
+        "buffer_max_size": "8M",
+        "http_server_workers": 2,
+        "http_server_max_connections": 100,
+        "oauth2_validate": true,
+        "oauth2_issuer": "https://idp.example.com/",
+        "oauth2_jwks_url": "https://idp.example.com/.well-known/jwks.json",
+        "oauth2_allowed_audience": "velox"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "level ^debug$"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "replicas": 0,
+        "timezone": "America/Sao_Paulo"
+      }
+    }
+  }
+}

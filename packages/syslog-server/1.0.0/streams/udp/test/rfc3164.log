@@ -1,0 +1,6 @@
+<34>Nov 12 10:15:02 web-01 su[2231]: 'su root' failed for lonvick on /dev/pts/8
+<13>Nov  3 07:00:01 web-01 CRON[2231]: (root) CMD (command -v debian-sa1 > /dev/null)
+<189>Nov 12 10:15:09 sw-core-02 %LINK-3-UPDOWN: Interface Gi1/0/24, changed state to down
+<14>Nov 12 10:15:10 db-01 kernel: [12345.678] usb 1-1: new high-speed USB device number 4
+<38>Nov 12 10:15:11 gw-01 plain message without a program tag
+this line has no priority and no syslog shape at all

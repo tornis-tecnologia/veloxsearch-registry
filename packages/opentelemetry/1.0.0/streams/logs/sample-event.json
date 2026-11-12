@@ -1,0 +1,40 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "message": "payment declined for order 8841",
+  "log": {
+    "level": "error"
+  },
+  "otel": {
+    "severity_number": 17
+  },
+  "trace_id": "5b8efff798038103d269b633813fc60c",
+  "span_id": "eee19b7ec3c1b174",
+  "service": {
+    "name": "checkout"
+  },
+  "host": {
+    "name": "web-01"
+  },
+  "resource": {
+    "service": {
+      "name": "checkout"
+    },
+    "host": {
+      "name": "web-01"
+    },
+    "deployment": {
+      "environment": "prod"
+    }
+  },
+  "attributes": {
+    "http": {
+      "method": "POST",
+      "status_code": 502
+    }
+  },
+  "velox": {
+    "integration": "opentelemetry",
+    "stream": "logs",
+    "package_version": "1.0.0"
+  }
+}

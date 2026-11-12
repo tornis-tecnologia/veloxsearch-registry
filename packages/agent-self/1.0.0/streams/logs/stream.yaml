@@ -1,0 +1,40 @@
+id: logs
+title: {en: Agent logs, es: Logs del agente, pt: Logs do agente}
+description:
+  en: Fluent Bit's own log lines parsed into level, component and message.
+  es: Líneas de log propias de Fluent Bit separadas en nivel, componente y mensaje.
+  pt: Linhas de log do próprio Fluent Bit separadas em nível, componente e mensagem.
+signal: logs
+event_type: logs
+since: 5.0.0
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: fluentbit_logs
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 7d
+    delete_after: 14d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 14d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

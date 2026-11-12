@@ -1,0 +1,133 @@
+id: files
+title:
+  en: Files
+  es: Archivos
+  pt: Arquivos
+description:
+  en: Binary files found in a directory, with a record per file.
+  es: Archivos binarios hallados en un directorio, con un registro por archivo.
+  pt: Arquivos binários encontrados em um diretório, com um registro por arquivo.
+signal: logs
+event_type: logs
+enabled: true
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: blob
+  fixed:
+    database_file: '{state_dir}/blob-{stream_tag}.db'
+  fields:
+  - name: path
+    type: string
+    default: /var/spool/velox/blobs/*
+    required: true
+    placeholder: /var/backups/*.dump
+    title:
+      en: Path
+      es: Ruta
+      pt: Caminho
+    description:
+      en: Directory or glob to scan.
+      es: Directorio o glob a escanear.
+      pt: Diretório ou glob a varrer.
+    bind:
+      key: path
+  - name: exclude
+    type: string
+    multi: true
+    title:
+      en: Exclude patterns
+      es: Patrones excluidos
+      pt: Padrões excluídos
+    bind:
+      key: exclude_pattern
+      join: ','
+  - name: scan_refresh_interval
+    type: duration
+    default: 10s
+    title:
+      en: Rescan interval
+      es: Intervalo de reescaneo
+      pt: Intervalo de nova varredura
+    bind:
+      key: scan_refresh_interval
+  - name: upload_success_action
+    type: select
+    options:
+    - delete
+    - add_suffix
+    - emit_log
+    group: advanced
+    title:
+      en: After success
+      es: Tras el éxito
+      pt: Após o sucesso
+    bind:
+      key: upload_success_action
+  - name: upload_success_suffix
+    type: string
+    show_if:
+      field: upload_success_action
+      equals: add_suffix
+    group: advanced
+    title:
+      en: Success suffix
+      es: Sufijo de éxito
+      pt: Sufixo de sucesso
+    bind:
+      key: upload_success_suffix
+  - name: upload_failure_action
+    type: select
+    options:
+    - delete
+    - add_suffix
+    - emit_log
+    group: advanced
+    title:
+      en: After failure
+      es: Tras el fallo
+      pt: Após a falha
+    bind:
+      key: upload_failure_action
+  - name: upload_failure_suffix
+    type: string
+    show_if:
+      field: upload_failure_action
+      equals: add_suffix
+    group: advanced
+    title:
+      en: Failure suffix
+      es: Sufijo de fallo
+      pt: Sufixo de falha
+    bind:
+      key: upload_failure_suffix
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - parser
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title:
+      en: Delete after
+      es: Eliminar después de
+      pt: Apagar após
+    bind:
+      lifecycle: delete_after

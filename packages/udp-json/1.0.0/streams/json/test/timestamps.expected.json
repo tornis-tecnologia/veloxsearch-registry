@@ -1,0 +1,39 @@
+[
+  {
+    "host": "app-01",
+    "@timestamp": "2026-11-12T08:15:02.250Z",
+    "message": "order created",
+    "level": "info"
+  },
+  {
+    "host": "app-02",
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "message": "slow query",
+    "level": "warn"
+  },
+  {
+    "host": "app-01",
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "message": "payment refused",
+    "level": "error"
+  },
+  {
+    "host": "app-03",
+    "@timestamp": "2026-11-12T10:15:05.500Z",
+    "message": "only the sender's own @timestamp",
+    "level": "info"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "level": "debug",
+    "host": "app-01",
+    "time": "yesterday afternoon",
+    "message": "malformed time keeps the arrival time"
+  },
+  {
+    "host": "app-02",
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "no time field at all",
+    "level": "info"
+  }
+]

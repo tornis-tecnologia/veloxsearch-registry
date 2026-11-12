@@ -1,0 +1,16 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.250Z",
+  "level": "info",
+  "host": "billing-01",
+  "service": "invoices",
+  "message": "invoice issued",
+  "invoice_id": "INV-20931",
+  "source": {
+    "address": "203.0.113.20"
+  },
+  "velox": {
+    "integration": "http-endpoint",
+    "stream": "json",
+    "package_version": "1.0.0"
+  }
+}

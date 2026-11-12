@@ -1,0 +1,46 @@
+{
+  "package_id": "tcp-json",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "json": {
+      "enabled": true,
+      "input": {
+        "listen": "127.0.0.1",
+        "port": 6170,
+        "chunk_size": 64,
+        "buffer_size": 256,
+        "workers": 2,
+        "source_address_key": "client_addr"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "level ^debug$"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "replicas": 0,
+        "timezone": "America/Sao_Paulo"
+      }
+    },
+    "raw": {
+      "enabled": true,
+      "input": {
+        "listen": "0.0.0.0",
+        "port": 6171,
+        "chunk_size": 64,
+        "workers": 2
+      },
+      "backend": {
+        "delete_after": "7d"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: metrics stream.'
+      es: 'Primera versión: stream metrics.'
+      pt: 'Primeira versão: stream metrics.'

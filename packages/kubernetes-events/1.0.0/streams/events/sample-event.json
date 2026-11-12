@@ -1,0 +1,27 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "message": "Back-off restarting failed container api",
+  "kubernetes": {
+    "event": {
+      "reason": "BackOff",
+      "type": "Warning",
+      "message": "Back-off restarting failed container api",
+      "count": 14,
+      "first_timestamp": "2025-11-12T09:58:00.000Z",
+      "involved_object": {
+        "kind": "Pod",
+        "name": "api-7d9c-xk2lp",
+        "namespace": "shop"
+      },
+      "source": {
+        "component": "kubelet",
+        "host": "node-2"
+      }
+    }
+  },
+  "velox": {
+    "integration": "kubernetes-events",
+    "stream": "events",
+    "package_version": "1.0.0"
+  }
+}

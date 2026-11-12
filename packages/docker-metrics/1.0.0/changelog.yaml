@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description:
+      en: 'First release: stats stream.'
+      es: 'Primera versión: stream stats.'
+      pt: 'Primeira versão: stream stats.'

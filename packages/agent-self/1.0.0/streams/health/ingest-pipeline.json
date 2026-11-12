@@ -1,0 +1,79 @@
+{
+  "description": "agent-self/health: TCP check result (alive true/false, host, port)",
+  "processors": [
+    {
+      "rename": {
+        "tag": "alive",
+        "field": "alive",
+        "target_field": "health.alive",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "host",
+        "field": "host",
+        "target_field": "destination.address",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "tag": "port",
+        "field": "port",
+        "target_field": "destination.port",
+        "type": "integer",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "tag": "category",
+        "field": "event.category",
+        "value": "network"
+      }
+    },
+    {
+      "set": {
+        "tag": "outcome_up",
+        "field": "event.outcome",
+        "value": "success",
+        "if": "ctx.health?.alive == true"
+      }
+    },
+    {
+      "set": {
+        "tag": "outcome_down",
+        "field": "event.outcome",
+        "value": "failure",
+        "if": "ctx.health?.alive == false"
+      }
+    },
+    {
+      "set": {
+        "tag": "message",
+        "field": "message",
+        "value": "{{destination.address}}:{{destination.port}} is up",
+        "if": "ctx.health?.alive == true"
+      }
+    },
+    {
+      "set": {
+        "tag": "message_down",
+        "field": "message",
+        "value": "{{destination.address}}:{{destination.port}} is down",
+        "if": "ctx.health?.alive == false"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "port"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

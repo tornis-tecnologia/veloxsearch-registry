@@ -1,0 +1,33 @@
+id: metrics
+title: {en: Agent metrics, es: Métricas del agente, pt: Métricas do agente}
+description:
+  en: Fluent Bit internal metrics (input/output records, bytes, retries, errors) sent to the OTLP endpoint of the policy.
+  es: Métricas internas de Fluent Bit (registros de entrada/salida, bytes, reintentos, errores) enviadas al endpoint OTLP de la política.
+  pt: Métricas internas do Fluent Bit (registros de entrada/saída, bytes, retentativas, erros) enviadas ao endpoint OTLP da política.
+signal: metrics
+event_type: metrics
+enabled: false
+os:
+- linux
+- windows
+- darwin
+input:
+  plugin: fluentbit_metrics
+  fields:
+  - name: scrape_interval
+    type: duration
+    default: 30s
+    title: {en: Scrape interval, es: Intervalo de recolección, pt: Intervalo de coleta}
+    bind:
+      key: scrape_interval
+  - name: scrape_on_start
+    type: bool
+    default: false
+    group: advanced
+    title: {en: Collect at startup, es: Recolectar al iniciar, pt: Coletar na inicialização}
+    bind:
+      key: scrape_on_start
+processors:
+  allow:
+  - metrics_selector
+  - labels

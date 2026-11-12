@@ -1,0 +1,92 @@
+[
+  {
+    "container": {
+      "name": "api-1",
+      "image": {
+        "name": "registry.example.com/api:2.4.1"
+      },
+      "id": "3f2a9c1d8e7b"
+    },
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "event": {
+      "category": "container",
+      "action": "start",
+      "original": "{\\\"Type\\\": \\\"container\\\", \\\"Action\\\": \\\"start\\\", \\\"Actor\\\": {\\\"ID\\\": \\\"3f2a9c1d8e7b\\\", \\\"Attributes\\\": {\\\"image\\\": \\\"registry.example.com/api:2.4.1\\\", \\\"name\\\": \\\"api-1\\\"}}, \\\"scope\\\": \\\"local\\\", \\\"time\\\": 1794478502, \\\"timeNano\\\": 1794478502000000000}"
+    },
+    "docker": {
+      "actor": {
+        "name": "api-1",
+        "id": "3f2a9c1d8e7b"
+      },
+      "type": "container",
+      "scope": "local"
+    }
+  },
+  {
+    "container": {
+      "name": "api-1",
+      "image": {
+        "name": "registry.example.com/api:2.4.1"
+      },
+      "id": "3f2a9c1d8e7b"
+    },
+    "@timestamp": "2026-11-12T10:16:00.000Z",
+    "event": {
+      "category": "container",
+      "action": "die",
+      "original": "{\\\"Type\\\": \\\"container\\\", \\\"Action\\\": \\\"die\\\", \\\"Actor\\\": {\\\"ID\\\": \\\"3f2a9c1d8e7b\\\", \\\"Attributes\\\": {\\\"image\\\": \\\"registry.example.com/api:2.4.1\\\", \\\"name\\\": \\\"api-1\\\", \\\"exitCode\\\": \\\"137\\\"}}, \\\"scope\\\": \\\"local\\\", \\\"time\\\": 1794478560, \\\"timeNano\\\": 1794478560000000000}"
+    },
+    "docker": {
+      "actor": {
+        "name": "api-1",
+        "id": "3f2a9c1d8e7b"
+      },
+      "exit_code": 137,
+      "type": "container",
+      "scope": "local"
+    }
+  },
+  {
+    "container": {
+      "name": "worker-2",
+      "image": {
+        "name": "redis:7"
+      },
+      "id": "9b8c7d6e5f4a"
+    },
+    "@timestamp": "2026-11-12T10:16:01.000Z",
+    "event": {
+      "category": "container",
+      "action": "oom"
+    },
+    "docker": {
+      "actor": {
+        "name": "worker-2",
+        "id": "9b8c7d6e5f4a"
+      },
+      "type": "container",
+      "scope": "local"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:10.000Z",
+    "event": {
+      "action": "connect",
+      "original": "{\\\"Type\\\": \\\"network\\\", \\\"Action\\\": \\\"connect\\\", \\\"Actor\\\": {\\\"ID\\\": \\\"a1b2c3d4e5f6\\\", \\\"Attributes\\\": {\\\"name\\\": \\\"bridge\\\"}}, \\\"scope\\\": \\\"local\\\", \\\"time\\\": 1794478570, \\\"timeNano\\\": 1794478570000000000}"
+    },
+    "docker": {
+      "actor": {
+        "name": "bridge",
+        "id": "a1b2c3d4e5f6"
+      },
+      "type": "network",
+      "scope": "local"
+    }
+  },
+  {
+    "message": "not json at all",
+    "event": {
+      "outcome": "unparsed"
+    }
+  }
+]

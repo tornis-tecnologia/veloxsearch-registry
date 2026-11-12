@@ -1,0 +1,5 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: json streams.', es: 'Primera versión: streams json.', pt: 'Primeira versão:
+        streams json.'}

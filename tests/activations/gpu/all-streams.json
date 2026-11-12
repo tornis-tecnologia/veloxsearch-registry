@@ -1,0 +1,29 @@
+{
+  "package_id": "gpu",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "scrape_interval": 10,
+        "cards_include": "0,1",
+        "cards_exclude": "2",
+        "enable_nvml": false,
+        "enable_power": false,
+        "enable_temperature": true,
+        "path_sysfs": "/sys"
+      },
+      "processors": [
+        {
+          "plugin": "labels",
+          "params": {
+            "insert": [
+              "rack r1"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

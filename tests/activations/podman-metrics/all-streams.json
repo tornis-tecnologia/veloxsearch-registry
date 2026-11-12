@@ -1,0 +1,24 @@
+{
+  "package_id": "podman-metrics",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "metrics": {
+      "enabled": true,
+      "input": {
+        "scrape_interval": 60,
+        "scrape_on_start": true
+      },
+      "processors": [
+        {
+          "plugin": "labels",
+          "params": {
+            "insert": [
+              "env prod"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

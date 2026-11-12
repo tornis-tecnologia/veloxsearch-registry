@@ -1,0 +1,23 @@
+{
+  "@timestamp": "2025-11-12T10:15:02.000Z",
+  "host": "db-01",
+  "plugin": "cpu",
+  "plugin_instance": "0",
+  "type": "percent",
+  "type_instance": "idle",
+  "dsnames": [
+    "value"
+  ],
+  "dstypes": [
+    "gauge"
+  ],
+  "values": [
+    93.4
+  ],
+  "interval": 10.0,
+  "velox": {
+    "integration": "collectd",
+    "stream": "metrics",
+    "package_version": "1.0.0"
+  }
+}

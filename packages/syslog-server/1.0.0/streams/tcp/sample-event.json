@@ -1,0 +1,30 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "sw-core-02"
+  },
+  "process": {
+    "name": "mgmtd",
+    "pid": 411
+  },
+  "message": "Interface Gi1/0/24, changed state to down",
+  "log": {
+    "level": "warning",
+    "syslog": {
+      "priority": 188,
+      "facility": {
+        "code": 23,
+        "name": "local7"
+      },
+      "severity": {
+        "code": 4,
+        "name": "warning"
+      }
+    }
+  },
+  "velox": {
+    "integration": "syslog-server",
+    "stream": "tcp",
+    "package_version": "1.0.0"
+  }
+}

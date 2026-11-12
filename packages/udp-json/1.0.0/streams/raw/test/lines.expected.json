@@ -1,0 +1,22 @@
+[
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "2026-11-12T10:15:02Z worker-1 job 8841 finished in 412ms"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "ERROR payment gateway timeout after 30s (order=4417)"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "user=alice action=login src=10.0.0.5 result=ok"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "{\"this\":\"looks like json but is not closed\""
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "message": "   indented continuation line kept as it is"
+  }
+]

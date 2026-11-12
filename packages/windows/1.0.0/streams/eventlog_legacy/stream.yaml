@@ -1,0 +1,77 @@
+id: eventlog_legacy
+title: {en: Windows Event Log (legacy API), es: Registro de eventos de Windows (API clásica), pt: Windows Event Log (API clássica)}
+description:
+  en: Event Log channels read with the classic winlog API; use it on old Windows versions where the winevt stream does not work.
+  es: Canales del Registro de eventos leídos con la API winlog clásica; úsela en Windows antiguos donde el stream winevt no funciona.
+  pt: Canais do Event Log lidos com a API winlog clássica; use em Windows antigos onde o stream winevt não funciona.
+signal: logs
+event_type: logs
+enabled: false
+os:
+- windows
+input:
+  plugin: winlog
+  fixed:
+    db: '{state_dir}/winlog-{stream_tag}.db'
+  fields:
+  - name: channels
+    type: string
+    multi: true
+    required: true
+    default:
+    - Application
+    - System
+    - Security
+    title: {en: Channels, es: Canales, pt: Canais}
+    description:
+      en: Event Log channels to read. Security needs an administrator account.
+      es: Canales del Registro de eventos a leer. Security requiere una cuenta de administrador.
+      pt: Canais do Event Log a ler. Security exige conta de administrador.
+    bind:
+      key: channels
+      join: ','
+  - name: interval
+    type: integer
+    default: 1
+    title: {en: Polling interval (s), es: Intervalo de sondeo (s), pt: Intervalo de polling (s)}
+    bind:
+      key: interval_sec
+    min: 1
+  - name: string_inserts
+    type: bool
+    default: true
+    title: {en: Keep string inserts, es: Conservar string inserts, pt: Manter string inserts}
+    bind:
+      key: string_inserts
+    group: advanced
+  - name: use_ansi
+    type: bool
+    default: false
+    title: {en: ANSI messages, es: Mensajes ANSI, pt: Mensagens ANSI}
+    bind:
+      key: use_ansi
+    group: advanced
+processors:
+  allow:
+  - grep
+  - modify
+  - record_modifier
+  - nest
+  - content_modifier
+  - sql
+  - throttle
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind:
+      lifecycle: delete_after

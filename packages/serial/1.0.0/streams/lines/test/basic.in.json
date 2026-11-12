@@ -1,0 +1,14 @@
+[
+  {
+    "msg": "T=21.4 H=48\r\n"
+  },
+  {
+    "msg": "  boot ok  "
+  },
+  {
+    "message": "already a message"
+  },
+  {
+    "msg": 12345
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "message": "user=alice action=login src=10.0.0.5 result=ok",
+  "velox": {
+    "integration": "tcp-json",
+    "stream": "raw",
+    "package_version": "1.0.0"
+  }
+}

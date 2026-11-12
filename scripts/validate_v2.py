@@ -210,6 +210,10 @@ def check_stream(pkg: L.Package, st: L.Stream, cat: L.Catalog | None):
     if not st_os <= pkg_os:
         err(f"{where}: os {sorted(st_os - pkg_os)} not in compatibility.os (R4)")
 
+    minfb = (pkg.manifest.get("compatibility") or {}).get("min_fluent_bit_version", "3.2.0")
+    if s_since := st.doc.get("since"):
+        if L.semver_key(s_since) < L.semver_key(minfb):
+            err(f"{where}: since {s_since} is below the package's min_fluent_bit_version {minfb} (R4)")
     name = L.artifact_name(st.id, pkg.id, pkg.version)
     if len(name) > 200 or not re.fullmatch(r"[a-z0-9][a-z0-9._-]*", name):
         err(f"{where}: artifact name {name!r} invalid (R22)")

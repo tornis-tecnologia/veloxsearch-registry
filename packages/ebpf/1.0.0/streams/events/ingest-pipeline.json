@@ -1,0 +1,60 @@
+{
+  "description": "ebpf: tag eBPF trace records and normalize process fields",
+  "processors": [
+    {
+      "set": {
+        "tag": "kind",
+        "field": "event.kind",
+        "value": "event"
+      }
+    },
+    {
+      "set": {
+        "tag": "module",
+        "field": "event.module",
+        "value": "ebpf"
+      }
+    },
+    {
+      "convert": {
+        "tag": "pid",
+        "field": "pid",
+        "target_field": "process.pid",
+        "type": "long",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "comm",
+        "field": "comm",
+        "target_field": "process.name",
+        "ignore_missing": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "pid"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "event.outcome",
+        "value": "unparsed"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    }
+  ]
+}
