@@ -425,10 +425,19 @@ pipeline:
       http_passwd: ${VELOX_OTLP_PASSWORD}
 ```
 
-O compilador de referência deste repositório (`scripts/render.py`, fase F3)
-gera exatamente isso a partir de um pacote e de uma ativação. É a
-especificação executável: o compilador do core deve produzir saída equivalente
-para os mesmos casos de teste.
+O compilador de referência deste repositório (`scripts/render.py`) gera
+exatamente isso a partir de um pacote e de uma ativação. É a especificação
+executável: o compilador do core deve produzir saída equivalente para os
+mesmos casos de teste. O CI do registry roda `fluent-bit --dry-run` (3.2 e a
+versão atual) sobre a saída de todo pacote com seus padrões e com os fixtures
+de `tests/activations/`; a saída foi aceita também pelo 4.0.
+
+**Processamento condicional (reservado).** O Fluent Bit ≥ 4.0 aceita uma chave
+`condition` por processor (`op: and|or`, regras `field/op/value` com
+`eq, neq, gt, lt, gte, lte, regex, not_regex, in, not_in`, acessor `$field`),
+só em YAML e **não** quando um filter roda como processor. A Spec 2.0 não a
+expõe; `fluent-bit/5.2/processors/CONDITIONAL.md` guarda a sintaxe para uma
+revisão 2.1.
 
 ---
 
@@ -479,6 +488,13 @@ template existir):
    `veloxagent-<integração>-v<major>-<id>`, `stream:<id>` vira o `N` da stream,
    em todas as referências, incluindo `searchSourceJSON` (transformação por JSON
    parseado, como no ADR-071).
+
+`scripts/render.py <pacote> --backend` imprime exatamente esses objetos
+(component templates, pipeline com o processor `pipeline` para `N@custom`
+com `ignore_missing_pipeline: true`, política ISM com `ism_template` para
+`.ds-N-*`, index template com `data_stream: {}`, index pattern e saved
+objects renomeados). Detalhe prático: os pipelines dos pacotes usam `set` com
+`value: "{{campo}}"`, porque o OpenSearch não tem `copy_from`.
 
 **Compartilhamento:** os artefatos de `N` são do deployment, não da política.
 Duas políticas na mesma major compartilham `N`. Instale sempre o backend da

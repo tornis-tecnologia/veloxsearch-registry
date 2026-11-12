@@ -130,12 +130,16 @@ lado Mesh; este repo tem de ser compatível com ela.
 | Fase | Entrega | Depende de |
 | --- | --- | --- |
 | F0 ✅ | Este CLAUDE.md; `docs/mesh-integration-guide.md`; cópia compartilhada | — |
-| F1 ✅ rascunho | Spec 2.0 em `docs/spec/` + JSON Schemas em `schemas/` + exemplo + `check_spec.py` no CI (branch `feat/packages-spec-2.0`). Aguarda revisão do usuário e do time do Mesh | — |
-| F2 | Catálogo de plugins `fluent-bit/<versão>/{inputs,parsers,filters,processors}/<nome>.yaml`: parâmetros tipados, padrões, i18n, `since`, tipo de evento emitido, se roda como processor. Uma página de doc por plugin, verificada | F1 |
-| F3 | Ferramentas: `scripts/validate_v2.py`, `scripts/build_index.py`, compilador de referência `scripts/render.py` (form → YAML do Fluent Bit, executável como spec para o Mesh), CI com `fluent-bit --dry-run` (3.2 e atual) e `_simulate` de pipeline num OpenSearch em container | F1, F2 |
-| F4 | Pacotes (ondas abaixo) | F1–F3 |
-| F5 | README, CONTRIBUTING (en/es/pt), changelog por pacote | F4 |
-| F6 | PR casado no core: ADR de nomes por stream, signing 2.0, leitura do catálogo v2 pelo Mesh, migração do caminho de cluster | core |
+| F1 ✅ | Spec 2.0 em `docs/spec/` + JSON Schemas em `schemas/` + exemplo + `check_spec.py` no CI | — |
+| F2 ✅ | Catálogo `fluent-bit/5.2/` — 84 plugins (49 inputs, 19 filters, 9 processors, 4 formatos de parser, 8 multiline). Descrições parafraseadas do manual; chaves/padrões transcritos. `CONDITIONAL.md` guarda a sintaxe condicional para uma Spec 2.1 | F1 |
+| F3 ✅ | `validate_v2.py` (R1–R23), `build_index.py`, `render.py` (+ `--backend`), `dryrun.sh`, `pipeline_test.py` (R24), `check_catalog.py`; CI jobs `spec`, `packages`, `pipelines` | F1, F2 |
+| F4 🔄 | `custom-logs`, `system` prontos e verificados (dry-run 3.2/4.0/5.x, pipelines no OpenSearch). Demais pacotes em andamento por agentes (ver ondas) | F1–F3 |
+| F5 ✅ | README, CONTRIBUTING, `docs/PACKAGING.md` | — |
+| F6 | PR casado no core: ADR de nomes por stream, signing 2.0, leitura do catálogo v2 pelo Mesh, rota de métricas, migração do caminho de cluster | core |
+
+Tudo no branch `feat/packages-spec-2.0` (não enviado ao remoto; nada assinado).
+Ambiente local de teste usado: OpenSearch em `docker` (`velox-os-test`, porta
+19200, sem segurança) e imagens `fluent/fluent-bit:{3.2,4.0,latest}`.
 
 ### F4 — pacotes por input padrão do Fluent Bit
 
