@@ -1,0 +1,85 @@
+{
+  "description": "redis/log: Redis server log lines",
+  "processors": [
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{log}}",
+        "if": "ctx.log != null"
+      }
+    },
+    {
+      "rename": {
+        "field": "log",
+        "target_field": "_line",
+        "ignore_missing": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "_line",
+        "ignore_missing": true,
+        "patterns": [
+          "^%{POSINT:process.pid:int}:(?<_role>[XCSM]) (?<_ts>%{MONTHDAY} %{MONTH}(?: %{YEAR})? %{TIME}) (?<_lvl>[.*#-]) %{GREEDYDATA:message}$"
+        ],
+        "on_failure": [
+          {
+            "rename": {
+              "field": "_line",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "normalize",
+        "lang": "painless",
+        "if": "ctx._role != null || ctx._lvl != null",
+        "source": "def roles = ['X':'sentinel','C':'child','S':'replica','M':'master']; def lvls = ['.':'debug','-':'verbose','*':'notice','#':'warning']; if (ctx._role != null) { ctx.redis = ['role': roles.getOrDefault(ctx._role, ctx._role)]; } if (ctx._lvl != null) { ctx.log = ['level': lvls.getOrDefault(ctx._lvl, ctx._lvl)]; }"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "d MMM yyyy HH:mm:ss.SSS",
+          "d MMM HH:mm:ss.SSS"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_line",
+          "_role",
+          "_lvl"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

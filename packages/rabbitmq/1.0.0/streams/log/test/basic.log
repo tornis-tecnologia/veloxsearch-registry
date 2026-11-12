@@ -1,0 +1,9 @@
+2026-11-12 10:15:02.123456+00:00 [info] <0.123.0> Starting RabbitMQ 3.12.10 on Erlang 26.1
+2026-11-12 10:15:03.001234+00:00 [notice] <0.44.0> Application rabbit started on node 'rabbit@mq-01'
+2026-11-12 10:15:04.500000+00:00 [info] <0.912.0> accepting AMQP connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672)
+2026-11-12 10:15:04.620000+00:00 [info] <0.912.0> connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672): user 'app' authenticated and granted access to vhost '/'
+2026-11-12 10:16:10.000000+00:00 [warning] <0.30.0> Free disk space is insufficient. Free bytes: 48000000. Limit: 50000000
+2026-11-12 10:17:00.250000+00:00 [error] <0.1500.0> Channel error on connection <0.912.0>: operation basic.publish caused a channel exception not_found
+[1m2026-11-12 10:18:00.100000+00:00 [[31merror[0m] <0.77.0> [33mCould not connect to node[0m rabbit@mq-02
+2026-11-12 10:19:00.000 [info] <0.5.0> old format line without timezone
+this is not a rabbitmq line

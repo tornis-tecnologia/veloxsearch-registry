@@ -1,0 +1,53 @@
+id: metrics
+title: {en: Server metrics (stub_status), es: Métricas del servidor (stub_status), pt: Métricas do servidor (stub_status)}
+description:
+  en: "Connections, accepted/handled counters and requests scraped from nginx stub_status (or the NGINX Plus API) and sent to the OTLP endpoint."
+  es: "Conexiones, contadores accepted/handled y peticiones obtenidas de stub_status de nginx (o de la API de NGINX Plus) y enviadas al endpoint OTLP."
+  pt: "Conexões, contadores accepted/handled e requisições coletados do stub_status do nginx (ou da API do NGINX Plus) e enviados ao endpoint OTLP."
+signal: metrics
+event_type: metrics
+enabled: false
+os: [linux]
+
+input:
+  plugin: nginx_metrics
+  fields:
+    - name: host
+      type: string
+      default: localhost
+      required: true
+      title: {en: Host, es: Host, pt: Host}
+      bind: {key: host}
+    - name: port
+      type: integer
+      default: 80
+      min: 1
+      max: 65535
+      title: {en: Port, es: Puerto, pt: Porta}
+      bind: {key: port}
+    - name: status_url
+      type: string
+      default: /status
+      title: {en: Status URL path, es: Ruta de la URL de estado, pt: Caminho da URL de status}
+      description:
+        en: Location that exposes stub_status (or the NGINX Plus API).
+        es: Location que expone stub_status (o la API de NGINX Plus).
+        pt: Location que expõe o stub_status (ou a API do NGINX Plus).
+      bind: {key: status_url}
+    - name: nginx_plus
+      type: bool
+      default: false
+      title: {en: NGINX Plus, es: NGINX Plus, pt: NGINX Plus}
+      description:
+        en: Turn on only for NGINX Plus; open source nginx uses stub_status.
+        es: Actívelo solo con NGINX Plus; nginx de código abierto usa stub_status.
+        pt: Ative apenas com NGINX Plus; o nginx open source usa stub_status.
+      bind: {key: nginx_plus}
+    - name: scrape_interval
+      type: duration
+      default: 15s
+      title: {en: Scrape interval, es: Intervalo de recolección, pt: Intervalo de coleta}
+      bind: {key: scrape_interval}
+
+processors:
+  allow: [metrics_selector, labels]

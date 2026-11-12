@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First Spec 2.0 release, migrated from the 1.x integration: access, error and metrics streams, ECS field names."
+        es: "Primera versión Spec 2.0, migrada de la integración 1.x: streams access, error y metrics, nombres de campo ECS."
+        pt: "Primeira versão Spec 2.0, migrada da integração 1.x: streams access, error e metrics, nomes de campo ECS."

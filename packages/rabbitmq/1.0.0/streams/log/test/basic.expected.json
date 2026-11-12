@@ -1,0 +1,125 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:02.123456+00:00 [info] <0.123.0> Starting RabbitMQ 3.12.10 on Erlang 26.1"
+    },
+    "message": "Starting RabbitMQ 3.12.10 on Erlang 26.1",
+    "rabbitmq": {
+      "pid": "0.123.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.001Z",
+    "log": {
+      "level": "notice"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:03.001234+00:00 [notice] <0.44.0> Application rabbit started on node 'rabbit@mq-01'"
+    },
+    "message": "Application rabbit started on node 'rabbit@mq-01'",
+    "rabbitmq": {
+      "pid": "0.44.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.500Z",
+    "log": {
+      "level": "info"
+    },
+    "source": {
+      "port": 54321,
+      "ip": "10.0.0.5"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:04.500000+00:00 [info] <0.912.0> accepting AMQP connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672)"
+    },
+    "message": "accepting AMQP connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672)",
+    "rabbitmq": {
+      "pid": "0.912.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.620Z",
+    "log": {
+      "level": "info"
+    },
+    "source": {
+      "port": 54321,
+      "ip": "10.0.0.5"
+    },
+    "event": {
+      "original": "2026-11-12 10:15:04.620000+00:00 [info] <0.912.0> connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672): user 'app' authenticated and granted access to vhost '/'"
+    },
+    "message": "connection <0.912.0> (10.0.0.5:54321 -> 10.0.0.9:5672): user 'app' authenticated and granted access to vhost '/'",
+    "rabbitmq": {
+      "pid": "0.912.0"
+    },
+    "user": {
+      "name": "app"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:10.000Z",
+    "log": {
+      "level": "warning"
+    },
+    "event": {
+      "original": "2026-11-12 10:16:10.000000+00:00 [warning] <0.30.0> Free disk space is insufficient. Free bytes: 48000000. Limit: 50000000"
+    },
+    "message": "Free disk space is insufficient. Free bytes: 48000000. Limit: 50000000",
+    "rabbitmq": {
+      "pid": "0.30.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:17:00.250Z",
+    "log": {
+      "level": "error"
+    },
+    "event": {
+      "original": "2026-11-12 10:17:00.250000+00:00 [error] <0.1500.0> Channel error on connection <0.912.0>: operation basic.publish caused a channel exception not_found"
+    },
+    "message": "Channel error on connection <0.912.0>: operation basic.publish caused a channel exception not_found",
+    "rabbitmq": {
+      "pid": "0.1500.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:18:00.100Z",
+    "log": {
+      "level": "error"
+    },
+    "event": {
+      "original": "\\u001B[1m2026-11-12 10:18:00.100000+00:00 [\\u001B[31merror\\u001B[0m] <0.77.0> \\u001B[33mCould not connect to node\\u001B[0m rabbit@mq-02"
+    },
+    "message": "Could not connect to node rabbit@mq-02",
+    "rabbitmq": {
+      "pid": "0.77.0"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:19:00.000Z",
+    "log": {
+      "level": "info"
+    },
+    "event": {
+      "original": "2026-11-12 10:19:00.000 [info] <0.5.0> old format line without timezone"
+    },
+    "message": "old format line without timezone",
+    "rabbitmq": {
+      "pid": "0.5.0"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "this is not a rabbitmq line"
+    },
+    "message": "this is not a rabbitmq line"
+  }
+]

@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "First release: MongoDB server log stream (JSON 4.4+ and legacy text)."
+        es: "Primera versión: stream del log del servidor MongoDB (JSON 4.4+ y texto heredado)."
+        pt: "Primeira versão: stream do log do servidor MongoDB (JSON 4.4+ e texto legado)."

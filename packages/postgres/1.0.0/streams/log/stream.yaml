@@ -1,0 +1,126 @@
+id: log
+title: {en: "Server log", es: "Log del servidor", pt: "Log do servidor"}
+description:
+  en: "PostgreSQL server log files; multi-line statements and errors are joined, and the line is parsed into level, pid, user, database and message."
+  es: "Archivos de log del servidor PostgreSQL; las sentencias y errores multilínea se unen y la línea se separa en nivel, pid, usuario, base de datos y mensaje."
+  pt: "Arquivos de log do servidor PostgreSQL; comandos e erros multilinha são juntados e a linha é separada em nível, pid, usuário, banco e mensagem."
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/postgresql/*.log, /var/lib/postgresql/*/main/log/*.log, /var/lib/pgsql/data/log/*.log]
+      title: {en: "Paths", es: "Rutas", pt: "Caminhos"}
+      description:
+        en: "Server log files. The defaults cover Debian/Ubuntu and RHEL layouts; wildcards allowed, a missing file is skipped. Needs log_line_prefix like '%m [%p] %q%u@%d '."
+        es: "Archivos de log del servidor. Los valores por defecto cubren Debian/Ubuntu y RHEL; se permiten comodines y un archivo ausente se omite. Requiere log_line_prefix como '%m [%p] %q%u@%d '."
+        pt: "Arquivos de log do servidor. Os padrões cobrem Debian/Ubuntu e RHEL; curingas são permitidos e arquivo ausente é ignorado. Requer log_line_prefix como '%m [%p] %q%u@%d '."
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: "Exclude paths", es: "Rutas excluidas", pt: "Caminhos excluídos"}
+      bind: {key: exclude_path, join: ","}
+    - name: multiline
+      type: select
+      default: "postgres.log.statements"
+      options:
+        - {value: none, title: {en: "None", es: "Ninguno", pt: "Nenhum"}}
+        - {value: "postgres.log.statements", title: {en: "Join multi-line statements", es: "Unir sentencias multilínea", pt: "Juntar comandos multilinha"}}
+      title: {en: "Multiline", es: "Multilínea", pt: "Multilinha"}
+      description:
+        en: Join continuation lines into the record that started them.
+        es: Une las líneas de continuación al registro que las inició.
+        pt: Junta as linhas de continuação ao registro que as iniciou.
+      bind: {key: multiline.parser, omit_if: none}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: "Read from head", es: "Leer desde el inicio", pt: "Ler do início"}
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: "Ignore files older than", es: "Ignorar archivos anteriores a", pt: "Ignorar arquivos mais antigos que"}
+      bind: {key: ignore_older}
+
+multiline_parsers:
+  - name: statements
+    title: {en: "Lines starting with a timestamp", es: "Líneas que empiezan con fecha", pt: "Linhas que começam com data"}
+    type: regex
+    flush_timeout: 2000
+    rules:
+      - {state: start_state, regex: '/^\d{4}-\d{2}-\d{2} /', next_state: cont}
+      - {state: cont, regex: '/^(?!\d{4}-\d{2}-\d{2} ).*/', next_state: cont}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: "Exclusion rules", es: "Reglas de exclusión", pt: "Regras de exclusão"}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log CHECKPOINT"
+          title: {en: "Rules", es: "Reglas", pt: "Regras"}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: "Delete after", es: "Eliminar después de", pt: "Apagar após"}
+      bind: {lifecycle: delete_after}
+    - name: keep_original
+      type: bool
+      default: false
+      group: advanced
+      title: {en: "Keep the raw line", es: "Conservar la línea original", pt: "Manter a linha original"}
+      description:
+        en: Store the unparsed line in event.original as well.
+        es: Guarda también la línea sin procesar en event.original.
+        pt: Guarda também a linha sem processar em event.original.
+      bind: {pipeline_toggle: keep_original}
+    - name: min_level
+      type: select
+      default: "false"
+      options:
+        - {value: "false", title: {en: "All levels", es: "Todos los niveles", pt: "Todos os níveis"}}
+        - {value: "ctx.log?.level != null && ['debug','info','notice','log'].contains(ctx.log.level)", title: {en: "Warning and above", es: "Warning y superior", pt: "Warning e superior"}}
+        - {value: "ctx.log?.level != null && ['debug','info','notice','log','warning'].contains(ctx.log.level)", title: {en: "Error and above", es: "Error y superior", pt: "Error e superior"}}
+      title: {en: "Minimum level kept", es: "Nivel mínimo conservado", pt: "Nível mínimo mantido"}
+      description:
+        en: Drop lines below this level in the ingest pipeline. The value is the condition of the `drop_info` processor.
+        es: Descarta en el pipeline las líneas por debajo de este nivel. El valor es la condición del processor `drop_info`.
+        pt: Descarta no pipeline as linhas abaixo deste nível. O valor é a condição do processor `drop_info`.
+      bind: {pipeline_param: drop_info.if}

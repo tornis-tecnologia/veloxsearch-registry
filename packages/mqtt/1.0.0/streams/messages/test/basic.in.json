@@ -1,0 +1,25 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "topic": "factory/line1/temperature",
+    "payload": "{\"sensor\":\"t-17\",\"value\":21.5}"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "topic": "factory/line1/status",
+    "payload": "RUNNING"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "topic": "factory/line2/door",
+    "payload": {
+      "open": true,
+      "by": "badge-9"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "topic": "factory/line2/temperature",
+    "payload": "{\"sensor\": \"t-18\", broken"
+  }
+]

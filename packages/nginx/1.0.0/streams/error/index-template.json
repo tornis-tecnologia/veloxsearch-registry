@@ -1,0 +1,126 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "5s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "text"
+        },
+        "log": {
+          "properties": {
+            "level": {
+              "type": "keyword"
+            }
+          }
+        },
+        "process": {
+          "properties": {
+            "pid": {
+              "type": "long"
+            },
+            "thread": {
+              "properties": {
+                "id": {
+                  "type": "long"
+                }
+              }
+            }
+          }
+        },
+        "client": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "outcome": {
+              "type": "keyword"
+            }
+          }
+        },
+        "http": {
+          "properties": {
+            "version": {
+              "type": "keyword"
+            },
+            "request": {
+              "properties": {
+                "method": {
+                  "type": "keyword"
+                },
+                "referrer": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                }
+              }
+            }
+          }
+        },
+        "url": {
+          "properties": {
+            "original": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                }
+              }
+            }
+          }
+        },
+        "nginx": {
+          "properties": {
+            "error": {
+              "properties": {
+                "connection_id": {
+                  "type": "long"
+                },
+                "server": {
+                  "type": "keyword"
+                },
+                "host": {
+                  "type": "keyword"
+                },
+                "upstream": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                },
+                "subrequest": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                }
+              }
+            }
+          }
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

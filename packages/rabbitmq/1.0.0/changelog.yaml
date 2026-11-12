@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "Migrated from the 1.x rabbitmq integration (1.0.1) to Spec 2.0: ANSI colour stripping, multi-line joining, connection fields, ECS field names."
+        es: "Migrado de la integración rabbitmq 1.x (1.0.1) a Spec 2.0: eliminación de colores ANSI, unión multilínea, campos de conexión, nombres ECS."
+        pt: "Migrado da integração rabbitmq 1.x (1.0.1) para Spec 2.0: remoção de cores ANSI, junção multilinha, campos de conexão, nomes ECS."

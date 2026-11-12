@@ -1,0 +1,7 @@
+- version: 1.0.0
+  changes:
+    - type: enhancement
+      description:
+        en: "Migrated from the 1.x kafka integration (1.0.0) to Spec 2.0: server, controller and state_change streams, stack-trace joining, kafka.logger/kafka.context, ECS field names."
+        es: "Migrado de la integración kafka 1.x (1.0.0) a Spec 2.0: streams server, controller y state_change, unión de stack traces, kafka.logger/kafka.context, nombres ECS."
+        pt: "Migrado da integração kafka 1.x (1.0.0) para Spec 2.0: streams server, controller e state_change, junção de stack traces, kafka.logger/kafka.context, nomes ECS."

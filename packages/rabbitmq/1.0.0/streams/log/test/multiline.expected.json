@@ -1,0 +1,15 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:20:00.000Z",
+    "log": {
+      "level": "error"
+    },
+    "event": {
+      "original": "2026-11-12 10:20:00.000000+00:00 [error] <0.2000.0> CRASH REPORT Process <0.2000.0> with 0 neighbours exited with reason: killed\\n    initial call: rabbit_channel:init/1\\n    pid: <0.2000.0>"
+    },
+    "message": "CRASH REPORT Process <0.2000.0> with 0 neighbours exited with reason: killed\n    initial call: rabbit_channel:init/1\n    pid: <0.2000.0>",
+    "rabbitmq": {
+      "pid": "0.2000.0"
+    }
+  }
+]

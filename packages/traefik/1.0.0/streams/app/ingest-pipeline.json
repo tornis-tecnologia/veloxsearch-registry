@@ -1,0 +1,95 @@
+{
+  "description": "traefik/app: Traefik's own log, console (ANSI-coloured) or logfmt",
+  "processors": [
+    {
+      "rename": {
+        "tag": "message",
+        "field": "log",
+        "target_field": "message",
+        "ignore_missing": true
+      }
+    },
+    {
+      "gsub": {
+        "tag": "ansi",
+        "field": "message",
+        "pattern": "\\x1B\\[[0-9;]*m",
+        "replacement": "",
+        "ignore_missing": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "message",
+        "patterns": [
+          "^time=\"%{TIMESTAMP_ISO8601:_ts}\" level=%{WORD:log.level} msg=\"%{DATA:message}\"(?:\\s+%{GREEDYDATA:_extra})?$",
+          "^%{TIMESTAMP_ISO8601:_ts} %{WORD:log.level}(?: %{GREEDYDATA:message})?$"
+        ],
+        "on_failure": [
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "level",
+        "if": "ctx.log?.level != null",
+        "lang": "painless",
+        "source": "String l = ctx.log.level.toLowerCase(); Map m = ['inf':'info','dbg':'debug','wrn':'warning','warn':'warning','err':'error','ftl':'fatal','trc':'trace']; ctx.log.level = m.containsKey(l) ? m.get(l) : l;"
+      }
+    },
+    {
+      "kv": {
+        "tag": "attrs",
+        "if": "ctx._extra != null",
+        "field": "_extra",
+        "target_field": "traefik.app",
+        "field_split": " ",
+        "value_split": "=",
+        "include_keys": [
+          "routerName",
+          "serviceName",
+          "entryPointName",
+          "providerName",
+          "middlewareName"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_extra"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

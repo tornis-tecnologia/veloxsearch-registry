@@ -1,0 +1,100 @@
+{
+  "description": "rabbitmq/log: RabbitMQ node log lines",
+  "processors": [
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{log}}",
+        "if": "ctx.log != null"
+      }
+    },
+    {
+      "rename": {
+        "field": "log",
+        "target_field": "_line",
+        "ignore_missing": true
+      }
+    },
+    {
+      "gsub": {
+        "tag": "strip_ansi",
+        "field": "_line",
+        "ignore_missing": true,
+        "pattern": "\\x1b\\[[0-9;]*m",
+        "replacement": ""
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "_line",
+        "ignore_missing": true,
+        "patterns": [
+          "^%{TIMESTAMP_ISO8601:_ts} \\[%{WORD:log.level}\\] <%{DATA:rabbitmq.pid}> (?<message>(?m:.*))$"
+        ],
+        "on_failure": [
+          {
+            "rename": {
+              "field": "_line",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "grok": {
+        "tag": "connection",
+        "field": "message",
+        "ignore_missing": true,
+        "ignore_failure": true,
+        "if": "ctx.message != null && ctx.message.contains('connection <')",
+        "patterns": [
+          "^(?:accepting AMQP )?connection <%{DATA}> \\(%{IP:source.ip}:%{POSINT:source.port:int} -> %{DATA}\\): user '%{DATA:user.name}'",
+          "^(?:accepting AMQP )?connection <%{DATA}> \\(%{IP:source.ip}:%{POSINT:source.port:int} -> %{DATA}\\)"
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss.SSSSSSXXX",
+          "yyyy-MM-dd HH:mm:ss.SSSXXX",
+          "yyyy-MM-dd HH:mm:ss.SSSSSS",
+          "yyyy-MM-dd HH:mm:ss.SSS",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_line"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

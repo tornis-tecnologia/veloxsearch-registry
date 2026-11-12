@@ -1,0 +1,16 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "mqtt": {
+    "topic": "factory/line1/temperature",
+    "payload": {
+      "sensor": "t-17",
+      "value": 21.5,
+      "unit": "C"
+    }
+  },
+  "velox": {
+    "integration": "mqtt",
+    "stream": "messages",
+    "package_version": "1.0.0"
+  }
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "warning"
+    },
+    "mysql": {
+      "subsystem": "Server",
+      "thread_id": 0,
+      "error_code": "MY-010068"
+    },
+    "event": {
+      "original": "2026-11-12T10:15:02.123456Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed."
+    },
+    "message": "CA certificate ca.pem is self signed."
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "log": {
+      "level": "info"
+    },
+    "mysql": {
+      "subsystem": "Server",
+      "thread_id": 0,
+      "error_code": "MY-010931"
+    },
+    "event": {
+      "original": "2026-11-12T10:15:03.000001Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.36'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL."
+    },
+    "message": "/usr/sbin/mysqld: ready for connections. Version: '8.0.36'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL."
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:09.411Z",
+    "log": {
+      "level": "error"
+    },
+    "mysql": {
+      "subsystem": "InnoDB",
+      "thread_id": 12,
+      "error_code": "MY-013183"
+    },
+    "event": {
+      "original": "2026-11-12T10:15:09.411200Z 12 [Error] [MY-013183] [InnoDB] Assertion failure: row0sel.cc:1234:prebuilt->trx"
+    },
+    "message": "Assertion failure: row0sel.cc:1234:prebuilt->trx"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:10.000Z",
+    "log": {
+      "level": "info"
+    },
+    "mysql": {
+      "thread_id": 0
+    },
+    "event": {
+      "original": "2026-11-12T10:15:10.000000Z 0 [Note] InnoDB: Buffer pool(s) load completed at 261112 10:15:10"
+    },
+    "message": "InnoDB: Buffer pool(s) load completed at 261112 10:15:10"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "log": {
+      "level": "info"
+    },
+    "mysql": {
+      "thread_id": 0
+    },
+    "event": {
+      "original": "2026-11-12 10:15:02 0 [Note] Server socket created on IP: '0.0.0.0'."
+    },
+    "message": "Server socket created on IP: '0.0.0.0'."
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:44.000Z",
+    "log": {
+      "level": "error"
+    },
+    "mysql": {
+      "thread_id": 8
+    },
+    "event": {
+      "original": "2026-11-12 10:16:44 8 [ERROR] Aborted connection 8 to db: 'shop' user: 'app' host: '10.0.0.5' (Got an error reading communication packets)"
+    },
+    "message": "Aborted connection 8 to db: 'shop' user: 'app' host: '10.0.0.5' (Got an error reading communication packets)"
+  },
+  {
+    "@timestamp": "2026-11-12T10:17:00.000Z",
+    "log": {
+      "level": "warning"
+    },
+    "mysql": {
+      "thread_id": 0
+    },
+    "event": {
+      "original": "2026-11-12 10:17:00 0 [Warning] InnoDB: Cannot open table shop/orders from the internal data dictionary"
+    },
+    "message": "InnoDB: Cannot open table shop/orders from the internal data dictionary"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "mysqld: Shutdown complete (garbage line without a timestamp)"
+    },
+    "message": "mysqld: Shutdown complete (garbage line without a timestamp)"
+  }
+]

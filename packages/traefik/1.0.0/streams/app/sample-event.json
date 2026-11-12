@@ -1,0 +1,18 @@
+{
+  "@timestamp": "2026-11-12T10:15:05.000Z",
+  "message": "Router uses a nonexistent service",
+  "log": {
+    "level": "error"
+  },
+  "traefik": {
+    "app": {
+      "routerName": "web@docker",
+      "entryPointName": "web"
+    }
+  },
+  "velox": {
+    "integration": "traefik",
+    "stream": "app",
+    "package_version": "1.0.0"
+  }
+}

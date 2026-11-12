@@ -1,0 +1,16 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "log": {
+    "level": "info"
+  },
+  "kafka": {
+    "context": "Controller id=1",
+    "logger": "kafka.controller.KafkaController"
+  },
+  "message": "Controller 1 became the active controller",
+  "velox": {
+    "integration": "kafka",
+    "stream": "server",
+    "package_version": "1.0.0"
+  }
+}

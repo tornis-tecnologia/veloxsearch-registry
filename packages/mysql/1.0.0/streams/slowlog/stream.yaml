@@ -1,0 +1,115 @@
+id: slowlog
+title: {en: "Slow query log", es: "Log de consultas lentas", pt: "Log de consultas lentas"}
+description:
+  en: "Slow query log: each entry joined into one event with user, host, query time, lock time, rows and the query text."
+  es: "Log de consultas lentas: cada entrada se une en un evento con usuario, host, tiempo de consulta, de bloqueo, filas y texto de la consulta."
+  pt: "Log de consultas lentas: cada entrada é juntada em um evento com usuário, host, tempo da consulta, de lock, linhas e texto da consulta."
+signal: logs
+event_type: logs
+enabled: false
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/mysql/mysql-slow.log]
+      title: {en: "Paths", es: "Rutas", pt: "Caminhos"}
+      description:
+        en: "Slow query log file. Enable slow_query_log and set slow_query_log_file / long_query_time on the server."
+        es: "Archivo del log de consultas lentas. Activa slow_query_log y define slow_query_log_file / long_query_time en el servidor."
+        pt: "Arquivo do log de consultas lentas. Ative slow_query_log e defina slow_query_log_file / long_query_time no servidor."
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: "Exclude paths", es: "Rutas excluidas", pt: "Caminhos excluídos"}
+      bind: {key: exclude_path, join: ","}
+    - name: multiline
+      type: select
+      default: "mysql.slowlog.entry"
+      options:
+        - {value: none, title: {en: "None", es: "Ninguno", pt: "Nenhum"}}
+        - {value: "mysql.slowlog.entry", title: {en: "Join entries (# Time / # User@Host header)", es: "Unir entradas (cabecera # Time / # User@Host)", pt: "Juntar entradas (cabeçalho # Time / # User@Host)"}}
+      title: {en: "Multiline", es: "Multilínea", pt: "Multilinha"}
+      description:
+        en: Join continuation lines into the record that started them.
+        es: Une las líneas de continuación al registro que las inició.
+        pt: Junta as linhas de continuação ao registro que as iniciou.
+      bind: {key: multiline.parser, omit_if: none}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: "Read from head", es: "Leer desde el inicio", pt: "Ler do início"}
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: "Ignore files older than", es: "Ignorar archivos anteriores a", pt: "Ignorar arquivos mais antigos que"}
+      bind: {key: ignore_older}
+
+multiline_parsers:
+  - name: entry
+    title: {en: "Entry from its # header to the next one", es: "Entrada desde su cabecera # hasta la siguiente", pt: "Entrada do seu cabeçalho # até a próxima"}
+    type: regex
+    flush_timeout: 2000
+    rules:
+      - {state: start_state, regex: '/^# Time: /', next_state: after_time}
+      - {state: start_state, regex: '/^# User@Host: /', next_state: cont}
+      - {state: after_time, regex: '/^# User@Host: /', next_state: cont}
+      - {state: cont, regex: '/^(?!# Time: |# User@Host: ).*/', next_state: cont}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: "Exclusion rules", es: "Reglas de exclusión", pt: "Regras de exclusão"}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log SELECT SLEEP"
+          title: {en: "Rules", es: "Reglas", pt: "Regras"}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: "Delete after", es: "Eliminar después de", pt: "Apagar após"}
+      bind: {lifecycle: delete_after}
+    - name: keep_original
+      type: bool
+      default: false
+      group: advanced
+      title: {en: "Keep the raw line", es: "Conservar la línea original", pt: "Manter a linha original"}
+      description:
+        en: Store the unparsed line in event.original as well.
+        es: Guarda también la línea sin procesar en event.original.
+        pt: Guarda também a linha sem processar em event.original.
+      bind: {pipeline_toggle: keep_original}

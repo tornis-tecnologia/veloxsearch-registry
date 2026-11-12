@@ -1,0 +1,109 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.000Z",
+    "mysql": {
+      "slowlog": {
+        "lock_time": 0.000123,
+        "rows_sent": 1,
+        "rows_examined": 100000,
+        "query": "SELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;"
+      }
+    },
+    "source": {
+      "address": "web-01",
+      "ip": "10.0.0.5"
+    },
+    "message": "SELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;",
+    "event": {
+      "duration": 1234567000,
+      "original": "# Time: 2026-11-12T10:15:02.123456Z\n# User@Host: app[app] @ web-01 [10.0.0.5]  Id:    42\n# Query_time: 1.234567  Lock_time: 0.000123 Rows_sent: 1  Rows_examined: 100000\nSET timestamp=1794478502;\nSELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;"
+    },
+    "user": {
+      "name": "app"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:10.000Z",
+    "mysql": {
+      "slowlog": {
+        "lock_time": 5e-05,
+        "rows_sent": 5000,
+        "rows_examined": 2500000,
+        "query": "use shop;\nSELECT c.name,\n       SUM(o.total)\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.id\n GROUP BY c.name;"
+      }
+    },
+    "source": {
+      "address": "localhost"
+    },
+    "message": "use shop;\nSELECT c.name,\n       SUM(o.total)\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.id\n GROUP BY c.name;",
+    "event": {
+      "duration": 12500000000,
+      "original": "# Time: 2026-11-12T10:16:10.000000Z\n# User@Host: report[report] @ localhost []  Id:    43\n# Query_time: 12.500000  Lock_time: 0.000050 Rows_sent: 5000  Rows_examined: 2500000\nuse shop;\nSET timestamp=1794478570;\nSELECT c.name,\n       SUM(o.total)\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.id\n GROUP BY c.name;"
+    },
+    "user": {
+      "name": "report"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:16:40.000Z",
+    "mysql": {
+      "slowlog": {
+        "lock_time": 9e-05,
+        "rows_sent": 0,
+        "rows_examined": 12,
+        "query": "UPDATE orders SET status = 'x' WHERE id < 100;"
+      }
+    },
+    "source": {
+      "address": "192.168.1.20",
+      "ip": "192.168.1.20"
+    },
+    "message": "UPDATE orders SET status = 'x' WHERE id < 100;",
+    "event": {
+      "duration": 3000211000,
+      "original": "# User@Host: root[root] @  [192.168.1.20]\n# Thread_id: 9  Schema: shop  QC_hit: No\n# Query_time: 3.000211  Lock_time: 0.000090  Rows_sent: 0  Rows_examined: 12\nSET timestamp=1794478600;\nUPDATE orders SET status = 'x' WHERE id < 100;"
+    },
+    "user": {
+      "name": "root"
+    }
+  },
+  {
+    "@timestamp": "2026-11-12T10:20:00.000Z",
+    "mysql": {
+      "slowlog": {
+        "lock_time": 0.0,
+        "rows_sent": 1,
+        "rows_examined": 1,
+        "query": "SELECT SLEEP(2);"
+      }
+    },
+    "source": {
+      "address": "db-02",
+      "ip": "10.0.0.9"
+    },
+    "message": "SELECT SLEEP(2);",
+    "event": {
+      "duration": 2000000000,
+      "original": "# Time: 261112 10:20:00\n# User@Host: app[app] @ db-02 [10.0.0.9]\n# Query_time: 2.000000  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1\nSELECT SLEEP(2);"
+    },
+    "user": {
+      "name": "app"
+    }
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "/usr/sbin/mysqld, Version: 8.0.36 (MySQL Community Server - GPL). started with:\nTcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock"
+    },
+    "message": "/usr/sbin/mysqld, Version: 8.0.36 (MySQL Community Server - GPL). started with:\nTcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "garbage line that is not a slow log entry"
+    },
+    "message": "garbage line that is not a slow log entry"
+  }
+]

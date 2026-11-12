@@ -1,0 +1,80 @@
+{
+  "description": "elasticsearch-bulk/bulk: keep @timestamp, normalize host.name, move bulk metadata",
+  "processors": [
+    {
+      "date": {
+        "tag": "ts_normalize",
+        "field": "@timestamp",
+        "target_field": "@timestamp",
+        "formats": [
+          "ISO8601",
+          "UNIX_MS"
+        ],
+        "if": "ctx['@timestamp'] != null",
+        "on_failure": [
+          {
+            "script": {
+              "tag": "ts_raw",
+              "lang": "painless",
+              "source": "if (ctx.bulk == null) { ctx.bulk = new HashMap(); } ctx.bulk.timestamp_raw = ctx['@timestamp'].toString();"
+            }
+          },
+          {
+            "remove": {
+              "tag": "ts_drop",
+              "field": "@timestamp",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "tag": "ts_unparsed",
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "host_name",
+        "lang": "painless",
+        "if": "ctx.host != null && !(ctx.host instanceof Map)",
+        "source": "ctx.host = ['name': ctx.host.toString()];"
+      }
+    },
+    {
+      "script": {
+        "tag": "host_agent",
+        "lang": "painless",
+        "if": "ctx.host?.name == null && ctx.agent?.hostname instanceof String",
+        "source": "if (ctx.host == null) { ctx.host = new HashMap(); } ctx.host.name = ctx.agent.hostname;"
+      }
+    },
+    {
+      "script": {
+        "tag": "host_fallback",
+        "lang": "painless",
+        "if": "ctx.hostname instanceof String && (ctx.host == null || ctx.host.name == null)",
+        "source": "if (ctx.host == null) { ctx.host = new HashMap(); } ctx.host.name = ctx.hostname; ctx.remove('hostname');"
+      }
+    },
+    {
+      "rename": {
+        "tag": "bulk_meta",
+        "field": "@meta",
+        "target_field": "bulk.meta",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "ts_fallback",
+        "field": "@timestamp",
+        "value": "{{_ingest.timestamp}}",
+        "if": "ctx['@timestamp'] == null"
+      }
+    }
+  ]
+}

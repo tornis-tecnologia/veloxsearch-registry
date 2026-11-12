@@ -1,0 +1,43 @@
+[
+  {
+    "host": {
+      "name": "app-07"
+    },
+    "splunk": {
+      "index": "main",
+      "sourcetype": "payments",
+      "source": "/var/log/payments.log"
+    },
+    "@timestamp": "2025-11-12T10:15:02.500Z",
+    "message": "payment authorized"
+  },
+  {
+    "host": {
+      "name": "app-08"
+    },
+    "splunk": {
+      "sourcetype": "_json",
+      "source": "http:orders",
+      "fields": {
+        "env": "prod"
+      },
+      "event": {
+        "order": 1042,
+        "status": "shipped"
+      }
+    },
+    "@timestamp": "2025-11-12T10:15:03.000Z"
+  },
+  {
+    "host": {
+      "name": "fw-01"
+    },
+    "splunk": {
+      "sourcetype": "syslog"
+    },
+    "message": "[a, b]"
+  },
+  {
+    "message": "42"
+  }
+]

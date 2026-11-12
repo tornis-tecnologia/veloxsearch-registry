@@ -1,0 +1,80 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.500Z",
+    "log": {
+      "level": "trace"
+    },
+    "kafka": {
+      "context": "Controller id=1 epoch=3",
+      "logger": "state.change.logger"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:02,500] TRACE [Controller id=1 epoch=3] Sending LeaderAndIsr request to broker 2 for partition orders-0 (state.change.logger)"
+    },
+    "message": "Sending LeaderAndIsr request to broker 2 for partition orders-0"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:02.501Z",
+    "log": {
+      "level": "info"
+    },
+    "kafka": {
+      "context": "Controller id=1 epoch=3",
+      "logger": "state.change.logger"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:02,501] INFO [Controller id=1 epoch=3] Sending UpdateMetadata request to brokers Set(1, 2, 3) (state.change.logger)"
+    },
+    "message": "Sending UpdateMetadata request to brokers Set(1, 2, 3)"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "log": {
+      "level": "info"
+    },
+    "kafka": {
+      "context": "Broker id=2",
+      "logger": "state.change.logger"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:03,000] INFO [Broker id=2] Handling LeaderAndIsr request correlationId 7 (state.change.logger)"
+    },
+    "message": "Handling LeaderAndIsr request correlationId 7"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "log": {
+      "level": "error"
+    },
+    "kafka": {
+      "context": "Broker id=2",
+      "logger": "state.change.logger"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:04,000] ERROR [Broker id=2] Received LeaderAndIsr request with stale epoch for partition orders-1 (state.change.logger)"
+    },
+    "message": "Received LeaderAndIsr request with stale epoch for partition orders-1"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:05.000Z",
+    "log": {
+      "level": "trace"
+    },
+    "kafka": {
+      "context": "Broker id=1",
+      "logger": "state.change.logger"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:05,000] TRACE [Broker id=1] Cached leader info for partition payments-3 (state.change.logger)"
+    },
+    "message": "Cached leader info for partition payments-3"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "garbled )("
+    },
+    "message": "garbled )("
+  }
+]

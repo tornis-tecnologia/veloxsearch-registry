@@ -1,0 +1,25 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "log": {
+    "level": "log"
+  },
+  "process": {
+    "pid": 1842
+  },
+  "user": {
+    "name": "app"
+  },
+  "postgres": {
+    "database": "shop",
+    "statement": "SELECT o.id, o.total FROM orders o WHERE o.customer_id = 42;"
+  },
+  "event": {
+    "duration": 812400000
+  },
+  "message": "duration: 812.400 ms  statement: SELECT o.id, o.total FROM orders o WHERE o.customer_id = 42;",
+  "velox": {
+    "integration": "postgres",
+    "stream": "log",
+    "package_version": "1.0.0"
+  }
+}

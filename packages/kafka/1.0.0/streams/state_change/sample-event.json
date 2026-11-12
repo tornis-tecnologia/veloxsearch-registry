@@ -1,0 +1,16 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "log": {
+    "level": "trace"
+  },
+  "kafka": {
+    "context": "Controller id=1 epoch=3",
+    "logger": "state.change.logger"
+  },
+  "message": "Sending LeaderAndIsr request to broker 2 for partition orders-0",
+  "velox": {
+    "integration": "kafka",
+    "stream": "state_change",
+    "package_version": "1.0.0"
+  }
+}

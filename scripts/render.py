@@ -195,6 +195,15 @@ def compile_policy(pkg: L.Package, activation: dict | None, ctx: dict, cat: L.Ca
         node = {"name": inp["plugin"], "tag": tag}
         node.update(resolve_fixed(inp.get("fixed"), refs))
         ivals = field_values(inp.get("fields") or [], (sa or {}).get("input"))
+        local_parsers = {p["name"] for p in (s.get("parsers") or []) + (s.get("multiline_parsers") or [])}
+        for f in inp.get("fields") or []:
+            # a select fed by the stream's own parsers: local name -> rendered name
+            if f.get("options_from") in ("parsers", "multiline_parsers") and f["name"] in ivals:
+                v = ivals[f["name"]]
+                if isinstance(v, list):
+                    ivals[f["name"]] = [pname(x) if x in local_parsers else x for x in v]
+                elif v in local_parsers:
+                    ivals[f["name"]] = pname(v)
         apply_bindings(inp.get("fields") or [], ivals, node, where + ".input")
         chosen = (sa or {}).get("parser", (s.get("parser_field") or {}).get("default", "none"))
         if chosen and chosen != "none":

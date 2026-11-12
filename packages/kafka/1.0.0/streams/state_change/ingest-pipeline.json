@@ -1,0 +1,91 @@
+{
+  "description": "kafka/state_change: Apache Kafka log4j lines (stack traces already joined by the agent)",
+  "processors": [
+    {
+      "set": {
+        "tag": "keep_original",
+        "field": "event.original",
+        "value": "{{log}}",
+        "if": "ctx.log != null"
+      }
+    },
+    {
+      "rename": {
+        "field": "log",
+        "target_field": "_line",
+        "ignore_missing": true
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "_line",
+        "ignore_missing": true,
+        "patterns": [
+          "^\\[%{TIMESTAMP_ISO8601:_ts}\\] %{LOGLEVEL:log.level}\\s+(?:\\[%{DATA:kafka.context}\\] )?%{DATA:message}(?: \\(%{NOTSPACE:kafka.logger}\\))?(?:\\n(?<_stack>(?m:.*)))?$"
+        ],
+        "on_failure": [
+          {
+            "rename": {
+              "field": "_line",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "lowercase": {
+        "tag": "normalize",
+        "field": "log.level",
+        "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+        "tag": "stack_trace",
+        "field": "_stack",
+        "target_field": "error.stack_trace",
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "yyyy-MM-dd HH:mm:ss,SSS",
+          "ISO8601"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_line",
+          "_stack"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

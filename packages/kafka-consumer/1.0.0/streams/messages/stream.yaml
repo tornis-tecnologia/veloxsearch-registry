@@ -1,0 +1,84 @@
+id: messages
+title: {en: Kafka messages, es: Mensajes Kafka, pt: Mensagens Kafka}
+description: {en: 'Consumes messages from Kafka topics and keeps topic, partition, offset and key next to the decoded payload.', es: 'Consume mensajes de topics de Kafka y conserva topic, partición, offset y clave junto a la carga decodificada.', pt: 'Consome mensagens de tópicos do Kafka e mantém tópico, partição, offset e chave junto da carga decodificada.'}
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+input:
+  plugin: kafka
+  fields:
+  - name: brokers
+    type: string
+    multi: true
+    required: true
+    default: ['localhost:9092']
+    title: {en: Brokers, es: Brokers, pt: Brokers}
+    placeholder: kafka-1:9092
+    description: {en: 'Kafka bootstrap brokers (host:port), one or more.', es: 'Brokers Kafka de arranque (host:puerto), uno o más.', pt: 'Brokers Kafka de bootstrap (host:porta), um ou mais.'}
+    bind: {key: brokers, join: ','}
+  - name: topics
+    type: string
+    multi: true
+    required: true
+    default: [logs]
+    title: {en: Topics, es: Topics, pt: Tópicos}
+    placeholder: app-logs
+    description: {en: Topics to subscribe to., es: Topics a los que suscribirse., pt: Tópicos a assinar.}
+    bind: {key: topics, join: ','}
+  - name: client_id
+    type: string
+    title: {en: Client ID, es: ID de cliente, pt: ID do cliente}
+    description: {en: Client ID presented to the brokers., es: ID de cliente presentado a los brokers., pt: ID do cliente apresentado aos brokers.}
+    bind: {key: client_id}
+  - name: group_id
+    type: string
+    default: fluent-bit
+    title: {en: Consumer group, es: Grupo de consumidores, pt: Grupo de consumidores}
+    description: {en: Consumer group ID; agents sharing it split the partitions., es: ID del grupo de consumidores; los agentes que lo comparten se reparten las particiones., pt: ID do grupo de consumidores; agentes que o compartilham dividem as partições.}
+    bind: {key: group_id}
+  - name: poll_ms
+    type: integer
+    default: 500
+    min: 1
+    group: advanced
+    title: {en: Poll interval (ms), es: Intervalo de sondeo (ms), pt: Intervalo de poll (ms)}
+    bind: {key: poll_ms}
+  - name: rdkafka
+    type: yaml
+    group: advanced
+    title: {en: librdkafka properties, es: Propiedades de librdkafka, pt: Propriedades do librdkafka}
+    description: {en: 'Extra librdkafka settings as a map, keys with the `rdkafka.` prefix (e.g. `rdkafka.security.protocol`, `rdkafka.sasl.mechanism`). Put secrets in a policy secret, not here.', es: 'Ajustes extra de librdkafka como mapa, con claves con prefijo `rdkafka.` (p. ej. `rdkafka.security.protocol`, `rdkafka.sasl.mechanism`). Los secretos van en un secreto de la política, no aquí.', pt: 'Ajustes extras do librdkafka como mapa, com chaves com prefixo `rdkafka.` (ex. `rdkafka.security.protocol`, `rdkafka.sasl.mechanism`). Segredos vão em um segredo da política, não aqui.'}
+    bind: {merge: true}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex. One rule per line: `<field> <regex>`.', es: 'Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`.', pt: 'Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      placeholder: message ^DEBUG
+      title: {en: Rules, es: Reglas, pt: Regras}
+      bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle: {rollover_max_size: 10gb, rollover_max_age: 1d, delete_after: 30d}
+  fields:
+  - name: parse_payload
+    type: bool
+    default: true
+    title: {en: Parse JSON payloads, es: Interpretar cargas JSON, pt: Interpretar cargas JSON}
+    description: {en: Decode payloads that are JSON objects into `kafka.payload`; when off they stay as text in `message`., es: Decodifica las cargas que son objetos JSON en `kafka.payload`; si se desactiva quedan como texto en `message`., pt: Decodifica as cargas que são objetos JSON em `kafka.payload`; se desligado ficam como texto em `message`.}
+    bind: {pipeline_toggle: parse_json}
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind: {lifecycle: delete_after}

@@ -1,0 +1,100 @@
+id: error
+title: {en: Error log, es: Log de errores, pt: Log de erros}
+description:
+  en: "nginx error.log with level, process, connection id and, when present, the client, server, request and upstream."
+  es: "error.log de nginx con nivel, proceso, id de conexión y, cuando existen, cliente, servidor, petición y upstream."
+  pt: "error.log do nginx com nível, processo, id de conexão e, quando existem, cliente, servidor, requisição e upstream."
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/nginx/error.log]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: Error log files. Wildcards allowed.
+        es: Archivos de log de errores. Se permiten comodines.
+        pt: Arquivos de log de erros. Curingas permitidos.
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      description:
+        en: Shell patterns of files to skip, such as *.gz.
+        es: Patrones shell de archivos a omitir, como *.gz.
+        pt: Padrões shell de arquivos a ignorar, como *.gz.
+      bind: {key: exclude_path, join: ","}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      description:
+        en: Read existing files from the beginning the first time they are seen.
+        es: Lee los archivos existentes desde el inicio la primera vez que se ven.
+        pt: Lê os arquivos existentes desde o início na primeira vez que são vistos.
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: Ignore files older than, es: Ignorar archivos anteriores a, pt: Ignorar arquivos mais antigos que}
+      bind: {key: ignore_older}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log \\[(debug|info)\\]"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 10gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: timezone
+      type: string
+      default: UTC
+      group: advanced
+      title: {en: Log time zone, es: Zona horaria del log, pt: Fuso horário do log}
+      description:
+        en: Time zone of the host that writes error.log, which has no offset (for example America/Sao_Paulo).
+        es: Zona horaria del host que escribe error.log, que no trae desfase (por ejemplo America/Sao_Paulo).
+        pt: Fuso horário do host que grava o error.log, que não traz deslocamento (por exemplo America/Sao_Paulo).
+      bind: {pipeline_param: timestamp.timezone}

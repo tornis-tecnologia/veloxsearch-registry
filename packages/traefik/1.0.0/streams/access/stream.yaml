@@ -1,0 +1,99 @@
+id: access
+title: {en: Access log, es: Log de acceso, pt: Log de acesso}
+description:
+  en: "Requests proxied by Traefik (common log format with router, service and duration)."
+  es: "Peticiones enrutadas por Traefik (formato common log con router, servicio y duración)."
+  pt: "Requisições roteadas pelo Traefik (common log format com router, serviço e duração)."
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/traefik/access.log]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: Traefik access log (accessLog.filePath).
+        es: Log de acceso de Traefik (accessLog.filePath).
+        pt: Log de acesso do Traefik (accessLog.filePath).
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      description:
+        en: Shell patterns of files to skip, such as *.gz.
+        es: Patrones shell de archivos a omitir, como *.gz.
+        pt: Padrões shell de arquivos a ignorar, como *.gz.
+      bind: {key: exclude_path, join: ","}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      description:
+        en: Read existing files from the beginning the first time they are seen.
+        es: Lee los archivos existentes desde el inicio la primera vez que se ven.
+        pt: Lê os arquivos existentes desde o início na primeira vez que são vistos.
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: Ignore files older than, es: Ignorar archivos anteriores a, pt: Ignorar arquivos mais antigos que}
+      bind: {key: ignore_older}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log ping@internal"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 20gb
+    rollover_max_age: 1d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: parse_user_agent
+      type: bool
+      default: true
+      title: {en: Parse the user agent, es: Analizar el user agent, pt: Analisar o user agent}
+      description:
+        en: Break the user agent into browser, OS and device (user_agent.name, user_agent.os.name, ...).
+        es: Separa el user agent en navegador, SO y dispositivo (user_agent.name, user_agent.os.name, ...).
+        pt: Separa o user agent em navegador, SO e dispositivo (user_agent.name, user_agent.os.name, ...).
+      bind: {pipeline_toggle: user_agent}

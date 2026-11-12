@@ -1,0 +1,72 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "5s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "text"
+        },
+        "log": {
+          "properties": {
+            "level": {
+              "type": "keyword"
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "outcome": {
+              "type": "keyword"
+            }
+          }
+        },
+        "traefik": {
+          "properties": {
+            "app": {
+              "properties": {
+                "routerName": {
+                  "type": "keyword"
+                },
+                "serviceName": {
+                  "type": "keyword"
+                },
+                "entryPointName": {
+                  "type": "keyword"
+                },
+                "providerName": {
+                  "type": "keyword"
+                },
+                "middlewareName": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

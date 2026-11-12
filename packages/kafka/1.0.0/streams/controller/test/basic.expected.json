@@ -1,0 +1,80 @@
+[
+  {
+    "@timestamp": "2026-11-12T10:15:02.123Z",
+    "log": {
+      "level": "info"
+    },
+    "kafka": {
+      "context": "Controller id=1",
+      "logger": "kafka.controller.KafkaController"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:02,123] INFO [Controller id=1] Starting become controller state transition (kafka.controller.KafkaController)"
+    },
+    "message": "Starting become controller state transition"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:02.200Z",
+    "log": {
+      "level": "info"
+    },
+    "kafka": {
+      "context": "Controller id=1, targetBrokerId=2",
+      "logger": "kafka.controller.RequestSendThread"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:02,200] INFO [Controller id=1, targetBrokerId=2] Starting (kafka.controller.RequestSendThread)"
+    },
+    "message": "Starting"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:02.300Z",
+    "log": {
+      "level": "info"
+    },
+    "kafka": {
+      "context": "Controller id=1",
+      "logger": "kafka.controller.KafkaController"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:02,300] INFO [Controller id=1] Partitions being reassigned: Map() (kafka.controller.KafkaController)"
+    },
+    "message": "Partitions being reassigned: Map()"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:03.000Z",
+    "log": {
+      "level": "warn"
+    },
+    "kafka": {
+      "context": "Controller id=1",
+      "logger": "kafka.controller.KafkaController"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:03,000] WARN [Controller id=1] Broker 3 is not reachable (kafka.controller.KafkaController)"
+    },
+    "message": "Broker 3 is not reachable"
+  },
+  {
+    "@timestamp": "2026-11-12T10:15:04.000Z",
+    "log": {
+      "level": "error"
+    },
+    "kafka": {
+      "context": "Controller id=1",
+      "logger": "kafka.controller.KafkaController"
+    },
+    "event": {
+      "original": "[2026-11-12 10:15:04,000] ERROR [Controller id=1] Error while electing or becoming controller on broker 1 (kafka.controller.KafkaController)"
+    },
+    "message": "Error while electing or becoming controller on broker 1"
+  },
+  {
+    "@timestamp": "2026-01-01T00:00:00.000Z",
+    "event": {
+      "outcome": "unparsed",
+      "original": "not a controller line"
+    },
+    "message": "not a controller line"
+  }
+]

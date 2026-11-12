@@ -1,0 +1,25 @@
+[
+  {
+    "time": "2026-11-12T10:15:02Z",
+    "host": "web-01",
+    "message": "user login accepted",
+    "level": "info"
+  },
+  {
+    "timestamp": 1762942503.123,
+    "hostname": "db-01",
+    "log": "checkpoint complete"
+  },
+  {
+    "ts": "1762942504000",
+    "host": {
+      "name": "app-01"
+    },
+    "message": "cache warmed"
+  },
+  {
+    "time": "not-a-date",
+    "host": 4711,
+    "message": "odd record"
+  }
+]

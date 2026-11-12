@@ -1,0 +1,63 @@
+id: messages
+title: {en: MQTT messages, es: Mensajes MQTT, pt: Mensagens MQTT}
+description: {en: Acts as a small MQTT listener and indexes each published message with its topic and payload., es: Actúa como un pequeño listener MQTT e indexa cada mensaje publicado con su topic y su carga., pt: Atua como um pequeno listener MQTT e indexa cada mensagem publicada com seu tópico e sua carga.}
+signal: logs
+event_type: logs
+enabled: true
+os: [linux, windows, darwin]
+input:
+  plugin: mqtt
+  fields:
+  - name: listen
+    type: string
+    default: 0.0.0.0
+    title: {en: Listen address, es: Dirección de escucha, pt: Endereço de escuta}
+    description: {en: Interface to bind to (0.0.0.0 = all)., es: Interfaz a la que enlazar (0.0.0.0 = todas)., pt: Interface à qual vincular (0.0.0.0 = todas).}
+    bind: {key: listen}
+  - name: port
+    type: integer
+    default: 1883
+    min: 1
+    max: 65535
+    title: {en: Port, es: Puerto, pt: Porta}
+    description: {en: TCP port MQTT clients connect to., es: Puerto TCP al que se conectan los clientes MQTT., pt: Porta TCP à qual os clientes MQTT se conectam.}
+    bind: {key: port}
+  - name: payload_key
+    type: string
+    default: payload
+    group: advanced
+    title: {en: Payload key, es: Clave de la carga, pt: Chave da carga}
+    description: {en: Record field that holds the message payload. The ingest pipeline reads `payload`; change it only if you also adapt the pipeline in `@custom`., es: Campo del registro que guarda la carga del mensaje. El pipeline lee `payload`; cámbialo solo si también adaptas el pipeline en `@custom`., pt: Campo do registro que guarda a carga da mensagem. O pipeline lê `payload`; altere só se também adaptar o pipeline em `@custom`.}
+    bind: {key: payload_key}
+processors:
+  defaults:
+  - id: exclude
+    plugin: grep
+    enabled: false
+    title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+    description: {en: 'Drop records whose field matches a regex. One rule per line: `<field> <regex>`.', es: 'Descarta registros cuyo campo coincide con una regex. Una regla por línea: `<campo> <regex>`.', pt: 'Descarta registros cujo campo casa com uma regex. Uma regra por linha: `<campo> <regex>`.'}
+    fields:
+    - name: rules
+      type: string
+      multi: true
+      placeholder: message ^DEBUG
+      title: {en: Rules, es: Reglas, pt: Regras}
+      bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle: {rollover_max_size: 10gb, rollover_max_age: 1d, delete_after: 30d}
+  fields:
+  - name: parse_payload
+    type: bool
+    default: true
+    title: {en: Parse JSON payloads, es: Interpretar cargas JSON, pt: Interpretar cargas JSON}
+    description: {en: Decode payloads that are JSON objects into `mqtt.payload`; when off they stay as text in `message`., es: Decodifica las cargas que son objetos JSON en `mqtt.payload`; si se desactiva quedan como texto en `message`., pt: Decodifica as cargas que são objetos JSON em `mqtt.payload`; se desligado ficam como texto em `message`.}
+    bind: {pipeline_toggle: parse_json}
+  - name: delete_after
+    type: duration
+    default: 30d
+    title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+    bind: {lifecycle: delete_after}

@@ -1,0 +1,33 @@
+{
+  "package_id": "mongo",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "log": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/var/log/mongodb/mongod.log",
+          "/data/db/*.log"
+        ],
+        "read_from_head": true,
+        "ignore_older": "3d"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log NETWORK"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "keep_original": true
+      }
+    }
+  }
+}

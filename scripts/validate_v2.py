@@ -238,7 +238,8 @@ def check_stream(pkg: L.Package, st: L.Stream, cat: L.Catalog | None):
         pnames.add(p["name"])
         if p["format"] == "regex":
             try:
-                re.compile(p["regex"])
+                # Fluent Bit (Onigmo) names groups (?<n>...); Python wants (?P<n>...)
+                re.compile(re.sub(r"\(\?<([A-Za-z_]\w*)>", r"(?P<\1>", p["regex"]))
             except re.error as e:
                 err(f"{where}: parser {p['name']!r}: regex does not compile: {e} (R14)")
     for mp in st.doc.get("multiline_parsers") or []:
@@ -246,6 +247,14 @@ def check_stream(pkg: L.Package, st: L.Stream, cat: L.Catalog | None):
             err(f"{where}: multiline parser {mp['name']!r} clashes with a parser name (R14)")
         if mp["type"] == "regex" and mp["rules"][0].get("state") != "start_state":
             err(f"{where}: multiline parser {mp['name']!r}: first rule must be start_state (R14)")
+    for f in inp.get("fields") or []:
+        if f.get("options_from") in ("parsers", "multiline_parsers"):
+            declared = {p["name"] for p in st.doc.get(f["options_from"]) or []}
+            builtin = set((cat.plugins.get("multiline_parser") or {}).keys()) if cat and f["options_from"] == "multiline_parsers" else set()
+            opts = [o["value"] if isinstance(o, dict) else o for o in f.get("options") or []]
+            for o in opts:
+                if o not in declared and o not in builtin and o != "none":
+                    err(f"{where}.input.{f['name']}: option {o!r} is neither a parser of the stream nor a built-in (R14)")
     pf = st.doc.get("parser_field") or {}
     if pf.get("default") not in (None, "none") and pf.get("default") not in pnames:
         err(f"{where}: parser_field.default {pf.get('default')!r} is not a parser of the stream (R14)")
@@ -320,9 +329,11 @@ def check_stream(pkg: L.Package, st: L.Stream, cat: L.Catalog | None):
             if f.get("type") != "bool":
                 err(f"{where}.backend.{n}: pipeline_toggle needs a bool field (R15)")
         elif "pipeline_param" in b:
-            tag = b["pipeline_param"].split(".", 1)[0]
+            tag, _, param = b["pipeline_param"].partition(".")
             if tag not in tags:
                 err(f"{where}.backend.{n}: pipeline_param tag {tag!r} is not a tag of the pipeline (R15)")
+            if param.split(".")[-1] in ("if", "source", "lang", "script", "patterns", "pattern", "regex") and f.get("type") != "select":
+                err(f"{where}.backend.{n}: pipeline_param into {param!r} is code; only a `select` field may bind it (R15)")
         elif "lifecycle" in b and not be.get("lifecycle"):
             err(f"{where}.backend.{n}: lifecycle binding but backend.lifecycle is absent (R15)")
         elif "template" in b and not be.get("index_template"):

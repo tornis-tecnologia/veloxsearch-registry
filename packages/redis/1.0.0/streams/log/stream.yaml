@@ -1,0 +1,99 @@
+id: log
+title: {en: Server log, es: Log del servidor, pt: Log do servidor}
+description:
+  en: "Redis server log: role, level, pid and message of every line."
+  es: "Log del servidor Redis: rol, nivel, pid y mensaje de cada línea."
+  pt: "Log do servidor Redis: papel, nível, pid e mensagem de cada linha."
+signal: logs
+event_type: logs
+enabled: true
+os: [linux]
+
+input:
+  plugin: tail
+  fixed:
+    db: "{state_dir}/tail-{stream_tag}.db"
+    mem_buf_limit: 5MB
+    skip_long_lines: true
+    key: log
+  fields:
+    - name: paths
+      type: string
+      multi: true
+      required: true
+      default: [/var/log/redis/redis-server.log, /var/log/redis/*.log]
+      title: {en: Paths, es: Rutas, pt: Caminhos}
+      description:
+        en: "Redis log files to read. Wildcards allowed; a missing file is skipped."
+        es: "Archivos de log de Redis a leer. Se permiten comodines; un archivo ausente se omite."
+        pt: "Arquivos de log do Redis a ler. Curingas permitidos; arquivo ausente é ignorado."
+      bind: {key: path, join: ","}
+    - name: exclude_paths
+      type: string
+      multi: true
+      group: advanced
+      title: {en: Exclude paths, es: Rutas excluidas, pt: Caminhos excluídos}
+      bind: {key: exclude_path, join: ","}
+    - name: read_from_head
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Read from head, es: Leer desde el inicio, pt: Ler do início}
+      bind: {key: read_from_head}
+    - name: ignore_older
+      type: duration
+      default: 7d
+      group: advanced
+      title: {en: Ignore files older than, es: Ignorar archivos anteriores a, pt: Ignorar arquivos mais antigos que}
+      bind: {key: ignore_older}
+
+processors:
+  defaults:
+    - id: exclude
+      plugin: grep
+      enabled: false
+      title: {en: Exclusion rules, es: Reglas de exclusión, pt: Regras de exclusão}
+      description:
+        en: "Drop lines matching a regex, one rule per line: `log <regex>`."
+        es: "Descarta líneas que coinciden con una regex, una regla por línea: `log <regex>`."
+        pt: "Descarta linhas que casam com uma regex, uma regra por linha: `log <regex>`."
+      fields:
+        - name: rules
+          type: string
+          multi: true
+          placeholder: "log MONITOR"
+          title: {en: Rules, es: Reglas, pt: Regras}
+          bind: {key: exclude, repeat: true}
+  allow: [grep, modify, record_modifier, nest, parser, content_modifier, sql, throttle]
+
+backend:
+  index_template: index-template.json
+  ingest_pipeline: ingest-pipeline.json
+  custom_hooks: true
+  lifecycle:
+    rollover_max_size: 5gb
+    rollover_max_age: 7d
+    delete_after: 30d
+  fields:
+    - name: delete_after
+      type: duration
+      default: 30d
+      title: {en: Delete after, es: Eliminar después de, pt: Apagar após}
+      bind: {lifecycle: delete_after}
+    - name: replicas
+      type: integer
+      default: 1
+      min: 0
+      group: advanced
+      title: {en: Replicas, es: Réplicas, pt: Réplicas}
+      bind: {template: settings.index.number_of_replicas}
+    - name: keep_original
+      type: bool
+      default: false
+      group: advanced
+      title: {en: Keep the raw line, es: Conservar la línea original, pt: Manter a linha original}
+      description:
+        en: Store the unparsed line in event.original as well.
+        es: Guarda también la línea sin procesar en event.original.
+        pt: Guarda também a linha sem processar em event.original.
+      bind: {pipeline_toggle: keep_original}

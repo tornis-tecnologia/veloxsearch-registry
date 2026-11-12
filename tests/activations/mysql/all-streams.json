@@ -1,0 +1,45 @@
+{
+  "package_id": "mysql",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "error": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/var/log/mysql/error.log"
+        ],
+        "read_from_head": true
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log \\[Note\\]"
+            ]
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d"
+      }
+    },
+    "slowlog": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/var/log/mysql/mysql-slow.log",
+          "/var/lib/mysql/*-slow.log"
+        ],
+        "multiline": "mysql.slowlog.entry",
+        "ignore_older": "1d"
+      },
+      "backend": {
+        "delete_after": "7d",
+        "keep_original": true
+      }
+    }
+  }
+}

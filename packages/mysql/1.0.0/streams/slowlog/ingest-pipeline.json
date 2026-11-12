@@ -1,0 +1,153 @@
+{
+  "description": "mysql/slowlog: MySQL and MariaDB slow query log entries (already joined by the multiline parser)",
+  "processors": [
+    {
+      "script": {
+        "tag": "keep_original",
+        "lang": "painless",
+        "if": "ctx.log != null",
+        "source": "if (ctx.event == null) { ctx.event = new HashMap(); } ctx.event.original = ctx.log;"
+      }
+    },
+    {
+      "grok": {
+        "tag": "time",
+        "field": "log",
+        "ignore_missing": true,
+        "ignore_failure": true,
+        "patterns": [
+          "# Time:\\s+%{GREEDYDATA:_ts}"
+        ]
+      }
+    },
+    {
+      "grok": {
+        "tag": "user_host",
+        "field": "log",
+        "ignore_missing": true,
+        "ignore_failure": true,
+        "patterns": [
+          "# User@Host: %{MYUSER:user.name}\\[[^\\]]*\\] @ %{MYHOST:_host} \\[%{DATA:_ip}\\]"
+        ],
+        "pattern_definitions": {
+          "MYUSER": "[^\\[\\s]*",
+          "MYHOST": "[^\\[\\s]*"
+        }
+      }
+    },
+    {
+      "grok": {
+        "tag": "timing",
+        "field": "log",
+        "ignore_missing": true,
+        "patterns": [
+          "# Query_time: %{NUMBER:_qt}\\s+Lock_time: %{NUMBER:_lt}\\s+Rows_sent: %{INT:mysql.slowlog.rows_sent:int}\\s+Rows_examined: %{INT:mysql.slowlog.rows_examined:int}"
+        ],
+        "on_failure": [
+          {
+            "rename": {
+              "field": "log",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "grok": {
+        "tag": "epoch",
+        "field": "log",
+        "ignore_missing": true,
+        "ignore_failure": true,
+        "patterns": [
+          "SET timestamp=%{INT:_epoch};"
+        ]
+      }
+    },
+    {
+      "script": {
+        "tag": "fields",
+        "if": "ctx.log != null && ctx._qt != null",
+        "lang": "painless",
+        "source": "\nif (ctx.event == null) { ctx.event = new HashMap(); }\nctx.event.duration = Math.round(Double.parseDouble(ctx._qt) * 1000000000.0);\nctx.mysql.slowlog.lock_time = Double.parseDouble(ctx._lt);\nif (ctx._host != null && ctx._host.length() > 0) { ctx.source = new HashMap(); ctx.source.address = ctx._host; }\nif (ctx._ip != null && ctx._ip.length() > 0) { if (ctx.source == null) { ctx.source = new HashMap(); } ctx.source.ip = ctx._ip; if (!ctx.source.containsKey('address')) { ctx.source.address = ctx._ip; } }\nString nl = String.valueOf((char) 10);\nString lg = ctx.log;\nStringBuilder sb = new StringBuilder();\nfor (String line : lg.splitOnToken(nl)) {\n  if (line.startsWith('# ') || line.startsWith('SET timestamp=')) { continue; }\n  if (sb.length() > 0) { sb.append(nl); }\n  sb.append(line);\n}\nString qy = sb.toString().trim();\nif (qy.length() > 0) { ctx.mysql.slowlog.query = qy; ctx.message = qy; }\n"
+      }
+    },
+    {
+      "rename": {
+        "field": "log",
+        "target_field": "message",
+        "ignore_missing": true,
+        "if": "ctx.message == null"
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": "log",
+        "ignore_missing": true
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp_epoch",
+        "if": "ctx._epoch != null",
+        "field": "_epoch",
+        "formats": [
+          "UNIX"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_epoch",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._epoch != null ? false : ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "ISO8601",
+          "yyMMdd HH:mm:ss",
+          "yyMMdd  H:mm:ss",
+          "yyMMdd H:mm:ss"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_epoch",
+          "_host",
+          "_ip",
+          "_qt",
+          "_lt"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

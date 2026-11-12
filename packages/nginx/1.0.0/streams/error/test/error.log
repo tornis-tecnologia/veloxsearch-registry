@@ -1,0 +1,7 @@
+2026/11/12 10:15:02 [error] 1234#1234: *5678 open() "/usr/share/nginx/html/missing.png" failed (2: No such file or directory), client: 203.0.113.9, server: www.example.com, request: "GET /missing.png HTTP/1.1", host: "www.example.com"
+2026/11/12 10:15:03 [error] 1234#1234: *5679 connect() failed (111: Connection refused) while connecting to upstream, client: 2001:db8::1, server: api.example.com, request: "POST /api/v1/orders HTTP/2.0", upstream: "http://127.0.0.1:8080/api/v1/orders", host: "api.example.com"
+2026/11/12 10:15:04 [warn] 1235#1235: *5680 an upstream response is buffered to a temporary file /var/cache/nginx/proxy_temp/3/00/0000000003 while reading upstream, client: 198.51.100.4, server: _, request: "GET /download HTTP/1.1", upstream: "http://10.0.0.7:9000/download", host: "files.example.com", referrer: "https://www.example.com/"
+2026/11/12 10:15:05 [notice] 1#1: nginx/1.25.3
+2026/11/12 10:15:06 [crit] 1236#1236: *5681 SSL_do_handshake() failed (SSL: error:0A000412:SSL routines::sslv3 alert bad certificate:SSL alert number 42) while SSL handshaking, client: 192.0.2.77, server: 0.0.0.0:443
+2026/11/12 10:15:07 [emerg] 1#1: bind() to 0.0.0.0:80 failed (98: Address already in use)
+nginx: something that is not an error log line

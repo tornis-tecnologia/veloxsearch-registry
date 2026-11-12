@@ -1,0 +1,27 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "user": {
+    "name": "app"
+  },
+  "source": {
+    "address": "web-01",
+    "ip": "10.0.0.5"
+  },
+  "event": {
+    "duration": 1234567000
+  },
+  "mysql": {
+    "slowlog": {
+      "lock_time": 0.000123,
+      "rows_sent": 1,
+      "rows_examined": 100000,
+      "query": "SELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;"
+    }
+  },
+  "message": "SELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC;",
+  "velox": {
+    "integration": "mysql",
+    "stream": "slowlog",
+    "package_version": "1.0.0"
+  }
+}

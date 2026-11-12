@@ -1,0 +1,27 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.123Z",
+  "log": {
+    "level": "info"
+  },
+  "mongo": {
+    "component": "COMMAND",
+    "context": "conn12",
+    "id": 51803,
+    "attr": {
+      "type": "command",
+      "ns": "shop.orders",
+      "planSummary": "COLLSCAN",
+      "docsExamined": 120000,
+      "durationMillis": 152
+    }
+  },
+  "event": {
+    "duration": 152000000
+  },
+  "message": "Slow query",
+  "velox": {
+    "integration": "mongo",
+    "stream": "log",
+    "package_version": "1.0.0"
+  }
+}

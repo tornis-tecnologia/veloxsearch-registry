@@ -1,0 +1,35 @@
+[
+  {
+    "time": 1762942502.5,
+    "host": "app-07",
+    "source": "/var/log/payments.log",
+    "sourcetype": "payments",
+    "index": "main",
+    "event": "payment authorized"
+  },
+  {
+    "time": "1762942503",
+    "host": "app-08",
+    "source": "http:orders",
+    "sourcetype": "_json",
+    "event": {
+      "order": 1042,
+      "status": "shipped"
+    },
+    "fields": {
+      "env": "prod"
+    }
+  },
+  {
+    "host": "fw-01",
+    "sourcetype": "syslog",
+    "event": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "time": "yesterday",
+    "event": 42
+  }
+]

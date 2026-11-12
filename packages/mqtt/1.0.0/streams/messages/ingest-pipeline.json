@@ -1,0 +1,62 @@
+{
+  "description": "mqtt/messages: topic, JSON payload into mqtt.payload, plain payload kept as message",
+  "processors": [
+    {
+      "rename": {
+        "tag": "topic",
+        "field": "topic",
+        "target_field": "mqtt.topic",
+        "ignore_missing": true
+      }
+    },
+    {
+      "json": {
+        "tag": "parse_json",
+        "field": "payload",
+        "target_field": "mqtt.payload",
+        "if": "ctx.payload instanceof String && ctx.payload.trim().startsWith('{')",
+        "on_failure": [
+          {
+            "set": {
+              "tag": "unparsed",
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "rename": {
+        "tag": "payload_object",
+        "field": "payload",
+        "target_field": "mqtt.payload",
+        "if": "ctx.payload instanceof Map",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "payload_message",
+        "lang": "painless",
+        "source": "ctx.message = ctx.payload.toString();",
+        "if": "ctx.message == null && ctx.payload != null && ctx.mqtt?.payload == null"
+      }
+    },
+    {
+      "remove": {
+        "tag": "drop_payload",
+        "field": "payload",
+        "ignore_missing": true
+      }
+    },
+    {
+      "set": {
+        "tag": "ts_fallback",
+        "field": "@timestamp",
+        "value": "{{_ingest.timestamp}}",
+        "if": "ctx['@timestamp'] == null"
+      }
+    }
+  ]
+}

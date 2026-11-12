@@ -1,0 +1,13 @@
+Nov 12 10:15:02 web-01 sshd[2231]: Failed password for invalid user admin from 203.0.113.9 port 51022 ssh2
+Nov 12 10:15:09 web-01 sshd[2240]: Accepted publickey for deploy from 10.0.0.5 port 40112 ssh2: ED25519 SHA256:abcdEFGH1234
+Nov 12 10:15:12 web-01 sshd[2245]: Accepted password for root from 2001:db8::7 port 55123 ssh2
+Nov 12 10:15:20 web-01 sshd[2251]: Invalid user oracle from 198.51.100.7 port 40222
+Nov 12 10:15:21 web-01 sshd[2251]: Connection closed by invalid user oracle 198.51.100.7 port 40222 [preauth]
+Nov 12 10:15:30 web-01 sshd[2260]: Disconnected from authenticating user root 198.51.100.8 port 2222 [preauth]
+Nov 12 10:15:31 web-01 sshd[2260]: Disconnected from user deploy 10.0.0.5 port 40112
+Nov 12 10:15:40 web-01 sshd[2270]: error: maximum authentication attempts exceeded for invalid user test from 203.0.113.50 port 60000 ssh2 [preauth]
+Nov 12 10:15:41 web-01 sshd[2271]: Connection closed by 192.0.2.10 port 33000 [preauth]
+Nov 12 10:15:42 web-01 sshd-session[2272]: Failed password for ubuntu from 203.0.113.77 port 41000 ssh2
+Nov 12 10:16:00 web-01 sudo:   deploy : TTY=pts/0 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+Nov  3 09:01:00 web-01 CRON[999]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+this line is not syslog at all

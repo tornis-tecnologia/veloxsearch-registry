@@ -1,0 +1,14 @@
+{
+  "@timestamp": "2026-11-12T10:15:02.000Z",
+  "host": {
+    "name": "web-01"
+  },
+  "level": "info",
+  "message": "user login accepted",
+  "time": "2026-11-12T10:15:02Z",
+  "velox": {
+    "integration": "fluent-forward",
+    "stream": "logs",
+    "package_version": "1.0.0"
+  }
+}

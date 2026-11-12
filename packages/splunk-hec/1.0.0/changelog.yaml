@@ -1,0 +1,4 @@
+- version: 1.0.0
+  changes:
+  - type: enhancement
+    description: {en: 'First release: HEC events stream.', es: 'Primera versión: stream de eventos HEC.', pt: 'Primeira versão: stream de eventos HEC.'}

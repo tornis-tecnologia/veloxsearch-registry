@@ -1,0 +1,172 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "refresh_interval": "5s"
+      }
+    },
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "text"
+        },
+        "client": {
+          "properties": {
+            "ip": {
+              "type": "ip"
+            }
+          }
+        },
+        "user": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "outcome": {
+              "type": "keyword"
+            },
+            "category": {
+              "type": "keyword"
+            },
+            "duration": {
+              "type": "long"
+            }
+          }
+        },
+        "http": {
+          "properties": {
+            "version": {
+              "type": "keyword"
+            },
+            "request": {
+              "properties": {
+                "method": {
+                  "type": "keyword"
+                },
+                "referrer": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                }
+              }
+            },
+            "response": {
+              "properties": {
+                "status_code": {
+                  "type": "integer"
+                },
+                "body": {
+                  "properties": {
+                    "bytes": {
+                      "type": "long"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "url": {
+          "properties": {
+            "original": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 2048
+                }
+              }
+            }
+          }
+        },
+        "user_agent": {
+          "properties": {
+            "original": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 1024
+                }
+              }
+            },
+            "name": {
+              "type": "keyword"
+            },
+            "version": {
+              "type": "keyword"
+            },
+            "os": {
+              "properties": {
+                "name": {
+                  "type": "keyword"
+                },
+                "version": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "device": {
+              "properties": {
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "traefik": {
+          "properties": {
+            "ident": {
+              "type": "keyword"
+            },
+            "raw_request": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 1024
+                }
+              }
+            },
+            "request_count": {
+              "type": "long"
+            },
+            "router": {
+              "type": "keyword"
+            },
+            "service": {
+              "type": "keyword",
+              "ignore_above": 2048
+            },
+            "duration_ms": {
+              "type": "float"
+            }
+          }
+        },
+        "velox": {
+          "properties": {
+            "integration": {
+              "type": "keyword"
+            },
+            "stream": {
+              "type": "keyword"
+            },
+            "package_version": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

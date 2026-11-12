@@ -1,0 +1,42 @@
+{
+  "package_id": "postgres",
+  "package_version": "1.0.0",
+  "spec_version": "2.0",
+  "streams": {
+    "log": {
+      "enabled": true,
+      "input": {
+        "paths": [
+          "/srv/pg/log/*.log",
+          "/var/log/postgresql/postgresql-16-main.log"
+        ],
+        "multiline": "postgres.log.statements",
+        "read_from_head": true,
+        "ignore_older": "2d"
+      },
+      "processors": [
+        {
+          "id": "exclude",
+          "enabled": true,
+          "fields": {
+            "rules": [
+              "log checkpoint"
+            ]
+          }
+        },
+        {
+          "plugin": "throttle",
+          "params": {
+            "rate": 500,
+            "window": 5
+          }
+        }
+      ],
+      "backend": {
+        "delete_after": "14d",
+        "keep_original": true,
+        "min_level": "ctx.log?.level != null && ['debug','info','notice','log'].contains(ctx.log.level)"
+      }
+    }
+  }
+}

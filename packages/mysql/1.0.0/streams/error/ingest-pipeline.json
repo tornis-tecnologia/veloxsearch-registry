@@ -1,0 +1,88 @@
+{
+  "description": "mysql/error: MySQL 5.7/8.x and MariaDB error log",
+  "processors": [
+    {
+      "script": {
+        "tag": "keep_original",
+        "lang": "painless",
+        "if": "ctx.log != null",
+        "source": "if (ctx.event == null) { ctx.event = new HashMap(); } ctx.event.original = ctx.log;"
+      }
+    },
+    {
+      "grok": {
+        "tag": "parse",
+        "field": "log",
+        "ignore_missing": true,
+        "patterns": [
+          "\\A%{TIMESTAMP_ISO8601:_ts}\\s+%{INT:mysql.thread_id:int} \\[%{WORD:_level}\\] (?:\\[%{MYERR:mysql.error_code}\\] )?(?:\\[%{MYSUB:mysql.subsystem}\\] )?%{GREEDYDATA:message}"
+        ],
+        "pattern_definitions": {
+          "MYERR": "MY-\\d+",
+          "MYSUB": "[A-Za-z][A-Za-z ]*"
+        },
+        "on_failure": [
+          {
+            "rename": {
+              "field": "log",
+              "target_field": "message",
+              "ignore_missing": true
+            }
+          },
+          {
+            "set": {
+              "field": "event.outcome",
+              "value": "unparsed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": "log",
+        "ignore_missing": true
+      }
+    },
+    {
+      "script": {
+        "tag": "level",
+        "if": "ctx._level != null",
+        "lang": "painless",
+        "source": "String l = ctx._level.toLowerCase(); if (l == 'note' || l == 'system') { l = 'info'; } Map lg = new HashMap(); lg.put('level', l); ctx.log = lg;"
+      }
+    },
+    {
+      "date": {
+        "tag": "timestamp",
+        "if": "ctx._ts != null",
+        "field": "_ts",
+        "formats": [
+          "ISO8601",
+          "yyyy-MM-dd HH:mm:ss",
+          "yyyy-MM-dd H:mm:ss"
+        ],
+        "target_field": "@timestamp",
+        "on_failure": [
+          {
+            "remove": {
+              "field": "_ts",
+              "ignore_missing": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "tag": "cleanup",
+        "field": [
+          "_ts",
+          "_level"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ]
+}

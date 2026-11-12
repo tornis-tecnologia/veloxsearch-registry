@@ -1,0 +1,22 @@
+[
+  {
+    "log": "2026-11-12 10:20:11.250 UTC [2210] app@shop STATEMENT:  SELECT a,\n\tb\n\tFROM t\n\tWHERE x = 1;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "2026-11-12 10:21:00.000 UTC [2211] app@shop LOG:  duration: 1520.7 ms  statement: SELECT c.name,\n\tcount(*)\n\tFROM customers c JOIN orders o ON o.customer_id = c.id\n\tGROUP BY c.name;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "2026-11-12 10:22:30.500 UTC [2212] app@shop LOG:  statement: UPDATE accounts\n\tSET balance = balance - 10\n\tWHERE id = 7;",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "2026-11-12 10:23:00.000 UTC [2300] app@shop LOG:  duration: 5.5 ms  execute <unnamed>: SELECT 1",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "\tcontinuation line with no header at all\n\tfrom a truncated file",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  }
+]

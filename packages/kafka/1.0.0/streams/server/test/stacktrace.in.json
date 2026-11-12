@@ -1,0 +1,10 @@
+[
+  {
+    "log": "[2026-11-12 10:15:07,321] ERROR [KafkaApi-1] Error when handling request: clientId=producer-1, correlationId=42 (kafka.server.KafkaApis)\njava.lang.IllegalStateException: No leader for partition orders-0\n\tat kafka.server.ReplicaManager.appendRecords(ReplicaManager.scala:612)\n\tat kafka.server.KafkaApis.handleProduceRequest(KafkaApis.scala:431)\nCaused by: org.apache.kafka.common.errors.NotLeaderOrFollowerException: This server is not the leader\n\t... 3 more",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "log": "[2026-11-12 10:15:08,000] INFO [KafkaServer id=1] started (kafka.server.KafkaServer)",
+    "@timestamp": "2026-01-01T00:00:00.000Z"
+  }
+]
