@@ -462,6 +462,22 @@ def git_versions(base_ref: str, pkg_id: str) -> dict[str, str]:
     return out
 
 
+_SIG_VALUE = re.compile(r"^  value: (.*)$", re.M)
+
+
+def signing_only(old: str, new: str) -> bool:
+    """R19 exception: the placeholder replaced by a real signature, nothing else.
+
+    The manifest's `files:` inventory pins every other file (R2), and the
+    signed digest excludes `signature`, so swapping the placeholder's value
+    line for a real one changes no content.
+    """
+    m = _SIG_VALUE.search(old)
+    return (m is not None and m.group(1).startswith(L.PLACEHOLDER_SIG_PREFIX)
+            and len(_SIG_VALUE.findall(old)) == 1 and len(_SIG_VALUE.findall(new)) == 1
+            and _SIG_VALUE.sub("", old) == _SIG_VALUE.sub("", new))
+
+
 def mapping_fields(tpl: dict, prefix="") -> dict[str, str]:
     out = {}
     for name, body in ((tpl.get("properties") or {}).items()):
@@ -477,7 +493,8 @@ def check_history(pkg: L.Package, base_ref: str):
     label = f"{pkg.id}/{pkg.version}"
     published = git_versions(base_ref, pkg.id)
     if pkg.version in published:
-        if published[pkg.version] != (pkg.dir / "manifest.yaml").read_text():
+        old, new = published[pkg.version], (pkg.dir / "manifest.yaml").read_text()
+        if old != new and not signing_only(old, new):
             err(f"{label}: version already published on {base_ref}; a change needs a new version (R19)")
         return
     newer = [v for v in published if L.semver_key(v) >= L.semver_key(pkg.version)]
@@ -529,7 +546,8 @@ def main():
 
     seen = set()
     for d in dirs:
-        pkg = check_package(d, cat, args.expect_signed)
+        # the spec example is documentation and keeps the placeholder on purpose
+        pkg = check_package(d, cat, args.expect_signed and d.is_relative_to(L.PACKAGES))
         if pkg:
             key = (pkg.id, pkg.version)
             if key in seen and d.is_relative_to(L.PACKAGES):

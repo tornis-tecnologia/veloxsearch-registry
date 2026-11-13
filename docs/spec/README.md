@@ -321,7 +321,7 @@ Uma versão publicada é **imutável** (R19). Mudança = nova versão.
 | Remover ou mudar o tipo de um campo de mapping; mudar o `id` de uma stream | **major** (novo `N`) |
 | Remover campo de formulário ou stream | minor, com entrada `breaking-change` no changelog |
 
-- **R19** Versão já publicada em `main` não muda (CI compara com `main`).
+- **R19** Versão já publicada em `main` não muda (CI compara com `main`); exceção: trocar a assinatura placeholder pela assinatura real, sem outra mudança no manifesto (o inventário `files:` prende os demais arquivos).
 - **R20** Dentro de uma major, o mapping de cada stream é aditivo em relação à versão anterior: nenhum campo removido, nenhum tipo alterado.
 - **R21** `version` é maior que todas as versões existentes do mesmo pacote.
 
