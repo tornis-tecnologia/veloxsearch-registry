@@ -491,7 +491,8 @@ template existir):
 
 `scripts/render.py <pacote> --backend` imprime exatamente esses objetos
 (component templates, pipeline com o processor `pipeline` para `N@custom`
-com `ignore_missing_pipeline: true`, política ISM com `ism_template` para
+— sem `ignore_missing_pipeline`, que é do Elasticsearch e o OpenSearch recusa;
+`N@custom` é criado antes —, política ISM com `ism_template` para
 `.ds-N-*`, index template com `data_stream: {}`, index pattern e saved
 objects renomeados). Detalhe prático: os pipelines dos pacotes copiam campos com `script`
 (`ctx.event.original = ctx.log`): o OpenSearch não tem `copy_from`, e `set`

@@ -252,7 +252,10 @@ DEVEM ter `tag`. O core acrescenta, no fim, um processor `pipeline` que chama
 ### 8.4 Ciclo de vida e hooks
 
 `backend.lifecycle` (`rollover_max_size`, `rollover_max_age`,
-`rollover_max_docs`, `delete_after`) vira a política ISM `N`. Com
+`rollover_max_docs`, `delete_after`) vira a política ISM `N`, com as
+condições de rollover nos nomes do ISM do OpenSearch: `rollover_max_size` →
+`min_size`, `rollover_max_age` → `min_index_age`, `rollover_max_docs` →
+`min_doc_count` (o ISM recusa `min_max_size`). Com
 `custom_hooks: true` (padrão) o core cria `N@custom` (component template e
 pipeline vazios) se não existirem e nunca os sobrescreve: são do operador.
 

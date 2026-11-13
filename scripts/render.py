@@ -363,13 +363,19 @@ def compile_backend(pkg: L.Package, activation: dict | None) -> dict:
             objs[f"_ingest/pipeline/{N}@custom (create if absent)"] = {"processors": []}
         if pipe is not None:
             if be.get("custom_hooks", True):
-                pipe["processors"].append({"pipeline": {"name": f"{N}@custom", "ignore_missing_pipeline": True}})
+                # No ignore_missing_pipeline: it is Elasticsearch's, OpenSearch
+                # refuses the pipeline over it, and N@custom exists (created above).
+                pipe["processors"].append({"pipeline": {"name": f"{N}@custom"}})
             objs[f"_ingest/pipeline/{N}"] = pipe
         if life:
             actions = []
-            roll = {k[len("rollover_"):]: v for k, v in life.items() if k.startswith("rollover_")}
+            # OpenSearch ISM names the rollover thresholds by their lower bound;
+            # a mechanical "min_" + key gave min_max_size, which ISM refuses.
+            ism = {"rollover_max_size": "min_size", "rollover_max_age": "min_index_age",
+                   "rollover_max_docs": "min_doc_count"}
+            roll = {ism[k]: v for k, v in life.items() if k in ism}
             if roll:
-                actions.append({"rollover": {f"min_{k}": v for k, v in roll.items()}})
+                actions.append({"rollover": roll})
             states = [{"name": "hot", "actions": actions, "transitions": []}]
             if life.get("delete_after"):
                 states[0]["transitions"] = [{"state_name": "delete", "conditions": {"min_index_age": life["delete_after"]}}]
