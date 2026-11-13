@@ -81,7 +81,7 @@ jobs:
         run: |
           out=$(mktemp -d)
           python3 -I scripts/render.py docs/spec/examples/custom-logs/1.0.0 --activation docs/spec/examples/activations/custom-logs.json > "$out/example.yaml"
-          docker run --rm -e VELOX_OS_USER=u -e VELOX_OS_PASSWORD=p -v "$out:/cfg:ro" fluent/fluent-bit:3.2 /fluent-bit/bin/fluent-bit -c /cfg/example.yaml --dry-run | grep -q "configuration test is successful"
+          docker run --rm -e VELOX_OS_USER=u -e VELOX_OS_PASSWORD=p -v "$out:/cfg:ro" fluent/fluent-bit:3.2 /fluent-bit/bin/fluent-bit -c /cfg/example.yaml --dry-run 2>&1 | grep -q "configuration test is successful"
 
   pipelines:
     name: Ingest pipeline tests (R24)
