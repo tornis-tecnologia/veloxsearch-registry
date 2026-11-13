@@ -139,9 +139,9 @@ lado Mesh; este repo tem de ser compatível com ela.
 - **Rota de métricas no core/Mesh:** endpoint OTLP na política, credencial
   OTLP do coletor no Collector, exposição externa do receptor OTLP. Guia §9.1.
 - **ADR no core** para o nome por stream (decisão 12) e a rota de métricas.
-- **Assinatura 2.0.** Proposta: manifesto lista todo arquivo com sha256;
-  ed25519 sobre o manifesto canônico; mesma chave `velox-registry-2026-10`.
-  `velox sign`/`verify` do core precisam suportar.
+- **Assinatura 2.0.** `velox sign`/`verify` com suporte 2.0 (ADR-074) só no
+  branch local `feat/ee-velox-mesh-plan` do core; precisa chegar ao core
+  publicado para o Mesh aceitar os pacotes.
 - **Schema 1.2 do core só existe no branch local `feat/ee-velox-mesh-plan`**
   de veloxsearch-oss (não está em `origin/develop` nem `origin/main`).
 
@@ -153,11 +153,11 @@ lado Mesh; este repo tem de ser compatível com ela.
 | F1 ✅ | Spec 2.0 em `docs/spec/` + JSON Schemas em `schemas/` + exemplo + `check_spec.py` no CI | — |
 | F2 ✅ | Catálogo `fluent-bit/5.2/` — 84 plugins (49 inputs, 19 filters, 9 processors, 4 formatos de parser, 8 multiline). Descrições parafraseadas do manual; chaves/padrões transcritos. `CONDITIONAL.md` guarda a sintaxe condicional para uma Spec 2.1 | F1 |
 | F3 ✅ | `validate_v2.py` (R1–R23), `build_index.py`, `render.py` (+ `--backend`), `dryrun.sh`, `pipeline_test.py` (R24), `check_catalog.py`; CI jobs `spec`, `packages`, `pipelines` | F1, F2 |
-| F4 ✅ | 35 pacotes em `packages/` (ver `packages/index.json`), todos: validate_v2, 51 casos de pipeline no OpenSearch, dry-run 3.2 e latest (exceções: `ebpf` sem plugin na imagem oficial, `windows` não roda em Linux, `gpu` ≥ 4.1). Assinaturas = placeholder | F1–F3 |
+| F4 ✅ | 35 pacotes em `packages/` (ver `packages/index.json`), todos: validate_v2, 51 casos de pipeline no OpenSearch, dry-run 3.2 e latest (exceções: `ebpf` sem plugin na imagem oficial, `windows` não roda em Linux, `gpu` ≥ 4.1). Assinados com `velox-registry-2026-10` (2026-11-13) | F1–F3 |
 | F5 ✅ | README, CONTRIBUTING, `docs/PACKAGING.md` | — |
 | F6 | PR casado no core: ADR de nomes por stream, signing 2.0, leitura do catálogo v2 pelo Mesh, rota de métricas, migração do caminho de cluster | core |
 
-Tudo no branch `feat/packages-spec-2.0` (não enviado ao remoto; nada assinado).
+Tudo no branch `feat/packages-spec-2.0`, PR #9.
 Ambiente local de teste usado: OpenSearch em `docker` (`velox-os-test`, porta
 19200, sem segurança) e imagens `fluent/fluent-bit:{3.2,4.0,latest}`.
 
